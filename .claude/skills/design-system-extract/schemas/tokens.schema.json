@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["meta", "colors", "typography", "spacing", "radii", "shadows", "breakpoints"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["source", "coordinator", "timestamp", "totalColors", "totalFonts", "totalSpacingValues"],
+      "properties": {
+        "source": { "type": "string" },
+        "coordinator": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "totalColors": { "type": "integer", "minimum": 1 },
+        "totalFonts": { "type": "integer", "minimum": 1 },
+        "totalSpacingValues": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "colors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "value", "usage", "source"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "value": { "type": "string" },
+          "usage": {
+            "type": "string",
+            "enum": [
+              "primary", "secondary", "accent", "background", "surface",
+              "text", "text-secondary", "border", "error", "warning",
+              "success", "info", "hover", "disabled", "overlay", "other"
+            ]
+          },
+          "source": { "type": "string" },
+          "uncertain": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "typography": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "fontFamily", "fontSize", "fontWeight", "lineHeight"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "fontFamily": { "type": "string" },
+          "fontSize": { "type": "string" },
+          "fontWeight": { "type": ["string", "integer"] },
+          "lineHeight": { "type": "string" },
+          "letterSpacing": { "type": "string" },
+          "source": { "type": "string" },
+          "uncertain": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "spacing": {
+      "type": "object",
+      "required": ["base", "scale"],
+      "properties": {
+        "base": { "type": "integer" },
+        "scale": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "value"],
+            "properties": {
+              "name": { "type": "string" },
+              "value": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "radii": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "string" },
+          "source": { "type": "string" }
+        }
+      }
+    },
+    "shadows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "string" },
+          "source": { "type": "string" }
+        }
+      }
+    },
+    "breakpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      }
+    }
+  }
+}

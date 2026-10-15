@@ -1,0 +1,16 @@
+{
+  "name": "ratly",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:ui": "pnpm --filter @ratly/ui dev",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "ajv": "^8.20.0",
+    "husky": "^9.1.7",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

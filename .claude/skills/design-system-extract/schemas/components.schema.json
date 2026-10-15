@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["meta", "atoms", "components", "pages"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["source", "timestamp", "totalAtoms", "totalComponents", "totalPages"],
+      "properties": {
+        "source": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "totalAtoms": { "type": "integer", "minimum": 0 },
+        "totalComponents": { "type": "integer", "minimum": 0 },
+        "totalPages": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "atoms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "occurrences", "description"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "type": { "type": "string", "const": "atom" },
+          "occurrences": { "type": "integer", "minimum": 1 },
+          "description": { "type": "string" },
+          "variants": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "usedInComponents": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "usedInPages": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "uncertain": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "occurrences", "description", "atoms", "usedInPages"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "type": { "type": "string", "const": "component" },
+          "occurrences": { "type": "integer", "minimum": 1 },
+          "description": { "type": "string" },
+          "atoms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "count"],
+              "properties": {
+                "name": { "type": "string" },
+                "count": { "type": "integer", "minimum": 1 }
+              }
+            }
+          },
+          "usedInPages": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "uncertain": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "description", "components"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "description": { "type": "string" },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "count"],
+              "properties": {
+                "name": { "type": "string" },
+                "count": { "type": "integer", "minimum": 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

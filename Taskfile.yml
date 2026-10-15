@@ -1,0 +1,24 @@
+version: "3"
+
+tasks:
+  setup:
+    desc: Full project setup from scratch
+    cmds:
+      - task: setup:check
+      - task: setup:deps
+      - task: setup:husky
+
+  setup:check:
+    desc: Verify required tools are installed
+    cmds:
+      - bash scripts/check-tools.sh
+
+  setup:deps:
+    desc: Install all dependencies
+    cmds:
+      - pnpm install
+
+  setup:husky:
+    desc: Setup git hooks
+    cmds:
+      - npx husky
