@@ -39,14 +39,14 @@ export function ResetWindowModal({
       }
     >
       <div className="flex flex-col gap-4">
-        <p className="text-[var(--text-base-sm)] leading-normal text-[var(--color-text-tertiary)]">
+        <p className="text-[length:var(--text-base-sm)] leading-normal text-[color:var(--color-text-tertiary)]">
           Ends the current window early. The user gets the full limit back now,
           and a new hour starts with their next request. This can&apos;t be
           undone.
         </p>
         <div className="grid grid-cols-2 gap-2.5 font-[family-name:var(--font-mono)] text-[13px]">
           <div className="rounded-[var(--radius-lg)] bg-[var(--color-bg-base)] p-3">
-            <span className="text-[var(--text-xs)] text-[var(--color-text-secondary)]">
+            <span className="text-[length:var(--text-xs)] text-[color:var(--color-text-secondary)]">
               NOW
             </span>
             <p className="text-[var(--color-text-primary)]">
@@ -54,7 +54,7 @@ export function ResetWindowModal({
             </p>
           </div>
           <div className="rounded-[var(--radius-lg)] bg-[var(--color-bg-base)] p-3">
-            <span className="text-[var(--text-xs)] text-[var(--color-text-secondary)]">
+            <span className="text-[length:var(--text-xs)] text-[color:var(--color-text-secondary)]">
               AFTER
             </span>
             <p className="text-[var(--color-accent-blue)]">

@@ -6,8 +6,10 @@ import { QueryProvider } from '../src/providers/query'
 import { ThemeProvider } from '../src/providers/ThemeProvider'
 import '../src/styles/index.css'
 
+const THEME_STORAGE_KEY = 'ratly-theme'
+
 const withProviders: DecoratorFunction<ReactRenderer> = (Story, context) => {
-  document.documentElement.classList.add('dark')
+  localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify('dark'))
   const skipRouter = context.parameters.skipRouter === true
 
   const content = (
@@ -42,7 +44,7 @@ const preview: Preview = {
     },
 
     a11y: {
-      test: 'todo'
+      test: 'error'
     }
   },
 };

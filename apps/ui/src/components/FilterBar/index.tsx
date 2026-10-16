@@ -65,7 +65,7 @@ function FilterBar({
               {selectLabel}
             </span>
           )}
-          <Select>
+          <Select aria-label={selectLabel ?? "Filter"}>
             {selectOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}

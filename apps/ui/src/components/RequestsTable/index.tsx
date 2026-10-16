@@ -30,7 +30,7 @@ function RequestsTable({
       {...props}
     >
       <SectionHeading>{title}</SectionHeading>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Requests data">
         <table className="w-full border-collapse font-[family-name:var(--font-mono)] text-[13px] min-w-[560px]">
           <thead>
             <tr className="text-left text-[var(--color-text-muted)] text-[12px] uppercase tracking-[0.05em]">
