@@ -6,7 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test": "vitest run",
+    "test:guards": "vitest run --project guards",
+    "test:storybook": "vitest run --project storybook"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -26,6 +31,17 @@
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0"
+    "@types/react-dom": "^19.3.0",
+    "storybook": "^10.6.2",
+    "@storybook/react-vite": "^10.6.2",
+    "@chromatic-com/storybook": "latest",
+    "@storybook/addon-vitest": "^10.6.2",
+    "@storybook/addon-a11y": "^10.6.2",
+    "@storybook/addon-docs": "^10.6.2",
+    "@storybook/addon-mcp": "^10.6.2",
+    "vitest": "latest",
+    "@vitest/browser-playwright": "latest",
+    "@vitest/coverage-v8": "latest",
+    "playwright": "latest"
   }
 }

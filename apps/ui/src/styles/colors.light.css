@@ -1,0 +1,16 @@
+:root {
+  --color-bg-base: #FAFBFC;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-surface-raised: #F5F6F8;
+  --color-bg-active: #E8EBF0;
+  --color-bg-hover: #EDF0F4;
+
+  --color-border-default: #D8DCE3;
+  --color-border-active: #CDD2DA;
+  --color-border-strong: #B8BFC9;
+
+  --color-text-muted: #8C95A3;
+  --color-text-secondary: #5F6B7A;
+  --color-text-tertiary: #3D4A5C;
+  --color-text-primary: #141820;
+}

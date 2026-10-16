@@ -1,0 +1,86 @@
+@theme {
+  /* --- Colors: Brand & Accent (theme-independent) --- */
+  --color-accent-blue: #8CC0FF;
+  --color-accent-blue-hover: #B9D8FF;
+  --color-accent-purple: #B79CFF;
+
+  /* --- Colors: Status --- */
+  --color-success: #4FD18B;
+  --color-success-text: #9FE0B8;
+  --color-success-bg: #12241A;
+  --color-success-border: #1F4D33;
+
+  --color-warning: #F2B33D;
+  --color-warning-text: #F7D58C;
+  --color-warning-bg: #2A2112;
+  --color-warning-border: #5A4318;
+
+  --color-error: #FF7A5C;
+  --color-error-text: #FF9F87;
+  --color-error-bg: rgba(255, 122, 92, 0.14);
+  --color-error-bg-subtle: rgba(255, 122, 92, 0.06);
+  --color-error-border: #6B2E20;
+  --color-error-surface: #1F1714;
+
+  /* --- Typography --- */
+  --font-sans: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base-sm: 13px;
+  --text-base: 14px;
+  --text-lg: 16px;
+  --text-xl: 17px;
+  --text-2xl: 18px;
+  --text-3xl: 24px;
+  --text-4xl: 28px;
+  --text-5xl: 32px;
+
+  --leading-tight: 1;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  --tracking-tight: -0.01em;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.06em;
+
+  /* --- Spacing (base 4px) --- */
+  --spacing-0: 0px;
+  --spacing-px: 1px;
+  --spacing-0-5: 2px;
+  --spacing-1: 4px;
+  --spacing-1-5: 6px;
+  --spacing-2: 8px;
+  --spacing-2-5: 10px;
+  --spacing-3: 12px;
+  --spacing-3-5: 14px;
+  --spacing-4: 16px;
+  --spacing-4-5: 18px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-10: 40px;
+  --spacing-14: 56px;
+
+  /* --- Border Radii --- */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-full: 50%;
+  --radius-pill: 999px;
+
+  /* --- Shadows --- */
+  --shadow-inset-error: rgb(255, 122, 92) 3px 0px 0px inset;
+  --shadow-glow-success: rgba(79, 209, 139, 0.15) 0px 0px 0px 4px;
+
+  /* --- Animations --- */
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+}
