@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev:ui": "pnpm --filter @ratly/ui dev",
+    "dev:server": "pnpm --filter @ratly/server dev",
     "prepare": "husky"
   },
   "devDependencies": {
