@@ -10,11 +10,14 @@ description: Stage and commit changes with a conventional commit message. Scans 
 ## Rules
 - Follow all rules in `rules/staging.md`
 - Follow all rules in `rules/commit-message.md`
+- Follow all rules in `rules/scoped-branches.md`
 
 ## Steps
 
 1. **Review** — Run `git status` and `git diff` to see all changes. Group them into
    logical units. If changes span unrelated areas, plan multiple commits.
+   Also check if changes span unrelated scopes per `rules/scoped-branches.md`.
+   If so, split into separate branches before committing.
 
 2. **Scan for secrets** — Run:
    ```bash
