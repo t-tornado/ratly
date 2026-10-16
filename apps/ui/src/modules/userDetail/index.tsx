@@ -12,6 +12,9 @@ export default function UserDetailPage() {
         userId={userId ?? ""}
         status="status-ok"
         statusLabel="OK"
+        isThrottling={false}
+        currentLimit={100}
+        currentRemaining={42}
       />
       <PageSection className="flex-1 min-h-0 pb-5">
         <UserDetailContent />

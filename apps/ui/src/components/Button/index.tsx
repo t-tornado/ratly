@@ -9,6 +9,10 @@ const buttonVariants = cva(
       variant: {
         primary:
           "border-0 bg-[var(--color-warning)] text-[var(--color-bg-base)] font-semibold",
+        accent:
+          "border-0 bg-[var(--color-accent-blue)] text-[var(--color-bg-base)] font-semibold",
+        destructive:
+          "border-0 bg-[var(--color-error)] text-[var(--color-bg-base)] font-semibold",
         ghost:
           "border border-[var(--color-border-strong)] bg-transparent text-[var(--color-text-primary)]",
         "destructive-ghost":
@@ -28,6 +32,7 @@ const buttonVariants = cva(
         compact: "h-8 px-3 rounded-[var(--radius-md)] text-[13px]",
         filter: "h-[34px] px-3 rounded-[var(--radius-md)]",
         icon: "size-9 rounded-[var(--radius-lg)]",
+        pill: "h-9 px-3 rounded-[var(--radius-pill)] text-[13px]",
       },
     },
     defaultVariants: {

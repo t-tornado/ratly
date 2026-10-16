@@ -23,10 +23,9 @@ export const Default: Story = {
     status: "status-warning",
     statusLabel: "Warning",
     isStreaming: true,
-    actions: [
-      { label: "Reset window", variant: "destructive-ghost" },
-      { label: "Adjust limit", variant: "ghost" },
-    ],
+    isThrottling: false,
+    currentLimit: 100,
+    currentRemaining: 42,
   },
 };
 
@@ -36,6 +35,9 @@ export const Healthy: Story = {
     status: "status-ok",
     statusLabel: "OK",
     isStreaming: false,
+    isThrottling: false,
+    currentLimit: 500,
+    currentRemaining: 480,
   },
 };
 
@@ -45,9 +47,8 @@ export const Exceeded: Story = {
     status: "status-exceeded",
     statusLabel: "Exceeded",
     isStreaming: false,
-    actions: [
-      { label: "Reset window", variant: "destructive-ghost" },
-      { label: "Adjust limit", variant: "ghost" },
-    ],
+    isThrottling: true,
+    currentLimit: 100,
+    currentRemaining: 0,
   },
 };
