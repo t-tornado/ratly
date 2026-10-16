@@ -41,6 +41,7 @@ function ProgressBar({
         className
       )}
       role="progressbar"
+      aria-label="Progress"
       aria-valuenow={value}
       aria-valuemax={max}
       {...props}
