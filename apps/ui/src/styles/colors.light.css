@@ -9,6 +9,8 @@
   --color-border-active: #CDD2DA;
   --color-border-strong: #B8BFC9;
 
+  --color-overlay: rgba(0, 0, 0, 0.5);
+
   --color-text-muted: #8C95A3;
   --color-text-secondary: #5F6B7A;
   --color-text-tertiary: #3D4A5C;
