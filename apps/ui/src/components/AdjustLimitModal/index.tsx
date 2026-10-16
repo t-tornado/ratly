@@ -74,16 +74,17 @@ function AdjustLimitModal({
       }
     >
       <div className="flex flex-col gap-3.5">
-        <label className="text-[var(--text-base-sm)] text-[var(--color-text-secondary)]">
+        <label htmlFor="adjust-limit-input" className="text-[length:var(--text-base-sm)] text-[color:var(--color-text-secondary)]">
           Requests per hour (now {currentLimit})
         </label>
 
         <input
+          id="adjust-limit-input"
           type="number"
           data-testid="limit-input"
           value={limitValue}
           onChange={handleInputChange}
-          className="h-11 w-full bg-[var(--color-bg-base)] border border-[var(--color-border-strong)] focus:border-[var(--color-accent-blue)] rounded-[var(--radius-lg)] font-[family-name:var(--font-mono)] text-[var(--text-2xl)] text-[var(--color-text-primary)] px-3 outline-none"
+          className="h-11 w-full bg-[var(--color-bg-base)] border border-[var(--color-border-strong)] focus:border-[var(--color-accent-blue)] rounded-[var(--radius-lg)] font-[family-name:var(--font-mono)] text-[length:var(--text-2xl)] text-[color:var(--color-text-primary)] px-3 outline-none"
         />
 
         <div className="flex gap-2">

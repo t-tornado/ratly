@@ -92,7 +92,7 @@ export function AddExtraRequestsModal({
             onChange={handleInputChange}
             min={MIN_EXTRA_REQUESTS}
             aria-label="Extra requests"
-            className="h-11 w-[100px] text-center bg-[var(--color-bg-base)] border border-[var(--color-border-strong)] rounded-[var(--radius-lg)] font-[family-name:var(--font-mono)] text-[var(--text-2xl)] text-[var(--color-text-primary)]"
+            className="h-11 w-[100px] text-center bg-[var(--color-bg-base)] border border-[var(--color-border-strong)] rounded-[var(--radius-lg)] font-[family-name:var(--font-mono)] text-[length:var(--text-2xl)] text-[color:var(--color-text-primary)]"
           />
           <Button
             variant="ghost"
