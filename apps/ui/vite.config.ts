@@ -21,6 +21,15 @@ export default defineConfig({
       {
         extends: true,
         test: {
+          name: 'unit',
+          include: ['src/modules/**/*.test.tsx', 'src/components/**/*.test.tsx'],
+          environment: 'jsdom',
+          setupFiles: ['src/test/setup.ts'],
+        }
+      },
+      {
+        extends: true,
+        test: {
           name: 'guards',
           include: ['src/guards/**/*.test.ts'],
           environment: 'node',
