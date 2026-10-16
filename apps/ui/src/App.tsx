@@ -1,9 +1,5 @@
-function App() {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-4xl font-bold">Ratly</h1>
-    </div>
-  );
-}
+import Router from "./router";
 
-export default App;
+export default function App() {
+  return <Router />;
+}
