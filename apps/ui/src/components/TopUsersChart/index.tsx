@@ -52,4 +52,4 @@ function TopUsersChart({
   );
 }
 
-export { TopUsersChart };
+export { TopUsersChart, type TopUsersChartProps, type TopUser };

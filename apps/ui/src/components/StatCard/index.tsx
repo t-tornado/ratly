@@ -1,12 +1,22 @@
 import { cn } from "../../lib/utils";
 
+type StatCardAccent = "default" | "success" | "warning" | "error";
+
+const ACCENT_VALUE_CLASSES: Record<StatCardAccent, string> = {
+  default: "",
+  success: "text-[var(--color-success-text)]",
+  warning: "text-[var(--color-warning-text)]",
+  error: "text-[var(--color-error-text)]",
+};
+
 interface StatCardProps extends React.ComponentProps<"div"> {
   label: string;
   value: React.ReactNode;
   sub?: React.ReactNode;
+  accent?: StatCardAccent;
 }
 
-function StatCard({ label, value, sub, className, ...props }: StatCardProps) {
+function StatCard({ label, value, sub, accent = "default", className, ...props }: StatCardProps) {
   return (
     <div
       className={cn(
@@ -18,7 +28,12 @@ function StatCard({ label, value, sub, className, ...props }: StatCardProps) {
       <div className="text-[12px] text-[var(--color-text-secondary)] mb-1">
         {label}
       </div>
-      <div className="text-[32px] font-semibold font-[family-name:var(--font-sans)] leading-tight">
+      <div
+        className={cn(
+          "text-[32px] font-semibold font-[family-name:var(--font-sans)] leading-tight",
+          ACCENT_VALUE_CLASSES[accent]
+        )}
+      >
         {value}
       </div>
       {sub && (
@@ -30,4 +45,4 @@ function StatCard({ label, value, sub, className, ...props }: StatCardProps) {
   );
 }
 
-export { StatCard };
+export { StatCard, type StatCardProps, type StatCardAccent };

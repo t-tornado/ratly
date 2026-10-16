@@ -55,4 +55,4 @@ function LiveEventsFeed({
   );
 }
 
-export { LiveEventsFeed };
+export { LiveEventsFeed, type LiveEventsFeedProps, type LiveEvent };
