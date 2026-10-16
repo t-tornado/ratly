@@ -4,7 +4,7 @@ import { cn } from "../../lib/utils";
 import { Button } from "../Button";
 import { Modal, ModalFooter } from "../Modal";
 
-type ThrottlingDuration = "30m" | "1h" | "4h";
+type ThrottlingDuration = "15m" | "1h" | "24h";
 
 interface ThrottlingModalProps {
   isOpen: boolean;
@@ -15,16 +15,20 @@ interface ThrottlingModalProps {
   currentRemaining?: number;
 }
 
-const DURATION_OPTIONS: { value: ThrottlingDuration; label: string }[] = [
-  { value: "30m", label: "30 minutes" },
-  { value: "1h", label: "1 hour" },
-  { value: "4h", label: "4 hours" },
+const DURATION_OPTIONS: {
+  value: ThrottlingDuration;
+  label: string;
+  minutes: number;
+}[] = [
+  { value: "15m", label: "15 min", minutes: 15 },
+  { value: "1h", label: "1 hour", minutes: 60 },
+  { value: "24h", label: "24 hours", minutes: 1440 },
 ];
 
 const DURATION_MINUTES: Record<ThrottlingDuration, number> = {
-  "30m": 30,
+  "15m": 15,
   "1h": 60,
-  "4h": 240,
+  "24h": 1440,
 };
 
 function formatResumeTime(duration: ThrottlingDuration): string {
@@ -68,16 +72,16 @@ function ThrottlingModal({
       onCancel={onClose}
       onConfirm={handleConfirm}
       confirmLabel={isThrottling ? "Pause throttling" : "Resume throttling"}
-      confirmVariant={isThrottling ? "warning-ghost" : "primary"}
+      confirmVariant={isThrottling ? "primary" : "accent"}
     />
   );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} footer={footer}>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3.5">
         {isThrottling ? (
           <>
-            <p className="text-[var(--text-base-sm)] text-[var(--color-text-secondary)]">
+            <p className="text-[var(--text-base-sm)] text-[var(--color-text-tertiary)] leading-normal">
               Requests still get counted, but none are rejected. Throttling
               resumes on its own, or early with Resume.
             </p>
@@ -89,7 +93,7 @@ function ThrottlingModal({
                   className={cn(
                     "h-11 rounded-[var(--radius-lg)]",
                     selectedDuration === option.value &&
-                      "bg-[var(--color-bg-active)]"
+                      "border-[var(--color-accent-blue)] bg-[var(--color-bg-active)]"
                   )}
                   onClick={() => setSelectedDuration(option.value)}
                 >
@@ -105,7 +109,7 @@ function ThrottlingModal({
             </div>
           </>
         ) : (
-          <p className="text-[var(--text-base-sm)] text-[var(--color-text-secondary)]">
+          <p className="text-[var(--text-base-sm)] text-[var(--color-text-tertiary)] leading-normal">
             Turn throttling back on now. The user has{" "}
             {currentRemaining ?? 0} left in this window; if they're
             already over, further requests are rejected right away.

@@ -144,6 +144,7 @@ function UserDetailHeader({
         }}
         userId={userId}
         currentRemaining={currentRemaining}
+        limit={currentLimit}
       />
 
       <ThrottlingModal

@@ -4,7 +4,17 @@ import { Modal, ModalFooter, ModalPreviewBox } from "../Modal";
 import { Button } from "../Button";
 import { cn } from "../../lib/utils";
 
-const PRESET_LIMITS = [50, 100, 500, 1000] as const;
+interface PresetLimit {
+  value: number;
+  label: string;
+}
+
+const PRESET_LIMITS: readonly PresetLimit[] = [
+  { value: 50, label: "50" },
+  { value: 100, label: "100 \u00b7 default" },
+  { value: 150, label: "150" },
+  { value: 500, label: "500" },
+] as const;
 
 export interface AdjustLimitModalProps {
   isOpen: boolean;
@@ -59,11 +69,11 @@ function AdjustLimitModal({
           onCancel={onClose}
           onConfirm={handleConfirm}
           confirmLabel={`Set limit to ${limitValue}`}
-          confirmVariant="primary"
+          confirmVariant="accent"
         />
       }
     >
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3.5">
         <label className="text-[var(--text-base-sm)] text-[var(--color-text-secondary)]">
           Requests per hour (now {currentLimit})
         </label>
@@ -79,21 +89,26 @@ function AdjustLimitModal({
         <div className="flex gap-2">
           {PRESET_LIMITS.map((preset) => (
             <Button
-              key={preset}
+              key={preset.value}
               variant="ghost"
-              size="compact"
+              size="pill"
               className={cn(
-                limitValue === preset && "bg-[var(--color-bg-active)]"
+                limitValue === preset.value &&
+                  "border-[var(--color-accent-blue)] bg-[var(--color-bg-active)]"
               )}
-              onClick={() => handlePresetClick(preset)}
+              onClick={() => handlePresetClick(preset.value)}
             >
-              {preset}
+              {preset.label}
             </Button>
           ))}
         </div>
 
         <ModalPreviewBox>
-          Remaining becomes {newRemaining} &middot; {remainingStatus}
+          Remaining becomes{" "}
+          <span className="text-[var(--color-accent-blue)]">
+            {newRemaining} / {limitValue}
+          </span>{" "}
+          &middot; {remainingStatus}
         </ModalPreviewBox>
       </div>
     </Modal>

@@ -24,5 +24,6 @@ export const Default: Story = {
     onConfirm: () => {},
     userId: "usr_3e88d1",
     currentRemaining: 42,
+    limit: 100,
   },
 };

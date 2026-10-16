@@ -40,12 +40,12 @@ describe("ResetWindowModal", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows NOW and AFTER preview", () => {
+  it("shows NOW and AFTER preview in two-column grid", () => {
     renderModal({ currentRemaining: 42, currentStatus: "OK", limit: 100 });
     expect(screen.getByText("NOW")).toBeInTheDocument();
     expect(screen.getByText("AFTER")).toBeInTheDocument();
-    expect(screen.getByText(/42/)).toBeInTheDocument();
-    expect(screen.getByText(/100 \/ 100/)).toBeInTheDocument();
+    expect(screen.getByText(/42 \/ 100 · OK/)).toBeInTheDocument();
+    expect(screen.getByText(/100 \/ 100 · OK/)).toBeInTheDocument();
   });
 
   it("calls onConfirm when confirm clicked", () => {

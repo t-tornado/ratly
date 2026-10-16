@@ -5,7 +5,8 @@ import { Button } from "../Button";
 
 const DEFAULT_EXTRA_REQUESTS = 10;
 const MIN_EXTRA_REQUESTS = 1;
-const PRESET_VALUES = [10, 50, 100] as const;
+const STEPPER_INCREMENT = 5;
+const PRESET_VALUES = [10, 25, 50] as const;
 
 export interface AddExtraRequestsModalProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ export interface AddExtraRequestsModalProps {
   onConfirm: (extraRequests: number) => void;
   userId: string;
   currentRemaining: number;
+  limit: number;
 }
 
 export function AddExtraRequestsModal({
@@ -21,17 +23,18 @@ export function AddExtraRequestsModal({
   onConfirm,
   userId,
   currentRemaining,
+  limit,
 }: AddExtraRequestsModalProps) {
   const [extraRequests, setExtraRequests] = useState(DEFAULT_EXTRA_REQUESTS);
 
   function handleDecrement() {
     setExtraRequests((previous) =>
-      Math.max(MIN_EXTRA_REQUESTS, previous - 1)
+      Math.max(MIN_EXTRA_REQUESTS, previous - STEPPER_INCREMENT)
     );
   }
 
   function handleIncrement() {
-    setExtraRequests((previous) => previous + 1);
+    setExtraRequests((previous) => previous + STEPPER_INCREMENT);
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -64,17 +67,22 @@ export function AddExtraRequestsModal({
           onCancel={onClose}
           onConfirm={handleConfirm}
           confirmLabel={`Add ${extraRequests} requests`}
-          confirmVariant="primary"
+          confirmVariant="accent"
         />
       }
     >
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-center gap-2">
+      <div className="flex flex-col gap-3.5">
+        <p className="text-[var(--color-text-tertiary)] leading-normal">
+          A one-off top-up for this window only. It disappears when the window
+          resets; the limit stays {limit}.
+        </p>
+
+        <div className="flex items-center gap-2.5 flex-wrap">
           <Button
             variant="ghost"
             className="size-11 rounded-[var(--radius-lg)]"
             onClick={handleDecrement}
-            aria-label="Decrease"
+            aria-label="Decrease by 5"
           >
             -
           </Button>
@@ -90,18 +98,16 @@ export function AddExtraRequestsModal({
             variant="ghost"
             className="size-11 rounded-[var(--radius-lg)]"
             onClick={handleIncrement}
-            aria-label="Increase"
+            aria-label="Increase by 5"
           >
             +
           </Button>
-        </div>
-
-        <div className="flex items-center justify-center gap-2">
           {PRESET_VALUES.map((presetValue) => (
             <Button
               key={presetValue}
               variant="ghost"
-              size="compact"
+              size="pill"
+              className="text-[var(--color-text-tertiary)]"
               onClick={() => handlePreset(presetValue)}
             >
               +{presetValue}

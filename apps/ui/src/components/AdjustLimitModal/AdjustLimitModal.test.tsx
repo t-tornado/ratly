@@ -51,21 +51,28 @@ describe("AdjustLimitModal", () => {
     expect(limitInput).toHaveValue(250);
   });
 
+  it("renders all preset buttons", () => {
+    renderModal();
+    expect(screen.getByText("50")).toBeInTheDocument();
+    expect(screen.getByText("100 \u00b7 default")).toBeInTheDocument();
+    expect(screen.getByText("150")).toBeInTheDocument();
+    expect(screen.getByText("500")).toBeInTheDocument();
+  });
+
   it("preset buttons update value", () => {
     renderModal();
-    fireEvent.click(screen.getByText("500"));
+    fireEvent.click(screen.getByText("150"));
     const limitInput = screen.getByTestId("limit-input");
-    expect(limitInput).toHaveValue(500);
+    expect(limitInput).toHaveValue(150);
   });
 
   it("shows correct remaining preview", () => {
     renderModal({ currentLimit: 100, currentRemaining: 42 });
     fireEvent.click(screen.getByText("500"));
-    expect(
-      screen.getByText((textContent) =>
-        textContent.includes("Remaining becomes 442")
-      )
-    ).toBeInTheDocument();
+    const modalBody = screen.getByTestId("modal-body");
+    expect(modalBody.textContent).toContain("Remaining becomes");
+    expect(modalBody.textContent).toContain("442 / 500");
+    expect(modalBody.textContent).toContain("\u00b7 OK");
   });
 
   it("calls onConfirm with new limit when confirmed", () => {

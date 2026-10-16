@@ -34,9 +34,9 @@ describe("ThrottlingModal — Pause variant", () => {
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={true} />
     );
     expect(screen.getByTestId("duration-buttons")).toBeInTheDocument();
-    expect(screen.getByText("30 minutes")).toBeInTheDocument();
+    expect(screen.getByText("15 min")).toBeInTheDocument();
     expect(screen.getByText("1 hour")).toBeInTheDocument();
-    expect(screen.getByText("4 hours")).toBeInTheDocument();
+    expect(screen.getByText("24 hours")).toBeInTheDocument();
   });
 
   it("selects 1h by default", () => {
@@ -44,6 +44,7 @@ describe("ThrottlingModal — Pause variant", () => {
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={true} />
     );
     const oneHourButton = screen.getByText("1 hour");
+    expect(oneHourButton.className).toContain("border-[var(--color-accent-blue)]");
     expect(oneHourButton.className).toContain("bg-[var(--color-bg-active)]");
   });
 
@@ -51,9 +52,10 @@ describe("ThrottlingModal — Pause variant", () => {
     render(
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={true} />
     );
-    const thirtyMinButton = screen.getByText("30 minutes");
-    fireEvent.click(thirtyMinButton);
-    expect(thirtyMinButton.className).toContain("bg-[var(--color-bg-active)]");
+    const fifteenMinButton = screen.getByText("15 min");
+    fireEvent.click(fifteenMinButton);
+    expect(fifteenMinButton.className).toContain("border-[var(--color-accent-blue)]");
+    expect(fifteenMinButton.className).toContain("bg-[var(--color-bg-active)]");
 
     const oneHourButton = screen.getByText("1 hour");
     expect(oneHourButton.className).not.toContain(
@@ -79,9 +81,9 @@ describe("ThrottlingModal — Pause variant", () => {
         onConfirm={handleConfirm}
       />
     );
-    fireEvent.click(screen.getByText("4 hours"));
+    fireEvent.click(screen.getByText("24 hours"));
     fireEvent.click(screen.getByText("Pause throttling"));
-    expect(handleConfirm).toHaveBeenCalledWith("4h");
+    expect(handleConfirm).toHaveBeenCalledWith("24h");
   });
 
   it('confirm button says "Pause throttling"', () => {

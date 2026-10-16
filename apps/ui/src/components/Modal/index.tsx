@@ -40,7 +40,7 @@ interface ModalFooterProps {
   cancelLabel?: string;
   onConfirm: () => void;
   confirmLabel: string;
-  confirmVariant?: "primary" | "ghost" | "destructive-ghost" | "warning-ghost";
+  confirmVariant?: "primary" | "accent" | "destructive" | "ghost" | "destructive-ghost" | "warning-ghost";
   isConfirmDisabled?: boolean;
 }
 

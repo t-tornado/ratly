@@ -1,4 +1,4 @@
-import { Modal, ModalFooter, ModalPreviewBox } from "../Modal";
+import { Modal, ModalFooter } from "../Modal";
 
 export interface ResetWindowModalProps {
   isOpen: boolean;
@@ -34,32 +34,34 @@ export function ResetWindowModal({
           onCancel={onClose}
           onConfirm={onConfirm}
           confirmLabel="Reset window"
-          confirmVariant="warning-ghost"
+          confirmVariant="destructive"
         />
       }
     >
-      <div className="flex flex-col gap-3">
-        <p className="text-[var(--text-base-sm)] text-[var(--color-text-secondary)]">
+      <div className="flex flex-col gap-4">
+        <p className="text-[var(--text-base-sm)] leading-normal text-[var(--color-text-tertiary)]">
           Ends the current window early. The user gets the full limit back now,
           and a new hour starts with their next request. This can&apos;t be
           undone.
         </p>
-        <ModalPreviewBox>
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-2">
-              <span className="text-[var(--color-text-muted)]">NOW</span>
-              <span className="text-[var(--color-text-primary)]">
-                {currentRemaining} &middot; {currentStatus}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[var(--color-text-muted)]">AFTER</span>
-              <span className="text-[var(--color-text-primary)]">
-                {limit} / {limit} &middot; OK
-              </span>
-            </div>
+        <div className="grid grid-cols-2 gap-2.5 font-[family-name:var(--font-mono)] text-[13px]">
+          <div className="rounded-[var(--radius-lg)] bg-[var(--color-bg-base)] p-3">
+            <span className="text-[var(--text-xs)] text-[var(--color-text-secondary)]">
+              NOW
+            </span>
+            <p className="text-[var(--color-text-primary)]">
+              {currentRemaining} / {limit} &middot; {currentStatus}
+            </p>
           </div>
-        </ModalPreviewBox>
+          <div className="rounded-[var(--radius-lg)] bg-[var(--color-bg-base)] p-3">
+            <span className="text-[var(--text-xs)] text-[var(--color-text-secondary)]">
+              AFTER
+            </span>
+            <p className="text-[var(--color-accent-blue)]">
+              {limit} / {limit} &middot; OK
+            </p>
+          </div>
+        </div>
       </div>
     </Modal>
   );
