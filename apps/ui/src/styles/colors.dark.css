@@ -15,4 +15,18 @@
   --color-text-secondary: #9AA4B2;
   --color-text-tertiary: #C9D0DA;
   --color-text-primary: #E6E9EE;
+
+  --color-success-text: #9FE0B8;
+  --color-success-bg: #12241A;
+  --color-success-border: #1F4D33;
+
+  --color-warning-text: #F7D58C;
+  --color-warning-bg: #2A2112;
+  --color-warning-border: #5A4318;
+
+  --color-error-text: #FF9F87;
+  --color-error-bg: rgba(255, 122, 92, 0.14);
+  --color-error-bg-subtle: rgba(255, 122, 92, 0.06);
+  --color-error-border: #6B2E20;
+  --color-error-surface: #1F1714;
 }

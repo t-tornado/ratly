@@ -1,28 +1,34 @@
 import type { Preview } from '@storybook/react-vite'
 import type { ReactRenderer } from '@storybook/react-vite'
 import type { DecoratorFunction } from 'storybook/internal/types'
-import '../src/styles/index.css'
+import { MemoryRouter } from 'react-router-dom'
+import { QueryProvider } from '../src/providers/query'
 import { ThemeProvider } from '../src/providers/ThemeProvider'
+import '../src/styles/index.css'
 
-const withDarkMode: DecoratorFunction<ReactRenderer> = (Story) => {
+const withProviders: DecoratorFunction<ReactRenderer> = (Story) => {
   document.documentElement.classList.add('dark')
   return (
-    <div style={{
-      background: 'var(--color-bg-base)',
-      color: 'var(--color-text-primary)',
-      fontFamily: 'var(--font-sans)',
-      padding: '24px',
-      minHeight: '100vh',
-    }}>
-      <ThemeProvider>
-        <Story />
-      </ThemeProvider>
-    </div>
+    <MemoryRouter>
+      <QueryProvider>
+        <ThemeProvider>
+          <div style={{
+            background: 'var(--color-bg-base)',
+            color: 'var(--color-text-primary)',
+            fontFamily: 'var(--font-sans)',
+            padding: '24px',
+            minHeight: '100vh',
+          }}>
+            <Story />
+          </div>
+        </ThemeProvider>
+      </QueryProvider>
+    </MemoryRouter>
   )
 }
 
 const preview: Preview = {
-  decorators: [withDarkMode],
+  decorators: [withProviders],
   parameters: {
     layout: 'fullscreen',
     controls: {
