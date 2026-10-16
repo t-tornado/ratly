@@ -1,10 +1,12 @@
 import { cn } from "../../lib/utils";
 import { StatCard } from "../StatCard";
+import type { StatCardAccent } from "../StatCard";
 
 interface StatItem {
   label: string;
   value: React.ReactNode;
   sub?: React.ReactNode;
+  accent?: StatCardAccent;
 }
 
 interface StatsRowProps extends React.ComponentProps<"section"> {
@@ -27,10 +29,11 @@ function StatsRow({ items, className, ...props }: StatsRowProps) {
           label={item.label}
           value={item.value}
           sub={item.sub}
+          accent={item.accent}
         />
       ))}
     </section>
   );
 }
 
-export { StatsRow };
+export { StatsRow, type StatsRowProps, type StatItem };
