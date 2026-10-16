@@ -1,3 +1,4 @@
+import { PageLayout } from "../../components/PageLayout";
 import { PageSection } from "../../components/PageSection";
 import { DashboardHeader } from "./components/DashboardHeader";
 import { DashboardStats } from "./components/DashboardStats";
@@ -7,12 +8,12 @@ export default function DashboardPage() {
   const isConnected = true;
 
   return (
-    <div data-testid="dashboard-page" className="flex flex-col h-screen">
+    <PageLayout testId="dashboard-page">
       <DashboardHeader isConnected={isConnected} />
       <PageSection className="flex-1 min-h-0 pb-5">
         <DashboardStats />
         <DashboardContent />
       </PageSection>
-    </div>
+    </PageLayout>
   );
 }

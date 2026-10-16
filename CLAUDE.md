@@ -24,6 +24,7 @@
 | Building or updating components | `design-components` | Builds shared components flat — standalone or composed |
 | Comparing two visual sources | `visual-compare` | Screenshots + diffs for fidelity, regression, or theme checks |
 | Committing changes | `commit` | Stage, scan secrets, commit with conventional message |
+| Creating a pull request | `create-pr` | Run quality gates, collect gate report, create PR with proof |
 
 ## Skill rules
 

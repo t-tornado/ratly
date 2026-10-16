@@ -4,23 +4,10 @@
   --color-accent-blue-hover: #B9D8FF;
   --color-accent-purple: #B79CFF;
 
-  /* --- Colors: Status --- */
+  /* --- Colors: Status (base hues, theme-independent) --- */
   --color-success: #4FD18B;
-  --color-success-text: #9FE0B8;
-  --color-success-bg: #12241A;
-  --color-success-border: #1F4D33;
-
   --color-warning: #F2B33D;
-  --color-warning-text: #F7D58C;
-  --color-warning-bg: #2A2112;
-  --color-warning-border: #5A4318;
-
   --color-error: #FF7A5C;
-  --color-error-text: #FF9F87;
-  --color-error-bg: rgba(255, 122, 92, 0.14);
-  --color-error-bg-subtle: rgba(255, 122, 92, 0.06);
-  --color-error-border: #6B2E20;
-  --color-error-surface: #1F1714;
 
   /* --- Typography --- */
   --font-sans: "IBM Plex Sans", sans-serif;

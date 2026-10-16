@@ -11,8 +11,22 @@
 
   --color-overlay: rgba(0, 0, 0, 0.5);
 
-  --color-text-muted: #8C95A3;
+  --color-text-muted: #656D7A;
   --color-text-secondary: #5F6B7A;
   --color-text-tertiary: #3D4A5C;
   --color-text-primary: #141820;
+
+  --color-success-text: #1A7D3A;
+  --color-success-bg: #E8F5EC;
+  --color-success-border: #A3D9B1;
+
+  --color-warning-text: #8A6100;
+  --color-warning-bg: #FFF7E0;
+  --color-warning-border: #E0C56B;
+
+  --color-error-text: #C0392B;
+  --color-error-bg: rgba(255, 122, 92, 0.08);
+  --color-error-bg-subtle: rgba(255, 122, 92, 0.04);
+  --color-error-border: #E8A99A;
+  --color-error-surface: #FEF5F3;
 }

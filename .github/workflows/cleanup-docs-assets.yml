@@ -1,0 +1,59 @@
+name: Cleanup docs assets
+
+on:
+  pull_request:
+    types: [closed]
+  issues:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup-pr-assets:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find image assets added by this PR
+        id: find
+        run: |
+          ASSETS=$(git diff --name-only --diff-filter=A origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }} -- 'docs/visual-compare/**' 'docs/issues/**' '**.png' '**.jpg' '**.jpeg' '**.gif' '**.webp' | head -100)
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$ASSETS" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Delete assets and commit
+        if: steps.find.outputs.files != ''
+        run: |
+          echo "${{ steps.find.outputs.files }}" | while IFS= read -r file; do
+            [ -f "$file" ] && git rm "$file"
+          done
+          if git diff --cached --quiet; then
+            echo "Nothing to clean up"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore: cleanup docs assets from PR #${{ github.event.pull_request.number }}"
+            git push
+          fi
+
+  cleanup-issue-assets:
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delete issue asset directory
+        run: |
+          ISSUE_DIR="docs/issues/${{ github.event.issue.number }}"
+          if [ -d "$ISSUE_DIR" ]; then
+            git rm -r "$ISSUE_DIR"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore: cleanup assets for issue #${{ github.event.issue.number }}"
+            git push
+          else
+            echo "No assets directory for issue #${{ github.event.issue.number }}"
+          fi

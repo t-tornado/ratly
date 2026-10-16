@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { ThemeProvider } from "../../../../providers/ThemeProvider";
 import { UserDetailHeader } from ".";
 
 function renderHeader(
@@ -15,9 +16,11 @@ function renderHeader(
     currentRemaining: 42,
   };
   return render(
-    <MemoryRouter>
-      <UserDetailHeader {...defaultProps} {...props} />
-    </MemoryRouter>
+    <ThemeProvider>
+      <MemoryRouter>
+        <UserDetailHeader {...defaultProps} {...props} />
+      </MemoryRouter>
+    </ThemeProvider>
   );
 }
 

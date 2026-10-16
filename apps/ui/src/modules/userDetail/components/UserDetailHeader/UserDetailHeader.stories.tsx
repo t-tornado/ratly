@@ -1,17 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MemoryRouter } from "react-router-dom";
 import { UserDetailHeader } from ".";
 
 const meta = {
   component: UserDetailHeader,
   tags: ["autodocs"],
-  decorators: [
-    (Story) => (
-      <MemoryRouter>
-        <Story />
-      </MemoryRouter>
-    ),
-  ],
 } satisfies Meta<typeof UserDetailHeader>;
 
 export default meta;
