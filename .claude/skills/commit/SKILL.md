@@ -40,10 +40,13 @@ description: Stage and commit changes with a conventional commit message. Scans 
 
 6. **Validate message** — Check the composed message for any `Co-Authored-By` or co-author trailer (case-insensitive).
    - If found: discard the message, rewrite without it, and re-validate. Do NOT proceed until clean.
+   - The `commit-msg` hook (`.husky/commit-msg`) enforces this as a hard gate — git will reject the commit if a co-author trailer is present.
 
-7. **Commit** — Run `git commit`. Husky pre-commit hook runs gitleaks again as a safety net.
-   - If hook fails: do NOT use `--no-verify`. Fix the issue, unstage the problem file, and retry.
-   - If hook passes: report the commit hash to the user.
+7. **Commit** — Run `git commit`. Husky hooks run automatically:
+   - `pre-commit`: gitleaks scans staged files for secrets.
+   - `commit-msg`: rejects any commit message containing `Co-Authored-By` (case-insensitive).
+   - If any hook fails: do NOT use `--no-verify`. Fix the issue and retry.
+   - If hooks pass: report the commit hash to the user.
 
 ## Rules
 - Never use `--no-verify` or `--no-gpg-sign`.
