@@ -1,5 +1,6 @@
 import { cn } from "../../lib/utils";
 import { Logo } from "../Logo";
+import { ThemeToggle } from "../ThemeToggle";
 
 const PAGE_HEADER_HEIGHT = 56;
 const LOGO_SIZE = 22;
@@ -19,16 +20,25 @@ function PageHeader({
     <header
       data-testid="page-header"
       className={cn(
-        "flex flex-wrap items-center gap-4 px-7 py-3.5 border-b border-[var(--color-border-default)] bg-[var(--color-bg-surface)]",
+        "flex items-center gap-4 px-7 py-3.5 border-b border-[var(--color-border-default)] bg-[var(--color-bg-surface)]",
         className
       )}
       style={{ height: PAGE_HEADER_HEIGHT }}
       {...props}
     >
-      <Logo size={LOGO_SIZE} showWordmark />
-      {children}
+      <div className="flex items-center gap-4 shrink-0">
+        <Logo size={LOGO_SIZE} showWordmark />
+      </div>
+      {children && (
+        <div className="flex items-center gap-4 overflow-hidden">
+          {children}
+        </div>
+      )}
       <div className="flex-1" />
-      {rightSlot}
+      <div className="flex items-center gap-3 shrink-0">
+        {rightSlot}
+        <ThemeToggle />
+      </div>
     </header>
   );
 }
