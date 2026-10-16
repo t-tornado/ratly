@@ -12,7 +12,7 @@
 
 import { readFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
-import Ajv from "ajv";
+import Ajv from "ajv/dist/2020.js";
 
 const outputPath = resolve(process.argv[2]);
 if (!outputPath) {
