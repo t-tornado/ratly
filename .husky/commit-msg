@@ -1,0 +1,5 @@
+if grep -qi "co-authored-by" "$1"; then
+  echo "ERROR: Commit message contains a Co-Authored-By trailer."
+  echo "Remove it and try again."
+  exit 1
+fi
