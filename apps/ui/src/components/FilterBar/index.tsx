@@ -78,4 +78,4 @@ function FilterBar({
   );
 }
 
-export { FilterBar };
+export { FilterBar, type FilterBarProps, type FilterOption };
