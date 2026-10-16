@@ -2,7 +2,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../../lib/hooks";
 import { cn } from "../../lib/utils";
 
-interface ThemeToggleProps extends React.ComponentProps<"button"> {}
+type ThemeToggleProps = React.ComponentProps<"button">;
 
 function ThemeToggle({ className, ...props }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme();

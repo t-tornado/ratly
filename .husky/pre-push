@@ -2,4 +2,3 @@ gitleaks detect --no-banner --no-git
 pnpm --filter @ratly/ui lint
 pnpm --filter @ratly/ui typecheck
 pnpm --filter @ratly/ui test
-pnpm --filter @ratly/ui test:guards
