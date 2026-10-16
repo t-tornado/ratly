@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["step", "files"],
+  "properties": {
+    "step": { "type": "string", "const": "provision" },
+    "files": {
+      "type": "object",
+      "required": ["tokens.css", "colors.light.css", "colors.dark.css", "index.css"],
+      "additionalProperties": false,
+      "properties": {
+        "tokens.css": { "$ref": "#/$defs/fileStatus" },
+        "colors.light.css": { "$ref": "#/$defs/fileStatus" },
+        "colors.dark.css": { "$ref": "#/$defs/fileStatus" },
+        "index.css": { "$ref": "#/$defs/fileStatus" }
+      }
+    }
+  },
+  "$defs": {
+    "fileStatus": {
+      "type": "object",
+      "required": ["status", "path"],
+      "properties": {
+        "status": { "type": "string", "enum": ["found", "created"] },
+        "path": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["step", "files"],
+  "properties": {
+    "step": { "type": "string", "const": "write_tokens" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["file", "path", "action", "tokensWritten"],
+        "properties": {
+          "file": { "type": "string" },
+          "path": { "type": "string" },
+          "action": { "type": "string", "enum": ["created", "updated", "unchanged"] },
+          "tokensWritten": { "type": "integer", "minimum": 0 },
+          "tokensSkipped": { "type": "integer", "minimum": 0 },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["variable", "value", "action"],
+              "properties": {
+                "variable": { "type": "string" },
+                "value": { "type": "string" },
+                "action": { "type": "string", "enum": ["added", "updated", "unchanged"] }
+              }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["totalTokens", "added", "updated", "unchanged"],
+      "properties": {
+        "totalTokens": { "type": "integer", "minimum": 0 },
+        "added": { "type": "integer", "minimum": 0 },
+        "updated": { "type": "integer", "minimum": 0 },
+        "unchanged": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
