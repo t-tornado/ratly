@@ -12,7 +12,7 @@
 
 import { readFileSync } from "fs";
 import { resolve, dirname } from "path";
-import Ajv from "ajv";
+import Ajv2020 from "ajv/dist/2020.js";
 
 const outputPath = resolve(process.argv[2]);
 if (!outputPath) {
@@ -38,7 +38,7 @@ if (!componentStep) {
   process.exit(1);
 }
 
-const ajv = new Ajv({ allErrors: true });
+const ajv = new Ajv2020({ allErrors: true });
 const validate = ajv.compile(schema);
 const valid = validate(componentStep.results);
 

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["step", "report"],
+  "properties": {
+    "step": { "type": "string", "const": "report" },
+    "report": {
+      "type": "object",
+      "required": ["runId", "timestamp", "sourceA", "sourceB", "viewports", "overallStatus", "summary", "components"],
+      "properties": {
+        "runId": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "sourceA": {
+          "type": "object",
+          "required": ["type", "target", "label"],
+          "properties": {
+            "type": { "type": "string", "enum": ["url", "file", "storybook"] },
+            "target": { "type": "string" },
+            "label": { "type": "string" }
+          }
+        },
+        "sourceB": {
+          "type": "object",
+          "required": ["type", "target", "label"],
+          "properties": {
+            "type": { "type": "string", "enum": ["url", "file", "storybook"] },
+            "target": { "type": "string" },
+            "label": { "type": "string" }
+          }
+        },
+        "viewports": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "width", "height"],
+            "properties": {
+              "name": { "type": "string" },
+              "width": { "type": "integer" },
+              "height": { "type": "integer" }
+            }
+          }
+        },
+        "overallStatus": { "type": "string", "enum": ["pass", "review", "fail"] },
+        "summary": {
+          "type": "object",
+          "required": ["totalComparisons", "match", "close", "mismatch"],
+          "properties": {
+            "totalComparisons": { "type": "integer" },
+            "match": { "type": "integer" },
+            "close": { "type": "integer" },
+            "mismatch": { "type": "integer" }
+          }
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status", "viewports"],
+            "properties": {
+              "name": { "type": "string" },
+              "status": { "type": "string", "enum": ["match", "close", "mismatch", "error"] },
+              "viewports": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "status", "diffPercentage"],
+                  "properties": {
+                    "name": { "type": "string" },
+                    "status": { "type": "string", "enum": ["match", "close", "mismatch", "error"] },
+                    "diffPercentage": { "type": "number" },
+                    "differences": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["type", "description", "severity"],
+                        "properties": {
+                          "type": { "type": "string" },
+                          "description": { "type": "string" },
+                          "severity": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["step", "summary", "components"],
+  "properties": {
+    "step": { "type": "string", "const": "inventory" },
+    "summary": {
+      "type": "object",
+      "required": ["totalNeeded", "existing", "toCreate", "toUpdate"],
+      "properties": {
+        "totalNeeded": { "type": "integer", "minimum": 0 },
+        "existing": { "type": "integer", "minimum": 0 },
+        "toCreate": { "type": "integer", "minimum": 0 },
+        "toUpdate": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "status", "action"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "status": { "type": "string", "enum": ["exists", "missing"] },
+          "action": { "type": "string", "enum": ["create", "update", "skip"] },
+          "path": { "type": "string" },
+          "reason": { "type": "string" },
+          "variants": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

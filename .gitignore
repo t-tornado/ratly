@@ -1,2 +1,11 @@
 **/node_modules
 **/dist
+**/.vitest
+**/coverage
+.claude/.agent-runs/
+*storybook.log
+storybook-static
+.playwright-mcp/
+prototypes/
+.agent-runs/
+worktrees/
