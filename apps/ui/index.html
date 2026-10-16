@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ratly</title>
 
+    <!-- Theme flash prevention — runs before React, raw localStorage OK here -->
+    <script>
+      (function () {
+        var stored = null;
+        try { stored = JSON.parse(localStorage.getItem("ratly-theme")); } catch (e) {}
+        var theme = stored === "light" || stored === "dark" ? stored
+          : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.classList.add(theme);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.content = theme === "dark" ? "#0E1116" : "#FAFBFC";
+      })();
+    </script>
+
     <!-- Favicons -->
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

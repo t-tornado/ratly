@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/react-vite'
 import type { ReactRenderer } from '@storybook/react-vite'
 import type { DecoratorFunction } from 'storybook/internal/types'
 import '../src/styles/index.css'
+import { ThemeProvider } from '../src/providers/ThemeProvider'
 
 const withDarkMode: DecoratorFunction<ReactRenderer> = (Story) => {
   document.documentElement.classList.add('dark')
@@ -13,7 +14,9 @@ const withDarkMode: DecoratorFunction<ReactRenderer> = (Story) => {
       padding: '24px',
       minHeight: '100vh',
     }}>
-      <Story />
+      <ThemeProvider>
+        <Story />
+      </ThemeProvider>
     </div>
   )
 }
