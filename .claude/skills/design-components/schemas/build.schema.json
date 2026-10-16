@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["step", "layer", "summary", "components"],
+  "properties": {
+    "step": { "type": "string", "enum": ["build_atoms", "build_components"] },
+    "layer": { "type": "string", "enum": ["atoms", "components"] },
+    "summary": {
+      "type": "object",
+      "required": ["total", "created", "updated", "skipped"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "created": { "type": "integer", "minimum": 0 },
+        "updated": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "action", "path", "files"],
+        "properties": {
+          "name": { "type": "string" },
+          "action": { "type": "string", "enum": ["created", "updated", "skipped"] },
+          "path": { "type": "string" },
+          "files": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["file", "action"],
+              "properties": {
+                "file": { "type": "string" },
+                "action": { "type": "string", "enum": ["created", "updated", "unchanged"] }
+              }
+            }
+          },
+          "variants": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "usesTokens": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

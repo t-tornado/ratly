@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["step", "summary", "pairs"],
+  "properties": {
+    "step": { "type": "string", "const": "contrast_check" },
+    "summary": {
+      "type": "object",
+      "required": ["total", "passed", "failed"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 1 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "pairs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["foreground", "background", "foregroundValue", "backgroundValue", "ratio", "required", "level", "status"],
+        "properties": {
+          "foreground": { "type": "string" },
+          "background": { "type": "string" },
+          "foregroundValue": { "type": "string" },
+          "backgroundValue": { "type": "string" },
+          "ratio": { "type": "number", "minimum": 1 },
+          "required": { "type": "number", "enum": [3, 4.5, 7] },
+          "level": { "type": "string", "enum": ["AA-large", "AA", "AAA"] },
+          "status": { "type": "string", "enum": ["pass", "fail"] }
+        }
+      }
+    }
+  }
+}

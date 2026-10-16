@@ -9,6 +9,8 @@ description: Extract every design token and component from an HTML prototype col
 
 | Name                    | Value                                                 | Description                            |
 | ----------------------- | ----------------------------------------------------- | -------------------------------------- |
+| `<run_dir>`             | `.agent-runs/<run_id>`                           | Root of this run's output              |
+| `<output>`              | `<run_dir>/design-system-extract`                     | This skill's output directory          |
 | `<step_output>`         | `<output>/manifest.json`                              | Per-step JSON results (append-only)    |
 | `<final_output>`        | `<output>/design-system-extraction.html`              | Final combined output for human review |
 | `<skill_root>`          | `.claude/skills/design-system-extract`                | Root of this skill's assets            |
@@ -19,11 +21,23 @@ description: Extract every design token and component from an HTML prototype col
 
 ## Input
 
+- **run_id** (required): unique identifier for this run. Scopes all output. Provided by the coordinator.
 - **source** (required): An HTML file or URL to an HTML prototype
 - **coordinator** (required): the agent or session that invoked this skill. used to trace which run produced the outputs
 - **context** (optional): a summary of additional instructions, context or constraints passed from the coordinator agent. must be a maximum of 4 lines
 
 ## Steps
+
+0. **Initialize output** — Execute immediately before any other work:
+   ```bash
+   mkdir -p <output>
+   echo '[]' > <step_output>
+   ```
+   Then verify:
+   ```bash
+   cat <step_output>
+   ```
+   **HARD STOP: If `<step_output>` does not exist, do not proceed. Fix it first.**
 
 1. **Fetch** — Read the HTML. Follow all linked stylesheets, nested HTML partials, and asset references. List every file you found.
 
@@ -118,9 +132,15 @@ description: Extract every design token and component from an HTML prototype col
 
 ## Rules
 
-- write all the jsons in a single run file
-- Do NOT create any code yet except the output html jsons. This phase is extraction only.
-- the results object differs by step. follow the rules below strictly in your output
+### Source of truth
+- Extract tokens and components from the **HTML source code, CSS, and stylesheets** — never from screenshots or visual rendering.
+- Read the actual `style` attributes, CSS rules, class definitions, and markup structure.
+- Every extracted value must be traceable to a line in the source HTML or CSS.
+- Screenshots are for **verification only** — render the result and compare visually to the prototype. Never extract values from a screenshot.
+
+### Output
+- Write all step results in a single run file.
+- Do NOT create any application code. This phase is extraction only.
+- The results object differs by step. Follow the output rules for each step strictly.
 - Do NOT skip the self-verification step.
-- If unsure whether something is a token or a one-off value, include it
-  and flag it as "uncertain".
+- If unsure whether something is a token or a one-off value, include it and flag it as "uncertain".
