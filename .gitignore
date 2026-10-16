@@ -8,4 +8,5 @@ storybook-static
 .playwright-mcp/
 prototypes/
 .agent-runs/
+.claude/tasks/
 worktrees/
