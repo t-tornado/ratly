@@ -45,17 +45,17 @@ function DataTableRow({
   return (
     <tr
       className={cn(
-        "border-t border-[var(--color-bg-hover)]",
+        "border-t border-bg-hover",
         status === "exceeded" &&
-          "bg-[var(--color-error-bg)] shadow-[var(--shadow-inset-error)]",
-        isClickable && "cursor-pointer hover:bg-[var(--color-bg-hover)]"
+          "bg-error-bg shadow-inset-error",
+        isClickable && "cursor-pointer hover:bg-bg-hover"
       )}
       onClick={onClick}
     >
-      <td className="py-3 px-4 font-[family-name:var(--font-mono)] text-[13px]">
+      <td className="py-3 px-4 font-mono text-base-sm">
         <a
           href={href ?? "#"}
-          className="text-[var(--color-accent-blue)] no-underline hover:underline"
+          className="text-accent-blue no-underline hover:underline"
           onClick={(e) => e.stopPropagation()}
         >
           {id}
@@ -71,7 +71,7 @@ function DataTableRow({
         ))}
       </td>
       <td className="py-3 px-4">
-        <div className="flex items-center gap-3 font-[family-name:var(--font-mono)] text-[13px]">
+        <div className="flex items-center gap-3 font-mono text-base-sm">
           <span className="w-16 text-right">
             {remaining} / {total}
           </span>
@@ -83,9 +83,9 @@ function DataTableRow({
           />
         </div>
       </td>
-      <td className="py-3 px-4 font-[family-name:var(--font-mono)] text-[13px]">
+      <td className="py-3 px-4 font-mono text-base-sm">
         <span>{resetTime}</span>
-        <span className="text-[var(--color-text-muted)] ml-1">
+        <span className="text-text-muted ml-1">
           &middot; in {resetIn}
         </span>
       </td>
@@ -94,7 +94,7 @@ function DataTableRow({
           {statusLabel}
         </Badge>
       </td>
-      <td className="py-3 px-4 text-[var(--color-text-muted)] text-[13px]">
+      <td className="py-3 px-4 text-text-muted text-base-sm">
         {lastRequest}
       </td>
       <td className="py-3 px-4">

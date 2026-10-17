@@ -77,7 +77,7 @@ function ModalPreviewBox({ children, className }: ModalPreviewBoxProps) {
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-lg)] border border-[var(--color-border-strong)] bg-[var(--color-bg-base)] px-3 py-2.5 text-[length:var(--text-base-sm)] text-[color:var(--color-text-secondary)]",
+        "rounded-lg border border-border-strong bg-bg-base px-3 py-2.5 text-base-sm text-text-secondary",
         className
       )}
     >

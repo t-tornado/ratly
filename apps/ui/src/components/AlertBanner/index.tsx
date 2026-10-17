@@ -4,14 +4,14 @@ import { StatusDot } from "../StatusDot";
 import { Button } from "../Button";
 
 const alertBannerVariants = cva(
-  "flex flex-wrap items-center gap-3 rounded-[var(--radius-xl)] border px-4 py-3",
+  "flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3",
   {
     variants: {
       variant: {
         warning:
-          "bg-[var(--color-warning-bg)] border-[var(--color-warning-border)] text-[var(--color-warning-text)]",
+          "bg-warning-bg border-warning-border text-warning-text",
         error:
-          "bg-[var(--color-error-surface)] border-[var(--color-error-border)] text-[var(--color-error-text)]",
+          "bg-error-surface border-error-border text-error-text",
       },
     },
     defaultVariants: {

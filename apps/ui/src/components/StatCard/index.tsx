@@ -4,9 +4,9 @@ type StatCardAccent = "default" | "success" | "warning" | "error";
 
 const ACCENT_VALUE_CLASSES: Record<StatCardAccent, string> = {
   default: "",
-  success: "text-[var(--color-success-text)]",
-  warning: "text-[var(--color-warning-text)]",
-  error: "text-[var(--color-error-text)]",
+  success: "text-success-text",
+  warning: "text-warning-text",
+  error: "text-error-text",
 };
 
 interface StatCardProps extends React.ComponentProps<"div"> {
@@ -20,24 +20,24 @@ function StatCard({ label, value, sub, accent = "default", className, ...props }
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-xl)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)] px-4.5 py-4",
+        "rounded-xl border border-border-default bg-bg-surface-raised px-4.5 py-4",
         className
       )}
       {...props}
     >
-      <div className="text-[12px] text-[var(--color-text-secondary)] mb-1">
+      <div className="text-sm text-text-secondary mb-1">
         {label}
       </div>
       <div
         className={cn(
-          "text-[32px] font-semibold font-[family-name:var(--font-sans)] leading-tight",
+          "text-5xl font-semibold font-sans leading-tight",
           ACCENT_VALUE_CLASSES[accent]
         )}
       >
         {value}
       </div>
       {sub && (
-        <div className="text-[12px] text-[var(--color-text-muted)] mt-0.5">
+        <div className="text-sm text-text-muted mt-0.5">
           {sub}
         </div>
       )}

@@ -8,7 +8,7 @@ function CodeBlock({
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-xl)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)] px-4 py-3.5 font-[family-name:var(--font-mono)] text-[12px] leading-[1.7] whitespace-pre-line",
+        "rounded-xl border border-border-default bg-bg-surface-raised px-4 py-3.5 font-mono text-sm leading-relaxed whitespace-pre-line",
         className
       )}
       {...props}

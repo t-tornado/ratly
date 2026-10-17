@@ -26,7 +26,7 @@ describe("UserDetailRequests", () => {
     render(<UserDetailRequests />);
     const errorCells = screen
       .getAllByText("429")
-      .filter((el) => el.className.includes("color-error"));
+      .filter((el) => el.className.includes("text-error"));
     expect(errorCells).toHaveLength(2);
   });
 });

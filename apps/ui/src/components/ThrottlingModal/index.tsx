@@ -55,7 +55,7 @@ function ThrottlingModal({
   const title = (
     <>
       {isThrottling ? "Pause" : "Resume"} throttling for{" "}
-      <span className="font-[family-name:var(--font-mono)]">{userId}</span>
+      <span className="font-mono">{userId}</span>
     </>
   );
 
@@ -81,7 +81,7 @@ function ThrottlingModal({
       <div className="flex flex-col gap-3.5">
         {isThrottling ? (
           <>
-            <p className="text-[length:var(--text-base-sm)] text-[color:var(--color-text-tertiary)] leading-normal">
+            <p className="text-base-sm text-text-tertiary leading-normal">
               Requests still get counted, but none are rejected. Throttling
               resumes on its own, or early with Resume.
             </p>
@@ -91,9 +91,9 @@ function ThrottlingModal({
                   key={option.value}
                   variant="ghost"
                   className={cn(
-                    "h-11 rounded-[var(--radius-lg)]",
+                    "h-11 rounded-lg",
                     selectedDuration === option.value &&
-                      "border-[var(--color-accent-blue)] bg-[var(--color-bg-active)]"
+                      "border-accent-blue bg-bg-active"
                   )}
                   onClick={() => setSelectedDuration(option.value)}
                 >
@@ -102,14 +102,14 @@ function ThrottlingModal({
               ))}
             </div>
             <div
-              className="rounded-[var(--radius-lg)] border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] p-3 text-[length:var(--text-base-sm)] text-[color:var(--color-warning-text)]"
+              className="rounded-lg border border-warning-border bg-warning-bg p-3 text-base-sm text-warning-text"
               data-testid="warning-info-box"
             >
               Resumes at {formatResumeTime(selectedDuration)}
             </div>
           </>
         ) : (
-          <p className="text-[length:var(--text-base-sm)] text-[color:var(--color-text-tertiary)] leading-normal">
+          <p className="text-base-sm text-text-tertiary leading-normal">
             Turn throttling back on now. The user has{" "}
             {currentRemaining ?? 0} left in this window; if they're
             already over, further requests are rejected right away.

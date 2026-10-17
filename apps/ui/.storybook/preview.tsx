@@ -9,15 +9,15 @@ import '../src/styles/index.css'
 const THEME_STORAGE_KEY = 'ratly-theme'
 
 const withProviders: DecoratorFunction<ReactRenderer> = (Story, context) => {
-  localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify('dark'))
+  const selectedTheme = context.globals.theme || 'dark'
+  localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(selectedTheme))
   const skipRouter = context.parameters.skipRouter === true
 
   const content = (
     <QueryProvider>
-      <ThemeProvider>
+      <ThemeProvider key={selectedTheme}>
         <div style={{
           background: 'var(--color-bg-base)',
-          color: 'var(--color-text-primary)',
           fontFamily: 'var(--font-sans)',
           padding: '24px',
           minHeight: '100vh',
@@ -33,6 +33,23 @@ const withProviders: DecoratorFunction<ReactRenderer> = (Story, context) => {
 }
 
 const preview: Preview = {
+  globalTypes: {
+    theme: {
+      description: 'Theme',
+      toolbar: {
+        title: 'Theme',
+        icon: 'mirror',
+        items: [
+          { value: 'dark', title: 'Dark', icon: 'moon' },
+          { value: 'light', title: 'Light', icon: 'sun' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    theme: 'dark',
+  },
   decorators: [withProviders],
   parameters: {
     layout: 'fullscreen',

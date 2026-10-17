@@ -8,7 +8,7 @@ function Select({
   return (
     <select
       className={cn(
-        "h-10 rounded-[var(--radius-lg)] border border-[var(--color-border-strong)] bg-[var(--color-bg-base)] px-2.5 text-[var(--color-text-primary)] font-[family-name:var(--font-sans)] text-sm outline-none",
+        "h-10 rounded-lg border border-border-strong bg-bg-base px-2.5 text-text-primary font-sans text-sm outline-none",
         className
       )}
       {...props}

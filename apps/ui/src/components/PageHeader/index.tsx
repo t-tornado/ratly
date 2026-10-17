@@ -20,7 +20,7 @@ function PageHeader({
     <header
       data-testid="page-header"
       className={cn(
-        "flex items-center gap-4 px-7 py-3.5 border-b border-[var(--color-border-default)] bg-[var(--color-bg-surface)]",
+        "flex items-center gap-4 px-7 py-3.5 border-b border-border-default bg-bg-surface",
         className
       )}
       style={{ height: PAGE_HEADER_HEIGHT }}

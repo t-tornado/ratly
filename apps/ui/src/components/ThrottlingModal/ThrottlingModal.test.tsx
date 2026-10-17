@@ -44,8 +44,8 @@ describe("ThrottlingModal — Pause variant", () => {
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={true} />
     );
     const oneHourButton = screen.getByText("1 hour");
-    expect(oneHourButton.className).toContain("border-[var(--color-accent-blue)]");
-    expect(oneHourButton.className).toContain("bg-[var(--color-bg-active)]");
+    expect(oneHourButton.className).toContain("border-accent-blue");
+    expect(oneHourButton.className).toContain("bg-bg-active");
   });
 
   it("changes selection when clicking different duration", () => {
@@ -54,12 +54,12 @@ describe("ThrottlingModal — Pause variant", () => {
     );
     const fifteenMinButton = screen.getByText("15 min");
     fireEvent.click(fifteenMinButton);
-    expect(fifteenMinButton.className).toContain("border-[var(--color-accent-blue)]");
-    expect(fifteenMinButton.className).toContain("bg-[var(--color-bg-active)]");
+    expect(fifteenMinButton.className).toContain("border-accent-blue");
+    expect(fifteenMinButton.className).toContain("bg-bg-active");
 
     const oneHourButton = screen.getByText("1 hour");
     expect(oneHourButton.className).not.toContain(
-      "bg-[var(--color-bg-active)]"
+      "bg-bg-active"
     );
   });
 

@@ -28,15 +28,15 @@ function DataTable({ rows, footer, onAction, onRowClick, className, ...props }: 
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-xl)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)]",
+        "rounded-xl border border-border-default bg-bg-surface-raised",
         className
       )}
       {...props}
     >
       <div className="overflow-auto max-h-[70vh]">
         <table className="w-full border-collapse min-w-[860px]">
-          <thead className="sticky top-0 z-10 bg-[var(--color-bg-surface-raised)]">
-            <tr className="text-left text-[12px] text-[var(--color-text-muted)] uppercase tracking-[0.05em] border-b border-[var(--color-border-default)]">
+          <thead className="sticky top-0 z-10 bg-bg-surface-raised">
+            <tr className="text-left text-sm text-text-muted uppercase tracking-wide border-b border-border-default">
               <th className="py-3 px-4 font-medium">User ID</th>
               <th className="py-3 px-4 font-medium">Remaining / Total</th>
               <th className="py-3 px-4 font-medium">Reset time</th>
@@ -61,7 +61,7 @@ function DataTable({ rows, footer, onAction, onRowClick, className, ...props }: 
         </table>
       </div>
       {footer && (
-        <div className="flex justify-between items-center px-4 py-3 text-[12px] text-[var(--color-text-muted)] border-t border-[var(--color-border-default)]">
+        <div className="flex justify-between items-center px-4 py-3 text-sm text-text-muted border-t border-border-default">
           {footer}
         </div>
       )}

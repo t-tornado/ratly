@@ -8,14 +8,14 @@ function SearchInput({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 rounded-[var(--radius-lg)] border border-[var(--color-border-strong)] bg-transparent px-3 h-10",
+        "flex items-center gap-2 rounded-lg border border-border-strong bg-transparent px-3 h-10",
         className
       )}
     >
-      <Search className="size-4 text-[var(--color-text-muted)] shrink-0" />
+      <Search className="size-4 text-text-muted shrink-0" />
       <input
         type="search"
-        className="w-full bg-transparent border-0 outline-none text-[var(--color-text-primary)] font-[family-name:var(--font-mono)] text-[13px] placeholder:text-[var(--color-text-muted)]"
+        className="w-full bg-transparent border-0 outline-none text-text-primary font-mono text-base-sm placeholder:text-text-muted"
         {...props}
       />
     </div>

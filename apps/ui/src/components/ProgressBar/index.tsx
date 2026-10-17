@@ -1,12 +1,12 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
-const progressBarVariants = cva("block rounded-[var(--radius-xs)]", {
+const progressBarVariants = cva("block rounded-xs", {
   variants: {
     variant: {
-      ok: "bg-[var(--color-accent-blue)]",
-      warning: "bg-[var(--color-warning)]",
-      exceeded: "bg-[var(--color-error)]",
+      ok: "bg-accent-blue",
+      warning: "bg-warning",
+      exceeded: "bg-error",
     },
     barSize: {
       sm: "h-1.5",
@@ -36,7 +36,7 @@ function ProgressBar({
   return (
     <div
       className={cn(
-        "w-full rounded-[var(--radius-xs)] bg-[var(--color-border-default)]",
+        "w-full rounded-xs bg-border-default",
         barSize === "md" ? "h-2.5" : "h-1.5",
         className
       )}

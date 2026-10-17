@@ -52,7 +52,7 @@ function FilterBar({
           >
             {f.label}
             {f.count != null && (
-              <span className="ml-1 text-[11px] opacity-70">{f.count}</span>
+              <span className="ml-1 text-xs opacity-70">{f.count}</span>
             )}
           </Button>
         ))}
@@ -61,7 +61,7 @@ function FilterBar({
       {selectOptions && (
         <div className="flex items-center gap-2">
           {selectLabel && (
-            <span className="text-[var(--color-text-secondary)] text-sm">
+            <span className="text-text-secondary text-sm">
               {selectLabel}
             </span>
           )}

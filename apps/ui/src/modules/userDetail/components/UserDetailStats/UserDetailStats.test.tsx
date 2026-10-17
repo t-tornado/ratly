@@ -34,7 +34,7 @@ describe("UserDetailStats", () => {
       card.textContent?.includes("Remaining")
     );
     const valueLine = remainingCard?.querySelector(
-      "[class*='color-warning-text']"
+      "[class*='text-warning-text']"
     );
     expect(valueLine).toBeTruthy();
   });
@@ -47,7 +47,7 @@ describe("UserDetailStats", () => {
       card.textContent?.includes("Current window")
     );
     const valueLine = windowCard?.querySelector(
-      "[class*='color-error-text']"
+      "[class*='text-error-text']"
     );
     expect(valueLine).toBeTruthy();
   });

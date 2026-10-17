@@ -9,7 +9,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div className="dark bg-[var(--color-bg-base)] text-[var(--color-text-primary)] p-7 min-h-screen">
+      <div className="dark bg-bg-base text-text-primary p-7 min-h-screen">
         <Story />
       </div>
     ),

@@ -65,7 +65,7 @@ describe("DashboardPage", () => {
     const rateLimitCard = Array.from(cards).find((card) =>
       card.textContent?.includes("429s today")
     );
-    const valueLine = rateLimitCard?.querySelector("[class*='color-error-text']");
+    const valueLine = rateLimitCard?.querySelector("[class*='text-error-text']");
     expect(valueLine).toBeTruthy();
   });
 
@@ -76,14 +76,14 @@ describe("DashboardPage", () => {
     const nearLimitCard = Array.from(cards).find((card) =>
       card.textContent?.includes("Near limit")
     );
-    const valueLine = nearLimitCard?.querySelector("[class*='color-warning-text']");
+    const valueLine = nearLimitCard?.querySelector("[class*='text-warning-text']");
     expect(valueLine).toBeTruthy();
   });
 
   it("applies success color to active users sub text", () => {
     renderPage();
     const statsRow = screen.getByTestId("dashboard-stats");
-    const successElement = statsRow.querySelector("[class*='color-success-text']");
+    const successElement = statsRow.querySelector("[class*='text-success-text']");
     expect(successElement).toBeTruthy();
   });
 
@@ -94,10 +94,10 @@ describe("DashboardPage", () => {
     const totalUsersCard = Array.from(cards).find((card) =>
       card.textContent?.includes("Total users")
     );
-    const valueDiv = totalUsersCard?.querySelector("[class*='text-\\[32px\\]']");
-    expect(valueDiv?.className).not.toContain("color-error-text");
-    expect(valueDiv?.className).not.toContain("color-warning-text");
-    expect(valueDiv?.className).not.toContain("color-success-text");
+    const valueDiv = totalUsersCard?.querySelector("[class*='text-5xl']");
+    expect(valueDiv?.className).not.toContain("text-error-text");
+    expect(valueDiv?.className).not.toContain("text-warning-text");
+    expect(valueDiv?.className).not.toContain("text-success-text");
   });
 
   it("renders dashboard content layout", () => {

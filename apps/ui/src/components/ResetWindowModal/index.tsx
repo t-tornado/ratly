@@ -26,7 +26,7 @@ export function ResetWindowModal({
       title={
         <>
           Reset window for{" "}
-          <span className="font-[family-name:var(--font-mono)]">{userId}</span>
+          <span className="font-mono">{userId}</span>
         </>
       }
       footer={
@@ -39,25 +39,25 @@ export function ResetWindowModal({
       }
     >
       <div className="flex flex-col gap-4">
-        <p className="text-[length:var(--text-base-sm)] leading-normal text-[color:var(--color-text-tertiary)]">
+        <p className="text-base-sm leading-normal text-text-tertiary">
           Ends the current window early. The user gets the full limit back now,
           and a new hour starts with their next request. This can&apos;t be
           undone.
         </p>
-        <div className="grid grid-cols-2 gap-2.5 font-[family-name:var(--font-mono)] text-[13px]">
-          <div className="rounded-[var(--radius-lg)] bg-[var(--color-bg-base)] p-3">
-            <span className="text-[length:var(--text-xs)] text-[color:var(--color-text-secondary)]">
+        <div className="grid grid-cols-2 gap-2.5 font-mono text-base-sm">
+          <div className="rounded-lg bg-bg-base p-3">
+            <span className="text-xs text-text-secondary">
               NOW
             </span>
-            <p className="text-[var(--color-text-primary)]">
+            <p className="text-text-primary">
               {currentRemaining} / {limit} &middot; {currentStatus}
             </p>
           </div>
-          <div className="rounded-[var(--radius-lg)] bg-[var(--color-bg-base)] p-3">
-            <span className="text-[length:var(--text-xs)] text-[color:var(--color-text-secondary)]">
+          <div className="rounded-lg bg-bg-base p-3">
+            <span className="text-xs text-text-secondary">
               AFTER
             </span>
-            <p className="text-[var(--color-accent-blue)]">
+            <p className="text-accent-blue">
               {limit} / {limit} &middot; OK
             </p>
           </div>
