@@ -2,6 +2,7 @@
 **/dist
 **/.vitest
 **/coverage
+*.tsbuildinfo
 .claude/.agent-runs/
 *storybook.log
 storybook-static
