@@ -1,24 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DashboardContent } from ".";
+import { DashboardContent } from "./index";
+import { mockRows, mockLiveEvents } from "../../../../test/fixtures";
 
-const meta = {
+const meta: Meta<typeof DashboardContent> = {
+  title: "Dashboard/DashboardContent",
   component: DashboardContent,
   tags: ["autodocs"],
-} satisfies Meta<typeof DashboardContent>;
-
+};
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof DashboardContent>;
 
-export const Default: Story = {};
-
-export const Tablet: Story = {
-  parameters: {
-    viewport: { defaultViewport: "tablet" },
-  },
+export const Loaded: Story = {
+  args: { rows: mockRows, liveEvents: mockLiveEvents, isLoading: false },
 };
 
-export const Mobile: Story = {
-  parameters: {
-    viewport: { defaultViewport: "mobile1" },
-  },
+export const Loading: Story = {
+  args: { rows: [], liveEvents: [], isLoading: true },
 };

@@ -28,12 +28,12 @@ function DataTable({ rows, footer, onAction, onRowClick, className, ...props }: 
   return (
     <div
       className={cn(
-        "rounded-xl border border-border-default bg-bg-surface-raised",
+        "rounded-xl border border-border-default bg-bg-surface-raised flex flex-col",
         className
       )}
       {...props}
     >
-      <div className="overflow-auto max-h-[70vh]">
+      <div className="flex-1 min-h-0 overflow-auto">
         <table className="w-full border-collapse min-w-[860px]">
           <thead className="sticky top-0 z-10 bg-bg-surface-raised">
             <tr className="text-left text-sm text-text-muted uppercase tracking-wide border-b border-border-default">

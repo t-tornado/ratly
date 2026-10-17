@@ -9,6 +9,7 @@ import { Server, Socket } from "socket.io";
 import { DashboardStatsService } from "../services/dashboard/dashboard-stats.service.js";
 import { UserRow, DashboardStats } from "../lib/types/index.js";
 import { STATS_INTERVAL_MS } from "../lib/constants.js";
+import { RATE_UPDATE_EVENT, RATE_LIMIT_EXCEEDED_EVENT, DASHBOARD_STATS_UPDATE_EVENT } from "@ratly/core";
 
 @WebSocketGateway({ cors: { origin: "*" } })
 export class EventsGateway
@@ -36,15 +37,15 @@ export class EventsGateway
   }
 
   emitRateUpdate(row: UserRow) {
-    this.server.emit("rate:update", { type: "rate:update", row });
+    this.server.emit(RATE_UPDATE_EVENT, { type: RATE_UPDATE_EVENT, row });
   }
 
   emitLimitExceeded(row: UserRow) {
-    this.server.emit("rate:limit_exceeded", { type: "rate:limit_exceeded", row });
+    this.server.emit(RATE_LIMIT_EXCEEDED_EVENT, { type: RATE_LIMIT_EXCEEDED_EVENT, row });
   }
 
   emitDashboardStats(stats: DashboardStats) {
-    this.server.emit("dashboard_stats:update", { type: "dashboard_stats:update", stats });
+    this.server.emit(DASHBOARD_STATS_UPDATE_EVENT, { type: DASHBOARD_STATS_UPDATE_EVENT, stats });
   }
 
   handleConnection(_client: Socket) {}

@@ -25,6 +25,9 @@
 | Comparing two visual sources | `visual-compare` | Screenshots + diffs for fidelity, regression, or theme checks |
 | Committing changes | `commit` | Stage, scan secrets, commit with conventional message |
 | Creating a pull request | `create-pr` | Run quality gates, collect gate report, create PR with proof |
+| Shipping a GitHub issue end-to-end | `ratis` | Autonomous agent: classify → worktree → implement → PR with proofs |
+| Classifying a GitHub issue | `issue-intake` | Fetch issue, classify doable/not, write task spec |
+| Implementing a classified issue | `issue-implement` | Execute task spec steps, verify each, commit |
 
 ## Skill rules
 
