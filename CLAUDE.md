@@ -26,8 +26,10 @@
 | Committing changes | `commit` | Stage, scan secrets, commit with conventional message |
 | Creating a pull request | `create-pr` | Run quality gates, collect gate report, create PR with proof |
 | Shipping a GitHub issue end-to-end | `ratis` | Autonomous agent: classify → worktree → implement → PR with proofs |
-| Classifying a GitHub issue | `issue-intake` | Fetch issue, classify doable/not, write task spec |
+| Creating a pre-validated issue for ratis | `create-ratis-issue` | Gate description against doability criteria, then create GH issue with ratis label |
+| Classifying a GitHub issue | `issue-intake` | Fetch issue (must have ratis label), classify doable/not, write task spec |
 | Implementing a classified issue | `issue-implement` | Execute task spec steps, verify each, commit |
+| Running doability gate on a description | `ratis-classify` | Standalone: takes title + description, returns doable/not-doable + failed criteria |
 
 ## Skill rules
 
