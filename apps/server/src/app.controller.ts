@@ -1,10 +1,18 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, MiddlewareConsumer } from "@nestjs/common";
 
-const version = "1";
-@Controller({ version })
+@Controller()
 export class AppController {
   @Get("health")
   hello() {
-    return { message: "ratly server is running", version };
+    return { message: "ratly server is running" };
+  }
+
+  @Get("test")
+  test() {
+    return {
+      status: "ok",
+      service: "ratly",
+      timestamp: new Date().toISOString(),
+    };
   }
 }
