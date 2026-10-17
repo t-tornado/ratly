@@ -5,25 +5,21 @@ import { DashboardHeader } from "./components/DashboardHeader";
 import { DashboardStats } from "./components/DashboardStats";
 import { DashboardContent } from "./components/DashboardContent";
 import { useDashboardData } from "./hooks/useDashboardData";
-import { useLiveEvents } from "./hooks/useLiveEvents";
 import { useSocket } from "../../lib/hooks";
 import { RATE_UPDATE_EVENT, RATE_LIMIT_EXCEEDED_EVENT, DASHBOARD_STATS_UPDATE_EVENT } from "@ratly/core";
 import type { RateUpdateEvent, RateLimitExceededEvent, DashboardStatsEvent } from "@ratly/core";
 
 export default function DashboardPage() {
   const { stats, rows, isLoading, updateSingleRow, updateStats } = useDashboardData();
-  const { liveEvents, addRateUpdate, addLimitExceeded } = useLiveEvents();
   const { socket, isConnected } = useSocket();
 
   useEffect(() => {
     const handleRateUpdate = ({ row }: RateUpdateEvent) => {
       updateSingleRow(row);
-      addRateUpdate(row);
     };
 
     const handleLimitExceeded = ({ row }: RateLimitExceededEvent) => {
       updateSingleRow(row);
-      addLimitExceeded(row);
     };
 
     const handleDashboardStats = ({ stats: dashboardStats }: DashboardStatsEvent) => {
@@ -39,14 +35,14 @@ export default function DashboardPage() {
       socket.off(RATE_LIMIT_EXCEEDED_EVENT, handleLimitExceeded);
       socket.off(DASHBOARD_STATS_UPDATE_EVENT, handleDashboardStats);
     };
-  }, [socket, updateSingleRow, addRateUpdate, addLimitExceeded, updateStats]);
+  }, [socket, updateSingleRow, updateStats]);
 
   return (
     <PageLayout testId="dashboard-page">
       <DashboardHeader isConnected={isConnected} />
       <PageSection className="flex-1 min-h-0 pb-5 flex flex-col overflow-hidden">
         <DashboardStats stats={stats} isLoading={isLoading} />
-        <DashboardContent rows={rows} liveEvents={liveEvents} isLoading={isLoading} />
+        <DashboardContent rows={rows} isLoading={isLoading} />
       </PageSection>
     </PageLayout>
   );
