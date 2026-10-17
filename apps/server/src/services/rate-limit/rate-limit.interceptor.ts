@@ -6,17 +6,20 @@ import {
   Injectable,
   NestInterceptor,
 } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
 
 import { RateLimitService } from "./rate-limit.service.js";
 import { EventsGateway } from "../../events/events.gateway.js";
-import { RateEventType, RequestType, ResponseType } from "../../lib/types/index.js";
+import { RequestType, ResponseType } from "../../lib/types/index.js";
+import { SKIP_RATE_LIMIT } from "./skip-rate-limit.decorator.js";
 
 @Injectable()
 export class RateLimitInterceptor implements NestInterceptor {
   constructor(
     private readonly rateLimitService: RateLimitService,
     private readonly eventsGateway: EventsGateway,
+    private readonly reflector: Reflector,
   ) {}
 
   async intercept(
@@ -27,37 +30,50 @@ export class RateLimitInterceptor implements NestInterceptor {
       return next.handle();
     }
 
+    const shouldSkip = this.reflector.getAllAndOverride<boolean>(SKIP_RATE_LIMIT, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (shouldSkip) {
+      return next.handle();
+    }
+
     const request = context.switchToHttp().getRequest<RequestType>();
     const response = context.switchToHttp().getResponse<ResponseType>();
 
     const userId = request.headers["x-user-id"] as string;
     if (!userId) {
-      throw new HttpException(
-        "Missing x-user-id header",
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException("Missing x-user-id header", HttpStatus.UNAUTHORIZED);
     }
 
-    const { allowed, count, resetsIn } =
-      await this.rateLimitService.consume(userId);
+    const consumeResult = await this.rateLimitService.consume(userId);
 
-    const eventType = allowed ? RateEventType.UPDATE : RateEventType.LIMIT_EXCEEDED;
-    console.log("[Interceptor] emitting rate:event, gateway exists:", !!this.eventsGateway);
-    this.eventsGateway.emitRateEvent({ type: eventType, userId, allowed, count, resetsIn });
+    if (!consumeResult.allowed) {
+      const row = await this.rateLimitService.readRow(userId);
+      if (row) {
+        this.eventsGateway.emitLimitExceeded(row);
+      }
 
-    if (!allowed) {
+      const retryAfter = consumeResult.resetAt
+        ? Math.ceil((consumeResult.resetAt - consumeResult.now) / 1000)
+        : null;
+
       throw new HttpException(
         {
           statusCode: HttpStatus.TOO_MANY_REQUESTS,
           message: "Rate limit exceeded",
-          retryAfter: resetsIn,
+          retryAfter,
         },
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }
 
-    const remaining = 100 - count;
-    response.header("x-count", String(remaining));
+    response.header("x-ratelimit-remaining", String(consumeResult.remaining));
+
+    const row = await this.rateLimitService.readRow(userId);
+    if (row) {
+      this.eventsGateway.emitRateUpdate(row);
+    }
 
     return next.handle();
   }

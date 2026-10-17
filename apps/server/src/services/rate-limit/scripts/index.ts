@@ -3,10 +3,9 @@ import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const SCRIPTS_DIR = dirname(fileURLToPath(import.meta.url));
+const loadScript = (name: string) => readFileSync(resolve(SCRIPTS_DIR, name), "utf-8");
 
-const consumeFixedWindowScript = readFileSync(
-  resolve(SCRIPTS_DIR, "consume-fixed-window.lua"),
-  "utf-8",
-);
-
-export { consumeFixedWindowScript };
+export const fixedWindowScript = loadScript("fixed-window.lua");
+export const userRowScript = loadScript("user-row.lua");
+export const dashboardStatsScript = loadScript("dashboard-stats.lua");
+export const addExtraScript = loadScript("add-extra.lua");

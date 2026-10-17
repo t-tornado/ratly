@@ -4,25 +4,50 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from "@nestjs/websockets";
+import { OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { Server, Socket } from "socket.io";
-import { RateLimitEvent } from "../lib/types/index.js";
+import { DashboardStatsService } from "../services/dashboard/dashboard-stats.service.js";
+import { UserRow, DashboardStats } from "../lib/types/index.js";
+import { STATS_INTERVAL_MS } from "../lib/constants.js";
 
 @WebSocketGateway({ cors: { origin: "*" } })
-export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class EventsGateway
+  implements OnGatewayConnection, OnGatewayDisconnect, OnModuleInit, OnModuleDestroy
+{
   @WebSocketServer()
   server!: Server;
 
-  async emitRateEvent(event: RateLimitEvent) {
-    const sockets = await this.server.fetchSockets();
-    console.log(`[Gateway] emitting rate:event to ${sockets.length} connected clients`);
-    this.server.emit("rate:event", event);
+  private statsTimer: ReturnType<typeof setInterval> | null = null;
+
+  constructor(private readonly dashboardStatsService: DashboardStatsService) {}
+
+  onModuleInit() {
+    this.statsTimer = setInterval(async () => {
+      const stats = await this.dashboardStatsService.getStats();
+      this.emitDashboardStats(stats);
+    }, STATS_INTERVAL_MS);
   }
 
-  handleConnection(client: Socket) {
-    console.log(`[Server] -> Client connected: ${client.id}`);
+  onModuleDestroy() {
+    if (this.statsTimer) {
+      clearInterval(this.statsTimer);
+      this.statsTimer = null;
+    }
   }
 
-  handleDisconnect(client: Socket) {
-    console.log(`[Server] -> Client disconnected: ${client.id}`);
+  emitRateUpdate(row: UserRow) {
+    this.server.emit("rate:update", { type: "rate:update", row });
   }
+
+  emitLimitExceeded(row: UserRow) {
+    this.server.emit("rate:limit_exceeded", { type: "rate:limit_exceeded", row });
+  }
+
+  emitDashboardStats(stats: DashboardStats) {
+    this.server.emit("dashboard_stats:update", { type: "dashboard_stats:update", stats });
+  }
+
+  handleConnection(_client: Socket) {}
+
+  handleDisconnect(_client: Socket) {}
 }
