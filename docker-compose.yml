@@ -1,0 +1,14 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    command: redis-server --maxmemory 100mb --maxmemory-policy volatile-ttl
+    deploy:
+      resources:
+        limits:
+          memory: 200m
+    volumes:
+      - ratly_redis:/data
+volumes:
+  ratly_redis:
