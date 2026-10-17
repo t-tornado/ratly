@@ -1,15 +1,19 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
-import DashboardPage from "./modules/dashboard";
-import UserDetailPage from "./modules/userDetail";
+
+const DashboardPage = lazy(() => import("./modules/dashboard"));
+const UserDetailPage = lazy(() => import("./modules/userDetail"));
 
 export default function Router() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path={routes.dashboard} element={<DashboardPage />} />
-        <Route path="/users/:userId" element={<UserDetailPage />} />
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path={routes.dashboard} element={<DashboardPage />} />
+          <Route path="/users/:userId" element={<UserDetailPage />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
