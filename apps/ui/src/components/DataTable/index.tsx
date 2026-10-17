@@ -1,5 +1,6 @@
 import { cn } from "../../lib/utils";
 import { DataTableRow } from "./DataTableRow";
+import { EmptyState } from "../EmptyState";
 import type { BadgeProps } from "../Badge";
 
 type StatusVariant = NonNullable<BadgeProps["variant"]>;
@@ -25,6 +26,10 @@ interface DataTableProps extends React.ComponentProps<"div"> {
 }
 
 function DataTable({ rows, footer, onAction, onRowClick, className, ...props }: DataTableProps) {
+  if (rows.length === 0) {
+    return <EmptyState />;
+  }
+
   return (
     <div
       className={cn(
