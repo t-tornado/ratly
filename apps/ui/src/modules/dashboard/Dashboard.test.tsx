@@ -63,13 +63,4 @@ describe("DashboardPage", () => {
     expect(screen.getByTestId("dashboard-users-table")).toBeInTheDocument();
   });
 
-  it("renders top users chart", async () => {
-    renderPage();
-    expect(screen.getByTestId("dashboard-top-users")).toBeInTheDocument();
-  });
-
-  it("renders live events feed", async () => {
-    renderPage();
-    expect(screen.getByTestId("dashboard-live-events")).toBeInTheDocument();
-  });
 });

@@ -1,6 +1,4 @@
-import { RATE_UPDATE_EVENT, RATE_LIMIT_EXCEEDED_EVENT } from "@ratly/core";
 import type { UserRow, DashboardStats, TopUser } from "@ratly/core";
-import type { LiveEvent } from "../components/LiveEventsFeed";
 
 const NOW = 1_700_000_000_000;
 const HOUR_MS = 3_600_000;
@@ -82,18 +80,3 @@ export const mockStats: DashboardStats = {
   topUsers: mockTopUsers,
   at: NOW,
 };
-
-export const mockLiveEvents: LiveEvent[] = [
-  {
-    time: "16:53",
-    type: RATE_LIMIT_EXCEEDED_EVENT,
-    description: "usr_exceeded \u00b7 retry 17:00:00",
-    severity: "error",
-  },
-  {
-    time: "16:52",
-    type: RATE_UPDATE_EVENT,
-    description: "usr_warning \u00b7 8 left",
-    severity: "info",
-  },
-];
