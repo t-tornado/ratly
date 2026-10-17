@@ -1,12 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DashboardLiveEvents } from ".";
+import { DashboardLiveEvents } from "./index";
+import { mockLiveEvents } from "../../../../test/fixtures";
 
-const meta = {
+const meta: Meta<typeof DashboardLiveEvents> = {
+  title: "Dashboard/DashboardLiveEvents",
   component: DashboardLiveEvents,
   tags: ["autodocs"],
-} satisfies Meta<typeof DashboardLiveEvents>;
-
+};
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof DashboardLiveEvents>;
 
-export const Default: Story = {};
+export const WithEvents: Story = {
+  args: { liveEvents: mockLiveEvents },
+};
+
+export const Empty: Story = {
+  args: { liveEvents: [] },
+};

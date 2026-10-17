@@ -11,6 +11,9 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  optimizeDeps: {
+    include: ["socket.io-client"],
+  },
   resolve: {
     alias: {
       "@": `${import.meta.dirname}/src`
@@ -22,7 +25,13 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'unit',
-          include: ['src/modules/**/*.test.tsx', 'src/components/**/*.test.tsx', 'src/providers/**/*.test.tsx'],
+          include: [
+            'src/modules/**/*.test.tsx',
+            'src/modules/**/*.test.ts',
+            'src/lib/**/*.test.ts',
+            'src/components/**/*.test.tsx',
+            'src/providers/**/*.test.tsx',
+          ],
           environment: 'jsdom',
           setupFiles: ['src/test/setup.ts'],
         }

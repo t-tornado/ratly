@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { cn } from "../../lib/utils";
+import { cn, formatTime } from "../../lib/utils";
 import { Button } from "../Button";
 import { Modal, ModalFooter } from "../Modal";
 
@@ -32,13 +32,7 @@ const DURATION_MINUTES: Record<ThrottlingDuration, number> = {
 };
 
 function formatResumeTime(duration: ThrottlingDuration): string {
-  const resumeDate = new Date(
-    Date.now() + DURATION_MINUTES[duration] * 60 * 1000
-  );
-  return resumeDate.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatTime(Date.now() + DURATION_MINUTES[duration] * 60 * 1000);
 }
 
 function ThrottlingModal({

@@ -71,16 +71,13 @@ function DataTableRow({
         ))}
       </td>
       <td className="py-3 px-4">
-        <div className="flex items-center gap-3 font-mono text-base-sm">
-          <span className="w-16 text-right">
-            {remaining} / {total}
-          </span>
+        <div className="flex flex-col gap-1 font-mono text-base-sm">
           <ProgressBar
             value={total - remaining}
             max={total}
             variant={status}
-            className="w-24"
           />
+          <span>{remaining} / {total}</span>
         </div>
       </td>
       <td className="py-3 px-4 font-mono text-base-sm">

@@ -1,42 +1,52 @@
+import { useEffect } from "react";
 import { PageLayout } from "../../components/PageLayout";
 import { PageSection } from "../../components/PageSection";
 import { DashboardHeader } from "./components/DashboardHeader";
 import { DashboardStats } from "./components/DashboardStats";
 import { DashboardContent } from "./components/DashboardContent";
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useDashboardData } from "./hooks/useDashboardData";
+import { useLiveEvents } from "./hooks/useLiveEvents";
+import { useSocket } from "../../lib/hooks";
+import { RATE_UPDATE_EVENT, RATE_LIMIT_EXCEEDED_EVENT, DASHBOARD_STATS_UPDATE_EVENT } from "@ratly/core";
+import type { RateUpdateEvent, RateLimitExceededEvent, DashboardStatsEvent } from "@ratly/core";
 
 export default function DashboardPage() {
-  const [isConnected, setIsConnected] = useState(false);
+  const { stats, rows, isLoading, updateSingleRow, updateStats } = useDashboardData();
+  const { liveEvents, addRateUpdate, addLimitExceeded } = useLiveEvents();
+  const { socket, isConnected } = useSocket();
 
   useEffect(() => {
-    // dev guard. forces new sockets after every cleanup. strict mode defense in depth
-    const socket = io("http://localhost:3000", { forceNew: true });
+    const handleRateUpdate = ({ row }: RateUpdateEvent) => {
+      updateSingleRow(row);
+      addRateUpdate(row);
+    };
 
-    socket.on("connect", () => {
-      setIsConnected(true);
-    });
+    const handleLimitExceeded = ({ row }: RateLimitExceededEvent) => {
+      updateSingleRow(row);
+      addLimitExceeded(row);
+    };
 
-    socket.on("rate:event", (data) => {
-      console.log("[Client] -> connection data", { data });
-    });
+    const handleDashboardStats = ({ stats: dashboardStats }: DashboardStatsEvent) => {
+      updateStats(dashboardStats);
+    };
 
-    socket.on("connect_error", (err) => {
-      console.log("[Client] -> Failure", { err });
-      setIsConnected(false);
-    });
+    socket.on(RATE_UPDATE_EVENT, handleRateUpdate);
+    socket.on(RATE_LIMIT_EXCEEDED_EVENT, handleLimitExceeded);
+    socket.on(DASHBOARD_STATS_UPDATE_EVENT, handleDashboardStats);
 
     return () => {
-      socket.close();
+      socket.off(RATE_UPDATE_EVENT, handleRateUpdate);
+      socket.off(RATE_LIMIT_EXCEEDED_EVENT, handleLimitExceeded);
+      socket.off(DASHBOARD_STATS_UPDATE_EVENT, handleDashboardStats);
     };
-  }, [setIsConnected]);
+  }, [socket, updateSingleRow, addRateUpdate, addLimitExceeded, updateStats]);
 
   return (
     <PageLayout testId="dashboard-page">
       <DashboardHeader isConnected={isConnected} />
-      <PageSection className="flex-1 min-h-0 pb-5">
-        <DashboardStats />
-        <DashboardContent />
+      <PageSection className="flex-1 min-h-0 pb-5 flex flex-col overflow-hidden">
+        <DashboardStats stats={stats} isLoading={isLoading} />
+        <DashboardContent rows={rows} liveEvents={liveEvents} isLoading={isLoading} />
       </PageSection>
     </PageLayout>
   );

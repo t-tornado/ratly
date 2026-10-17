@@ -1,5 +1,7 @@
 **/node_modules
 **/dist
+packages/core/dist/
+apps/ui/.env
 **/.vitest
 **/coverage
 *.tsbuildinfo

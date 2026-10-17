@@ -1,12 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DashboardTopUsers } from ".";
+import { DashboardTopUsers } from "./index";
+import { mockStats } from "../../../../test/fixtures";
 
-const meta = {
+const meta: Meta<typeof DashboardTopUsers> = {
+  title: "Dashboard/DashboardTopUsers",
   component: DashboardTopUsers,
   tags: ["autodocs"],
-} satisfies Meta<typeof DashboardTopUsers>;
-
+};
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof DashboardTopUsers>;
 
-export const Default: Story = {};
+export const Populated: Story = {
+  args: { stats: mockStats },
+};
+
+export const NoData: Story = {
+  args: { stats: null },
+};

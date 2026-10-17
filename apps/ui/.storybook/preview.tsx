@@ -4,6 +4,7 @@ import type { DecoratorFunction } from 'storybook/internal/types'
 import { MemoryRouter } from 'react-router-dom'
 import { QueryProvider } from '../src/providers/query'
 import { ThemeProvider } from '../src/providers/ThemeProvider'
+import { SocketProvider } from '../src/providers/SocketProvider'
 import '../src/styles/index.css'
 
 const THEME_STORAGE_KEY = 'ratly-theme'
@@ -16,14 +17,16 @@ const withProviders: DecoratorFunction<ReactRenderer> = (Story, context) => {
   const content = (
     <QueryProvider>
       <ThemeProvider key={selectedTheme}>
-        <div style={{
-          background: 'var(--color-bg-base)',
-          fontFamily: 'var(--font-sans)',
-          padding: '24px',
-          minHeight: '100vh',
-        }}>
-          <Story />
-        </div>
+        <SocketProvider>
+          <div style={{
+            background: 'var(--color-bg-base)',
+            fontFamily: 'var(--font-sans)',
+            padding: '24px',
+            minHeight: '100vh',
+          }}>
+            <Story />
+          </div>
+        </SocketProvider>
       </ThemeProvider>
     </QueryProvider>
   )

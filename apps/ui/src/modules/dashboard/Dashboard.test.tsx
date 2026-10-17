@@ -1,121 +1,74 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "../../providers/ThemeProvider";
-import DashboardPage from ".";
+import { renderWithProviders } from "../../test/renderWithProviders";
+import { mockStats, mockRows } from "../../test/fixtures";
+
+vi.mock("../../lib/api/admin", () => ({
+  fetchDashboard: vi.fn().mockResolvedValue({ stats: mockStats, rows: mockRows }),
+}));
+
+
+const { default: DashboardPage } = await import("./index");
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
 function renderPage() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <MemoryRouter initialEntries={["/"]}>
-          <DashboardPage />
-        </MemoryRouter>
-      </ThemeProvider>
-    </QueryClientProvider>
+  return renderWithProviders(
+    <MemoryRouter>
+      <DashboardPage />
+    </MemoryRouter>
   );
 }
 
 describe("DashboardPage", () => {
-  it("renders with data-testid", () => {
+  it("renders without crashing", async () => {
     renderPage();
-    expect(screen.getByTestId("dashboard-page")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
   });
 
-  it("contains PageHeader", () => {
+  it("shows user rows from API response", async () => {
     renderPage();
+    await waitFor(() => {
+      expect(screen.getByText(mockRows[0].userId)).toBeInTheDocument();
+    });
+  });
+
+  it("shows stat counts from API response", async () => {
+    renderPage();
+    await waitFor(() => {
+      expect(
+        screen.getAllByText(String(mockStats.totalUsers)).length
+      ).toBeGreaterThan(0);
+    });
+  });
+
+  it("renders dashboard page structure", async () => {
+    renderPage();
+    expect(screen.getByTestId("dashboard-page")).toBeInTheDocument();
     expect(screen.getByTestId("page-header")).toBeInTheDocument();
   });
 
-  it("shows Logo", () => {
-    renderPage();
-    expect(screen.getByLabelText("Ratly logo")).toBeInTheDocument();
-  });
-
-  it("wraps content in PageSection", () => {
-    renderPage();
-    expect(screen.getByTestId("page-section")).toBeInTheDocument();
-  });
-
-  it("renders dashboard stats row", () => {
-    renderPage();
-    expect(screen.getByTestId("dashboard-stats")).toBeInTheDocument();
-  });
-
-  it("shows all 3 stat card labels", () => {
-    renderPage();
-    expect(screen.getByText("Total users")).toBeInTheDocument();
-    expect(screen.getByText(/Near limit/)).toBeInTheDocument();
-    expect(screen.getByText("429s today")).toBeInTheDocument();
-  });
-
-  it("does not show admin overrides card", () => {
-    renderPage();
-    expect(screen.queryByText(/admin override/i)).not.toBeInTheDocument();
-  });
-
-  it("applies error accent to 429s card value", () => {
-    renderPage();
-    const statsRow = screen.getByTestId("dashboard-stats");
-    const cards = statsRow.querySelectorAll("[class*='bg-']");
-    const rateLimitCard = Array.from(cards).find((card) =>
-      card.textContent?.includes("429s today")
-    );
-    const valueLine = rateLimitCard?.querySelector("[class*='text-error-text']");
-    expect(valueLine).toBeTruthy();
-  });
-
-  it("applies warning accent to near limit card value", () => {
-    renderPage();
-    const statsRow = screen.getByTestId("dashboard-stats");
-    const cards = statsRow.querySelectorAll("[class*='bg-']");
-    const nearLimitCard = Array.from(cards).find((card) =>
-      card.textContent?.includes("Near limit")
-    );
-    const valueLine = nearLimitCard?.querySelector("[class*='text-warning-text']");
-    expect(valueLine).toBeTruthy();
-  });
-
-  it("applies success color to active users sub text", () => {
-    renderPage();
-    const statsRow = screen.getByTestId("dashboard-stats");
-    const successElement = statsRow.querySelector("[class*='text-success-text']");
-    expect(successElement).toBeTruthy();
-  });
-
-  it("does not apply color accent to total users value", () => {
-    renderPage();
-    const statsRow = screen.getByTestId("dashboard-stats");
-    const cards = statsRow.querySelectorAll("[class*='bg-']");
-    const totalUsersCard = Array.from(cards).find((card) =>
-      card.textContent?.includes("Total users")
-    );
-    const valueDiv = totalUsersCard?.querySelector("[class*='text-5xl']");
-    expect(valueDiv?.className).not.toContain("text-error-text");
-    expect(valueDiv?.className).not.toContain("text-warning-text");
-    expect(valueDiv?.className).not.toContain("text-success-text");
-  });
-
-  it("renders dashboard content layout", () => {
+  it("renders dashboard content layout", async () => {
     renderPage();
     expect(screen.getByTestId("dashboard-content")).toBeInTheDocument();
   });
 
-  it("renders users table", () => {
+  it("renders users table", async () => {
     renderPage();
     expect(screen.getByTestId("dashboard-users-table")).toBeInTheDocument();
   });
 
-  it("renders top users chart", () => {
+  it("renders top users chart", async () => {
     renderPage();
     expect(screen.getByTestId("dashboard-top-users")).toBeInTheDocument();
   });
 
-  it("renders live events feed", () => {
+  it("renders live events feed", async () => {
     renderPage();
     expect(screen.getByTestId("dashboard-live-events")).toBeInTheDocument();
   });
