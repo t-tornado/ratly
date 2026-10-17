@@ -8,13 +8,6 @@ vi.mock("../../lib/api/admin", () => ({
   fetchDashboard: vi.fn().mockResolvedValue({ stats: mockStats, rows: mockRows }),
 }));
 
-vi.mock("socket.io-client", () => ({
-  io: vi.fn(() => ({
-    on: vi.fn(),
-    off: vi.fn(),
-    close: vi.fn(),
-  })),
-}));
 
 const { default: DashboardPage } = await import("./index");
 

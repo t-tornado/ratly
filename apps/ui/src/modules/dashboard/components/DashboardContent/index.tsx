@@ -16,7 +16,7 @@ function DashboardContent({ rows, stats, liveEvents, isLoading }: DashboardConte
     <div data-testid="dashboard-content" className="flex-1 min-h-0 flex flex-col mt-5">
       <div className="flex-1 min-h-0 grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr] lg:auto-rows-fr">
         {/* Sidebar cards: right on lg, top on smaller */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-1 lg:order-2 overflow-y-auto">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-1 lg:order-2 overflow-y-auto" tabIndex={0}>
           <DashboardTopUsers stats={stats ?? null} />
           <DashboardLiveEvents liveEvents={liveEvents} />
         </div>

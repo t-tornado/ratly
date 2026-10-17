@@ -2,6 +2,8 @@ import { render, type RenderOptions } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "../providers/ThemeProvider";
+import { SocketContext } from "../lib/hooks/useSocket";
+import type { Socket } from "socket.io-client";
 
 function createTestQueryClient() {
   return new QueryClient({
@@ -12,11 +14,24 @@ function createTestQueryClient() {
   });
 }
 
+const MOCK_SOCKET = {
+  on: () => {},
+  off: () => {},
+  connect: () => {},
+  disconnect: () => {},
+} as unknown as Socket;
+
+const MOCK_SOCKET_CONTEXT = { socket: MOCK_SOCKET, isConnected: false };
+
 function AllProviders({ children }: { children: React.ReactNode }) {
   const queryClient = createTestQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider>
+        <SocketContext value={MOCK_SOCKET_CONTEXT}>
+          {children}
+        </SocketContext>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
