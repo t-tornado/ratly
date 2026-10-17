@@ -1,13 +1,13 @@
 import { StatsRow } from "../../../../components/StatsRow";
 import type { StatItem } from "../../../../components/StatsRow";
-import type { DashboardStats } from "@ratly/core";
+import type { DashboardStats as DashboardStatsData } from "@ratly/core";
 
 interface DashboardStatsProps {
-  stats: DashboardStats | null;
+  stats: DashboardStatsData | null;
   isLoading: boolean;
 }
 
-function buildStatItems(stats: DashboardStats): StatItem[] {
+function buildStatItems(stats: DashboardStatsData): StatItem[] {
   return [
     {
       label: "Total users",
