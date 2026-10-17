@@ -40,7 +40,7 @@ function Logo({ size = 32, showWordmark = false, className }: LogoProps) {
     <div className={cn("flex items-center gap-2", className)}>
       <LogoMark size={size} />
       <span
-        className="font-semibold text-[var(--color-text-primary)] leading-none"
+        className="font-semibold text-text-primary leading-none"
         style={{ fontSize: wordmarkFontSize }}
       >
         ratly

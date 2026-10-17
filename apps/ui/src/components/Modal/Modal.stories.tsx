@@ -8,7 +8,7 @@ const meta = {
   tags: ["autodocs"],
   decorators: [
     (Story) => (
-      <div className="dark p-8 bg-[var(--color-bg-base)] min-h-[400px]">
+      <div className="dark p-8 bg-bg-base min-h-[400px]">
         <Story />
       </div>
     ),
@@ -23,7 +23,7 @@ export const Default: Story = {
     isOpen: true,
     onClose: () => {},
     title: "Modal Title",
-    children: <p className="text-[color:var(--color-text-secondary)] text-[length:var(--text-base-sm)]">Modal body content goes here.</p>,
+    children: <p className="text-text-secondary text-base-sm">Modal body content goes here.</p>,
     footer: (
       <ModalFooter
         onCancel={() => {}}
@@ -41,7 +41,7 @@ export const WithFooter: Story = {
     title: "Confirm Action",
     children: (
       <div className="flex flex-col gap-3">
-        <p className="text-[color:var(--color-text-secondary)] text-[length:var(--text-base-sm)]">
+        <p className="text-text-secondary text-base-sm">
           Are you sure you want to proceed with this action?
         </p>
         <ModalPreviewBox>Preview: something will change</ModalPreviewBox>
@@ -66,7 +66,7 @@ export const LongContent: Story = {
     children: (
       <div className="flex flex-col gap-3">
         {Array.from({ length: 8 }, (_, index) => (
-          <p key={index} className="text-[color:var(--color-text-secondary)] text-[length:var(--text-base-sm)]">
+          <p key={index} className="text-text-secondary text-base-sm">
             This is paragraph {index + 1} of many. It demonstrates how the modal
             handles longer content that might need scrolling.
           </p>
@@ -100,7 +100,7 @@ function InteractiveDemo() {
           />
         }
       >
-        <p className="text-[color:var(--color-text-secondary)] text-[length:var(--text-base-sm)]">
+        <p className="text-text-secondary text-base-sm">
           Click Cancel or the X button to close.
         </p>
       </Modal>

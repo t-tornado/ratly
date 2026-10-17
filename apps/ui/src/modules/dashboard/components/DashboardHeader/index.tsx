@@ -12,19 +12,19 @@ function DashboardHeader({ isConnected }: DashboardHeaderProps) {
         rightSlot={
           <div
             data-testid="connection-status"
-            className="flex items-center gap-2 font-[family-name:var(--font-mono)] text-[12px]"
+            className="flex items-center gap-2 font-mono text-sm"
           >
             {isConnected ? (
               <>
                 <StatusDot variant="live" pulsating />
-                <span className="text-[var(--color-success-text)]">
+                <span className="text-success-text">
                   LIVE · ws connected
                 </span>
               </>
             ) : (
               <>
                 <StatusDot variant="warning" />
-                <span className="text-[var(--color-text-secondary)]">
+                <span className="text-text-secondary">
                   disconnected
                 </span>
               </>

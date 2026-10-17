@@ -17,7 +17,7 @@ export const Default: Story = {
         {[3, 5, 2, 8, 12, 6, 4, 15, 20, 18, 7, 3].map((h, i) => (
           <div
             key={i}
-            className="flex-1 bg-[var(--color-accent-blue)] rounded-t-sm"
+            className="flex-1 bg-accent-blue rounded-t-sm"
             style={{ height: `${h * 5}%` }}
           />
         ))}

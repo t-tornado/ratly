@@ -8,7 +8,7 @@ const USER_DETAIL_STATS: StatItem[] = [
     sub: (
       <span>
         of 150{" "}
-        <span className="text-[var(--color-accent-purple)]">
+        <span className="text-accent-purple">
           (admin override)
         </span>
       </span>

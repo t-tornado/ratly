@@ -14,9 +14,9 @@ interface LiveEventsFeedProps extends React.ComponentProps<"section"> {
 }
 
 const severityColor: Record<string, string> = {
-  info: "text-[var(--color-accent-purple)]",
-  warning: "text-[var(--color-warning)]",
-  error: "text-[var(--color-error)]",
+  info: "text-accent-purple",
+  warning: "text-warning",
+  error: "text-error",
 };
 
 function LiveEventsFeed({
@@ -29,7 +29,7 @@ function LiveEventsFeed({
     <section
       aria-label="Live events"
       className={cn(
-        "rounded-[var(--radius-xl)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)] p-4",
+        "rounded-xl border border-border-default bg-bg-surface-raised p-4",
         className
       )}
       {...props}
@@ -38,14 +38,14 @@ function LiveEventsFeed({
       {events.map((event, i) => (
         <div
           key={i}
-          className="grid grid-cols-[64px_1fr] gap-2.5 py-[7px] border-t border-[var(--color-bg-hover)] font-[family-name:var(--font-mono)] text-[12px]"
+          className="grid grid-cols-[64px_1fr] gap-2.5 py-[7px] border-t border-bg-hover font-mono text-sm"
         >
-          <span className="text-[var(--color-text-muted)]">{event.time}</span>
+          <span className="text-text-muted">{event.time}</span>
           <div>
             <span className={severityColor[event.severity ?? "info"]}>
               {event.type}
             </span>
-            <span className="text-[var(--color-text-secondary)] ml-2">
+            <span className="text-text-secondary ml-2">
               {event.description}
             </span>
           </div>

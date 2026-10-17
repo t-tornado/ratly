@@ -21,7 +21,7 @@ function ActivityChart({
     <section
       aria-label="Activity history"
       className={cn(
-        "rounded-[var(--radius-xl)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)] p-4",
+        "rounded-xl border border-border-default bg-bg-surface-raised p-4",
         className
       )}
       {...props}

@@ -6,7 +6,7 @@ const DASHBOARD_STATS: StatItem[] = [
     label: "Total users",
     value: "1,284",
     sub: (
-      <span className="text-[var(--color-success-text)]">
+      <span className="text-success-text">
         312 active in last 15 min
       </span>
     ),

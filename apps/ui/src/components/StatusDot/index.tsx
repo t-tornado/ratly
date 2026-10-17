@@ -4,8 +4,8 @@ import { cn } from "../../lib/utils";
 const statusDotVariants = cva("inline-block size-2 rounded-full", {
   variants: {
     variant: {
-      live: "bg-[var(--color-success)] shadow-[var(--shadow-glow-success)]",
-      warning: "bg-[var(--color-warning)]",
+      live: "bg-success shadow-glow-success",
+      warning: "bg-warning",
     },
     pulsating: {
       true: "animate-pulse",

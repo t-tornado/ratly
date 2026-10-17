@@ -92,13 +92,13 @@ function UserDetailActivity() {
             </text>
           ))}
         </svg>
-        <div className="flex items-center gap-4 mt-3 text-[11px] text-[var(--color-text-muted)]">
+        <div className="flex items-center gap-4 mt-3 text-xs text-text-muted">
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-2.5 h-2.5 rounded-[2px] bg-[var(--color-accent-blue)] opacity-85" />
+            <span className="inline-block w-2.5 h-2.5 rounded-xs bg-accent-blue opacity-85" />
             Allowed
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block w-2.5 h-2.5 rounded-[2px] bg-[var(--color-error)]" />
+            <span className="inline-block w-2.5 h-2.5 rounded-xs bg-error" />
             Rejected
           </span>
         </div>

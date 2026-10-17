@@ -76,3 +76,36 @@
     50% { opacity: 0.4; }
   }
 }
+
+@theme inline {
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-raised: var(--bg-surface-raised);
+  --color-bg-active: var(--bg-active);
+  --color-bg-hover: var(--bg-hover);
+
+  --color-border-default: var(--border-default);
+  --color-border-active: var(--border-active);
+  --color-border-strong: var(--border-strong);
+
+  --color-overlay: var(--overlay);
+
+  --color-text-muted: var(--text-muted);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-primary: var(--text-primary);
+
+  --color-success-text: var(--success-text);
+  --color-success-bg: var(--success-bg);
+  --color-success-border: var(--success-border);
+
+  --color-warning-text: var(--warning-text);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+
+  --color-error-text: var(--error-text);
+  --color-error-bg: var(--error-bg);
+  --color-error-bg-subtle: var(--error-bg-subtle);
+  --color-error-border: var(--error-border);
+  --color-error-surface: var(--error-surface);
+}

@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const HttpOk: Story = {
   render: () => (
     <CodeBlock>
-      <span className="text-[var(--color-success-text)]">HTTP/1.1 200 OK</span>
+      <span className="text-success-text">HTTP/1.1 200 OK</span>
       {"\n"}x-count: 6{"\n"}content-type: application/json
     </CodeBlock>
   ),
@@ -21,7 +21,7 @@ export const HttpOk: Story = {
 export const Http429: Story = {
   render: () => (
     <CodeBlock>
-      <span className="text-[var(--color-error)]">
+      <span className="text-error">
         HTTP/1.1 429 Too Many Requests
       </span>
       {"\n"}retry-after: 134

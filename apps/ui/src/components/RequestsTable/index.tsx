@@ -24,16 +24,16 @@ function RequestsTable({
     <section
       aria-label="Recent requests"
       className={cn(
-        "rounded-[var(--radius-xl)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)] p-4",
+        "rounded-xl border border-border-default bg-bg-surface-raised p-4",
         className
       )}
       {...props}
     >
       <SectionHeading>{title}</SectionHeading>
       <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Requests data">
-        <table className="w-full border-collapse font-[family-name:var(--font-mono)] text-[13px] min-w-[560px]">
+        <table className="w-full border-collapse font-mono text-base-sm min-w-[560px]">
           <thead>
-            <tr className="text-left text-[var(--color-text-muted)] text-[12px] uppercase tracking-[0.05em]">
+            <tr className="text-left text-text-muted text-sm uppercase tracking-wide">
               <th className="py-2 font-medium">Time</th>
               <th className="py-2 font-medium">Request</th>
               <th className="py-2 font-medium">Result</th>
@@ -44,9 +44,9 @@ function RequestsTable({
             {rows.map((row, i) => (
               <tr
                 key={i}
-                className="border-t border-[var(--color-bg-hover)]"
+                className="border-t border-bg-hover"
               >
-                <td className="py-2 text-[var(--color-text-muted)]">
+                <td className="py-2 text-text-muted">
                   {row.time}
                 </td>
                 <td className="py-2">
@@ -56,13 +56,13 @@ function RequestsTable({
                   className={cn(
                     "py-2",
                     row.status >= 400
-                      ? "text-[var(--color-error)]"
-                      : "text-[var(--color-text-primary)]"
+                      ? "text-error"
+                      : "text-text-primary"
                   )}
                 >
                   {row.status}
                 </td>
-                <td className="py-2 text-[var(--color-text-muted)]">
+                <td className="py-2 text-text-muted">
                   {row.xCount ?? "—"}
                 </td>
               </tr>

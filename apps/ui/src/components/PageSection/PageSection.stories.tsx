@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: (
-      <div className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)] p-6 text-[var(--color-text-secondary)]">
+      <div className="rounded-xl border border-border-default bg-bg-surface-raised p-6 text-text-secondary">
         Page content goes here
       </div>
     ),

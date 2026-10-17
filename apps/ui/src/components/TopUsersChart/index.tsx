@@ -23,7 +23,7 @@ function TopUsersChart({
     <section
       aria-label="Top users"
       className={cn(
-        "rounded-[var(--radius-xl)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)] p-4",
+        "rounded-xl border border-border-default bg-bg-surface-raised p-4",
         className
       )}
       {...props}
@@ -32,9 +32,9 @@ function TopUsersChart({
       {users.map((user) => (
         <div
           key={user.id}
-          className="grid grid-cols-[110px_1fr_64px] items-center gap-2.5 py-1.5 font-[family-name:var(--font-mono)] text-[12px]"
+          className="grid grid-cols-[110px_1fr_64px] items-center gap-2.5 py-1.5 font-mono text-sm"
         >
-          <span className="text-[var(--color-text-secondary)] truncate">
+          <span className="text-text-secondary truncate">
             {user.id}
           </span>
           <ProgressBar
@@ -43,7 +43,7 @@ function TopUsersChart({
             variant="exceeded"
             barSize="md"
           />
-          <span className="text-right text-[var(--color-text-muted)]">
+          <span className="text-right text-text-muted">
             {user.requests} req
           </span>
         </div>

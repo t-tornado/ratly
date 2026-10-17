@@ -3,14 +3,14 @@ import { cn } from "../../lib/utils";
 import { Icon } from "../Icon";
 
 const toastVariants = cva(
-  "flex items-start gap-3 rounded-[var(--radius-xl)] border px-4 py-3",
+  "flex items-start gap-3 rounded-xl border px-4 py-3",
   {
     variants: {
       variant: {
         success:
-          "bg-[var(--color-success-bg)] border-[var(--color-success-border)] text-[var(--color-success-text)]",
+          "bg-success-bg border-success-border text-success-text",
         error:
-          "bg-[var(--color-error-surface)] border-[var(--color-error-border)] text-[var(--color-error-text)]",
+          "bg-error-surface border-error-border text-error-text",
       },
     },
     defaultVariants: {
@@ -43,12 +43,12 @@ function Toast({
       {...props}
     >
       {variant === "error" && (
-        <Icon variant="alert-circle" className="text-[var(--color-error)] shrink-0 mt-0.5" />
+        <Icon variant="alert-circle" className="text-error shrink-0 mt-0.5" />
       )}
       <div className="flex-1">
         {title && <div className="font-semibold">{title}</div>}
         {description && (
-          <div className="text-[13px] mt-0.5 opacity-80">{description}</div>
+          <div className="text-base-sm mt-0.5 opacity-80">{description}</div>
         )}
         {children}
       </div>

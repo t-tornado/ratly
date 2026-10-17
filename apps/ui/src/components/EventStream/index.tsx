@@ -14,9 +14,9 @@ interface EventStreamProps extends React.ComponentProps<"section"> {
 }
 
 const severityColor: Record<string, string> = {
-  info: "text-[var(--color-accent-purple)]",
-  warning: "text-[var(--color-warning)]",
-  error: "text-[var(--color-error)]",
+  info: "text-accent-purple",
+  warning: "text-warning",
+  error: "text-error",
 };
 
 function EventStream({
@@ -29,7 +29,7 @@ function EventStream({
     <section
       aria-label="Live events for this user"
       className={cn(
-        "rounded-[var(--radius-xl)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface-raised)] p-4",
+        "rounded-xl border border-border-default bg-bg-surface-raised p-4",
         className
       )}
       {...props}
@@ -39,17 +39,17 @@ function EventStream({
         {events.map((event, i) => (
           <div
             key={i}
-            className="py-2 border-t border-[var(--color-bg-hover)] font-[family-name:var(--font-mono)] text-[12px]"
+            className="py-2 border-t border-bg-hover font-mono text-sm"
           >
             <div className="flex items-center justify-between">
               <span className={severityColor[event.severity ?? "info"]}>
                 {event.type}
               </span>
-              <span className="text-[var(--color-text-muted)]">
+              <span className="text-text-muted">
                 {event.timestamp}
               </span>
             </div>
-            <div className="text-[var(--color-text-secondary)] mt-0.5">
+            <div className="text-text-secondary mt-0.5">
               {event.description}
             </div>
           </div>

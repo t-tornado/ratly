@@ -1,32 +1,32 @@
 .dark {
-  --color-bg-base: #0E1116;
-  --color-bg-surface: #11151B;
-  --color-bg-surface-raised: #151A21;
-  --color-bg-active: #1C232C;
-  --color-bg-hover: #1E252E;
+  --bg-base: #0E1116;
+  --bg-surface: #11151B;
+  --bg-surface-raised: #151A21;
+  --bg-active: #1C232C;
+  --bg-hover: #1E252E;
 
-  --color-border-default: #232A33;
-  --color-border-active: #232B36;
-  --color-border-strong: #2A323D;
+  --border-default: #232A33;
+  --border-active: #232B36;
+  --border-strong: #2A323D;
 
-  --color-overlay: rgba(4, 6, 9, 0.74);
+  --overlay: rgba(4, 6, 9, 0.74);
 
-  --color-text-muted: #8A94A3;
-  --color-text-secondary: #9AA4B2;
-  --color-text-tertiary: #C9D0DA;
-  --color-text-primary: #E6E9EE;
+  --text-muted: #8A94A3;
+  --text-secondary: #9AA4B2;
+  --text-tertiary: #C9D0DA;
+  --text-primary: #E6E9EE;
 
-  --color-success-text: #9FE0B8;
-  --color-success-bg: #12241A;
-  --color-success-border: #1F4D33;
+  --success-text: #9FE0B8;
+  --success-bg: #12241A;
+  --success-border: #1F4D33;
 
-  --color-warning-text: #F7D58C;
-  --color-warning-bg: #2A2112;
-  --color-warning-border: #5A4318;
+  --warning-text: #F7D58C;
+  --warning-bg: #2A2112;
+  --warning-border: #5A4318;
 
-  --color-error-text: #FF9F87;
-  --color-error-bg: rgba(255, 122, 92, 0.14);
-  --color-error-bg-subtle: rgba(255, 122, 92, 0.06);
-  --color-error-border: #6B2E20;
-  --color-error-surface: #1F1714;
+  --error-text: #FF9F87;
+  --error-bg: rgba(255, 122, 92, 0.14);
+  --error-bg-subtle: rgba(255, 122, 92, 0.06);
+  --error-border: #6B2E20;
+  --error-surface: #1F1714;
 }

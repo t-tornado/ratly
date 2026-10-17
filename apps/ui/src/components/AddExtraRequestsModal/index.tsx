@@ -59,7 +59,7 @@ export function AddExtraRequestsModal({
       title={
         <>
           Add extra requests for{" "}
-          <span className="font-[family-name:var(--font-mono)]">{userId}</span>
+          <span className="font-mono">{userId}</span>
         </>
       }
       footer={
@@ -72,7 +72,7 @@ export function AddExtraRequestsModal({
       }
     >
       <div className="flex flex-col gap-3.5">
-        <p className="text-[var(--color-text-tertiary)] leading-normal">
+        <p className="text-text-tertiary leading-normal">
           A one-off top-up for this window only. It disappears when the window
           resets; the limit stays {limit}.
         </p>
@@ -80,7 +80,7 @@ export function AddExtraRequestsModal({
         <div className="flex items-center gap-2.5 flex-wrap">
           <Button
             variant="ghost"
-            className="size-11 rounded-[var(--radius-lg)]"
+            className="size-11 rounded-lg"
             onClick={handleDecrement}
             aria-label="Decrease by 5"
           >
@@ -92,11 +92,11 @@ export function AddExtraRequestsModal({
             onChange={handleInputChange}
             min={MIN_EXTRA_REQUESTS}
             aria-label="Extra requests"
-            className="h-11 w-[100px] text-center bg-[var(--color-bg-base)] border border-[var(--color-border-strong)] rounded-[var(--radius-lg)] font-[family-name:var(--font-mono)] text-[length:var(--text-2xl)] text-[color:var(--color-text-primary)]"
+            className="h-11 w-[100px] text-center bg-bg-base border border-border-strong rounded-lg font-mono text-2xl text-text-primary"
           />
           <Button
             variant="ghost"
-            className="size-11 rounded-[var(--radius-lg)]"
+            className="size-11 rounded-lg"
             onClick={handleIncrement}
             aria-label="Increase by 5"
           >
@@ -107,7 +107,7 @@ export function AddExtraRequestsModal({
               key={presetValue}
               variant="ghost"
               size="pill"
-              className="text-[var(--color-text-tertiary)]"
+              className="text-text-tertiary"
               onClick={() => handlePreset(presetValue)}
             >
               +{presetValue}

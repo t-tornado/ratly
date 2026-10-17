@@ -61,7 +61,7 @@ function AdjustLimitModal({
       title={
         <>
           Adjust limit for{" "}
-          <span className="font-[family-name:var(--font-mono)]">{userId}</span>
+          <span className="font-mono">{userId}</span>
         </>
       }
       footer={
@@ -74,7 +74,7 @@ function AdjustLimitModal({
       }
     >
       <div className="flex flex-col gap-3.5">
-        <label htmlFor="adjust-limit-input" className="text-[length:var(--text-base-sm)] text-[color:var(--color-text-secondary)]">
+        <label htmlFor="adjust-limit-input" className="text-base-sm text-text-secondary">
           Requests per hour (now {currentLimit})
         </label>
 
@@ -84,7 +84,7 @@ function AdjustLimitModal({
           data-testid="limit-input"
           value={limitValue}
           onChange={handleInputChange}
-          className="h-11 w-full bg-[var(--color-bg-base)] border border-[var(--color-border-strong)] focus:border-[var(--color-accent-blue)] rounded-[var(--radius-lg)] font-[family-name:var(--font-mono)] text-[length:var(--text-2xl)] text-[color:var(--color-text-primary)] px-3 outline-none"
+          className="h-11 w-full bg-bg-base border border-border-strong focus:border-accent-blue rounded-lg font-mono text-2xl text-text-primary px-3 outline-none"
         />
 
         <div className="flex gap-2">
@@ -95,7 +95,7 @@ function AdjustLimitModal({
               size="pill"
               className={cn(
                 limitValue === preset.value &&
-                  "border-[var(--color-accent-blue)] bg-[var(--color-bg-active)]"
+                  "border-accent-blue bg-bg-active"
               )}
               onClick={() => handlePresetClick(preset.value)}
             >
@@ -106,7 +106,7 @@ function AdjustLimitModal({
 
         <ModalPreviewBox>
           Remaining becomes{" "}
-          <span className="text-[var(--color-accent-blue)]">
+          <span className="text-accent-blue">
             {newRemaining} / {limitValue}
           </span>{" "}
           &middot; {remainingStatus}

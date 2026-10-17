@@ -91,19 +91,19 @@ function UserDetailHeader({
       >
         <Link
           to={routes.dashboard}
-          className="no-underline text-[var(--color-text-secondary)] text-[13px]"
+          className="no-underline text-text-secondary text-base-sm"
         >
           ← Users
         </Link>
         <h1
           data-testid="user-id"
-          className="m-0 font-[family-name:var(--font-mono)] text-[24px] font-semibold"
+          className="m-0 font-mono text-3xl font-semibold"
         >
           {userId}
         </h1>
         <Badge variant={status}>{statusLabel}</Badge>
         {isStreaming && (
-          <span className="font-[family-name:var(--font-mono)] text-[12px] text-[var(--color-success-text)] flex items-center gap-1.5">
+          <span className="font-mono text-sm text-success-text flex items-center gap-1.5">
             <StatusDot variant="live" pulsating />
             streaming
           </span>
