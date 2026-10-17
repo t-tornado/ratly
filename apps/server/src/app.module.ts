@@ -1,19 +1,23 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller.js";
-import { EventsModule } from "./events/events.module.js";
-
 import { APP_INTERCEPTOR } from "@nestjs/core";
-import { RedisService } from "./lib/infra/redis/redis.service.js";
-import { RateLimitService } from "./services/rate-limit/rate-limit.service.js";
+import { AppController } from "./app.controller.js";
+import { RedisModule } from "./lib/infra/redis/redis.module.js";
+import { RateLimitModule } from "./services/rate-limit/rate-limit.module.js";
 import { RateLimitInterceptor } from "./services/rate-limit/rate-limit.interceptor.js";
+import { EventsModule } from "./events/events.module.js";
+import { AdminModule } from "./services/admin/admin.module.js";
+import { DashboardStatsModule } from "./services/dashboard/dashboard-stats.module.js";
 
 @Module({
-  imports: [EventsModule],
+  imports: [
+    RedisModule,
+    RateLimitModule,
+    EventsModule,
+    AdminModule,
+    DashboardStatsModule,
+  ],
   controllers: [AppController],
   providers: [
-    RedisService,
-    RateLimitService,
-    RateLimitInterceptor,
     { provide: APP_INTERCEPTOR, useExisting: RateLimitInterceptor },
   ],
 })
