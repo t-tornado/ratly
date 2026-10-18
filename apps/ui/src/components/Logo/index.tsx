@@ -23,7 +23,7 @@ function Logo({ size = 32, showWordmark = false, className }: LogoProps) {
         className="font-semibold text-text-primary leading-none"
         style={{ fontSize: wordmarkFontSize }}
       >
-        ratly
+        Ratly Console
       </span>
     </div>
   );
