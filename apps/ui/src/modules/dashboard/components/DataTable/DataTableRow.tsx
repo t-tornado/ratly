@@ -1,6 +1,6 @@
-import { cn } from "../../lib/utils";
-import { ProgressBar } from "../ProgressBar";
-import { Badge, type BadgeProps } from "../Badge";
+import { cn } from "../../../../lib/utils";
+import { ProgressBar } from "../../../../components/ProgressBar";
+import { Badge, type BadgeProps } from "../../../../components/Badge";
 
 type StatusVariant = NonNullable<BadgeProps["variant"]>;
 

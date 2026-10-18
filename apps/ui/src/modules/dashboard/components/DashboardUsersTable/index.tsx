@@ -2,53 +2,34 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { UserRow } from "@ratly/core";
 import { FilterBar } from "../../../../components/FilterBar";
-import { DataTable } from "../../../../components/DataTable";
-import { mapUserRowToTableRow } from "../../../../lib/utils";
+import { DataTable } from "../DataTable";
 import { useDebouncedSearch } from "../../../../lib/hooks/useDebouncedSearch";
 import { routes } from "../../../../routes";
 import { applyUserTableFilters, buildUserStatusFilterOptions, USER_TABLE_TIME_OPTIONS } from "../../utils/userTableFilters";
 import type { UserStatusFilter, TimeWindowFilter } from "../../types/userTableFilters";
 import { useAdminActions } from "../../hooks/useAdminActions";
-import { DashboardActionMenu } from "../DashboardActionMenu";
+import { DashboardTableRow } from "./DashboardTableRow";
+import type { RowEventStore } from "../../hooks/useRowEventStore";
 
 interface DashboardUsersTableProps {
-  rows: UserRow[];
+  store: RowEventStore;
   isLoading?: boolean;
 }
 
-function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTableProps) {
+function DashboardUsersTable({ store, isLoading = false }: DashboardUsersTableProps) {
   const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState<UserStatusFilter>("All");
   const [windowFilter, setWindowFilter] = useState<TimeWindowFilter>("any");
   const { searchQuery, onSearchChange } = useDebouncedSearch();
+  const adminActions = useAdminActions();
 
-  const {
-    resetWindowMutation,
-    adjustLimitMutation,
-    resetLimitMutation,
-    addExtraMutation,
-    pauseMutation,
-    unlockMutation,
-  } = useAdminActions();
+  const allRows = store.userIds
+    .map((userId) => store.getRow(userId))
+    .filter((row): row is UserRow => row !== undefined);
 
-  const filteredRows = applyUserTableFilters(rows, { statusFilter, searchQuery, windowFilter });
-  const statusFilterOptions = buildUserStatusFilterOptions(rows, statusFilter);
-
-  function renderRowAction(userId: string) {
-    const targetRow = rows.find((r) => r.userId === userId);
-    if (!targetRow) return null;
-    return (
-      <DashboardActionMenu
-        row={targetRow}
-        onResetWindow={() => resetWindowMutation.mutate(userId)}
-        onAddExtra={(amount) => addExtraMutation.mutate({ userId, amount })}
-        onAdjustLimit={(limit) => adjustLimitMutation.mutate({ userId, limit })}
-        onResetLimit={() => resetLimitMutation.mutate(userId)}
-        onPause={(seconds) => pauseMutation.mutate({ userId, seconds })}
-        onUnlock={() => unlockMutation.mutate(userId)}
-      />
-    );
-  }
+  const filteredRows = applyUserTableFilters(allRows, { statusFilter, searchQuery, windowFilter });
+  const filteredUserIds = filteredRows.map((row) => row.userId);
+  const statusFilterOptions = buildUserStatusFilterOptions(allRows, statusFilter);
 
   return (
     <div data-testid="dashboard-users-table" className="flex flex-col sm:flex-1 sm:min-h-0 gap-3">
@@ -64,12 +45,19 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
       </div>
       <DataTable
         className="flex-1 min-h-0"
-        rows={filteredRows.map(mapUserRowToTableRow)}
+        userIds={filteredUserIds}
         isLoading={isLoading}
-        onRowClick={(userId) => navigate(routes.userDetail(userId))}
-        renderAction={renderRowAction}
+        renderRow={(userId) => (
+          <DashboardTableRow
+            key={userId}
+            userId={userId}
+            store={store}
+            onRowClick={() => navigate(routes.userDetail(userId))}
+            adminActions={adminActions}
+          />
+        )}
         footer={
-          <span>{filteredRows.length} of {rows.length} shown &middot; sorted by usage &darr;</span>
+          <span>{filteredUserIds.length} of {store.userIds.length} shown &middot; sorted by usage &darr;</span>
         }
       />
     </div>
