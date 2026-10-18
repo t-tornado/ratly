@@ -16,8 +16,9 @@ function user(
   windowTtl: number,
   pauseTtl: number,
   lastSeen: number,
+  lastResetAt: number = 0,
 ): (string | number)[] {
-  return [userId, used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastSeen];
+  return [userId, used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastSeen, lastResetAt];
 }
 
 describe("unpackAllRows", () => {
@@ -105,6 +106,19 @@ describe("unpackAllRows", () => {
 
     expect(rows).toHaveLength(3);
     expect(rows.map((r) => r.userId)).toEqual(["u1", "u2", "u3"]);
+  });
+
+  it("sets lastAdminResetAt when value > 0", () => {
+    const resetTs = NOW - 60_000;
+    const flat = buildFlat(user("u1", 5, 0, 0, 100, 3000, -2, NOW - 1000, resetTs));
+    const [row] = unpackAllRows(flat);
+    expect(row.lastAdminResetAt).toBe(resetTs);
+  });
+
+  it("sets lastAdminResetAt to null when value is 0", () => {
+    const flat = buildFlat(user("u1", 5, 0, 0, 100, 3000, -2, NOW - 1000, 0));
+    const [row] = unpackAllRows(flat);
+    expect(row.lastAdminResetAt).toBeNull();
   });
 
   it("sets at = now on every row", () => {

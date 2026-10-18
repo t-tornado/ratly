@@ -16,6 +16,7 @@ export const mockUserRow: UserRow = {
   resetAt: NOW + HOUR_MS,
   status: "ok",
   lastRequestAt: NOW - 5_000,
+  lastAdminResetAt: null,
   at: NOW,
 };
 
