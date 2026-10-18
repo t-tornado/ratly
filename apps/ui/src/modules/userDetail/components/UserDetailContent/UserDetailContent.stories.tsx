@@ -7,6 +7,9 @@ const meta = {
   parameters: {
     layout: "fullscreen",
   },
+  args: {
+    userId: "usr_demo_001",
+  },
   decorators: [
     (Story) => (
       <div className="dark bg-bg-base text-text-primary p-7 min-h-screen">

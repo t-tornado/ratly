@@ -7,6 +7,9 @@ const meta = {
   parameters: {
     layout: "padded",
   },
+  args: {
+    userId: "usr_demo_001",
+  },
 } satisfies Meta<typeof UserDetailEvents>;
 
 export default meta;

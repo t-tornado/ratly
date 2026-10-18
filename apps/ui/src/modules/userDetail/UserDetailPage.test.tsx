@@ -1,9 +1,19 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "../../providers/ThemeProvider";
+import { SocketContext } from "../../lib/hooks/useSocket";
+import type { Socket } from "socket.io-client";
 import UserDetailPage from ".";
+
+const MOCK_SOCKET = {
+  on: () => {},
+  off: () => {},
+  connect: () => {},
+  disconnect: () => {},
+} as unknown as Socket;
 
 function renderPage() {
   const queryClient = new QueryClient({
@@ -12,11 +22,13 @@ function renderPage() {
   return render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <MemoryRouter initialEntries={["/users/usr_test123"]}>
-          <Routes>
-            <Route path="/users/:userId" element={<UserDetailPage />} />
-          </Routes>
-        </MemoryRouter>
+        <SocketContext value={{ socket: MOCK_SOCKET, isConnected: false }}>
+          <MemoryRouter initialEntries={["/users/usr_test123"]}>
+            <Routes>
+              <Route path="/users/:userId" element={<UserDetailPage />} />
+            </Routes>
+          </MemoryRouter>
+        </SocketContext>
       </ThemeProvider>
     </QueryClientProvider>
   );
