@@ -1,23 +1,26 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Users } from "lucide-react";
+import { Users, WifiOff } from "lucide-react";
 import { cn } from "../../../../lib/utils";
 import { useMediaQuery } from "../../../../lib/hooks/useMediaQuery";
 import { EmptyState } from "../../../../components/EmptyState";
 import { DataTableMobile } from "./DataTableMobile";
+
+const DISCONNECTED_MESSAGE = "Connection to server lost. Data shown may be stale.";
 
 interface DataTableProps extends React.ComponentProps<"div"> {
   userIds: string[];
   renderRow: (userId: string) => React.ReactNode;
   footer?: React.ReactNode;
   isLoading?: boolean;
+  isDisconnected?: boolean;
   mobileTitle?: string;
 }
 
 const ROW_ESTIMATED_HEIGHT = 48;
 const MOBILE_BREAKPOINT = "(max-width: 639px)";
 
-function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle, className, ...props }: DataTableProps) {
+function DataTable({ userIds, renderRow, footer, isLoading = false, isDisconnected = false, mobileTitle, className, ...props }: DataTableProps) {
   const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +39,7 @@ function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle,
         renderRow={renderRow}
         footer={footer}
         isLoading={isLoading}
+        isDisconnected={isDisconnected}
         mobileTitle={mobileTitle}
         className={className}
         {...props}
@@ -82,6 +86,17 @@ function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle,
               <tr>
                 <td colSpan={6} className="py-16 text-center text-sm text-text-muted min-h-64">
                   Loading…
+                </td>
+              </tr>
+            ) : isDisconnected ? (
+              <tr>
+                <td colSpan={6}>
+                  <EmptyState
+                    icon={WifiOff}
+                    variant="warning"
+                    message={DISCONNECTED_MESSAGE}
+                    className="border-0 rounded-none bg-transparent"
+                  />
                 </td>
               </tr>
             ) : isEmpty ? (

@@ -10,16 +10,16 @@ import { useSocket } from "../../lib/hooks";
 
 export default function DashboardPage() {
   const { socket, isConnected } = useSocket();
-  const { stats, initialRows, isLoading, isError } = useDashboardData(socket);
+  const { stats, initialRows, isLoading, isError, refetch } = useDashboardData(socket);
   const store = useRowEventStore(socket, initialRows);
 
   return (
     <PageLayout testId="dashboard-page">
-      <DashboardHeader isConnected={isConnected} />
+      <DashboardHeader isConnected={isConnected} isError={isError} onRetry={refetch} />
       <PageSection className="pb-5 flex flex-col">
         <DashboardStats stats={stats} isLoading={isLoading} isError={isError} />
         <TopUsersChart topUsers={stats?.topUsers ?? []} isError={isError} />
-        <DashboardContent store={store} isLoading={isLoading} />
+        <DashboardContent store={store} isLoading={isLoading} isConnected={isConnected} />
       </PageSection>
     </PageLayout>
   );

@@ -21,7 +21,7 @@ const MOCK_SOCKET = {
   disconnect: () => {},
 } as unknown as Socket;
 
-const MOCK_SOCKET_CONTEXT = { socket: MOCK_SOCKET, isConnected: false };
+const MOCK_SOCKET_CONTEXT = { socket: MOCK_SOCKET, isConnected: true };
 
 function AllProviders({ children }: { children: React.ReactNode }) {
   const queryClient = createTestQueryClient();

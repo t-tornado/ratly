@@ -39,7 +39,13 @@ function TopUsersChart({ topUsers, isError }: TopUsersChartProps) {
         <SectionHeading>Top Requests by Window</SectionHeading>
         <FetchStatusIndicator isError={isError} />
       </div>
-      {topUsers.length === 0 ? (
+      {isError ? (
+        <ChartEmpty
+          className="flex-1"
+          message="Failed to load chart data"
+          description="Use the retry button in the header to refresh"
+        />
+      ) : topUsers.length === 0 ? (
         <ChartEmpty
           className="flex-1"
           message="No active windows"

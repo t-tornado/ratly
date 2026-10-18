@@ -12,7 +12,7 @@ const EMPTY_ROWS: UserRow[] = [];
 function useDashboardData(socket: Socket) {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: queryKeys.dashboard,
     queryFn: fetchDashboard,
   });
@@ -43,6 +43,7 @@ function useDashboardData(socket: Socket) {
     initialRows,
     isLoading,
     isError,
+    refetch,
   };
 }
 

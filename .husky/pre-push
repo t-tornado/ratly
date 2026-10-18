@@ -2,3 +2,5 @@ pnpm --filter @ratly/core typecheck
 pnpm --filter @ratly/server typecheck
 pnpm --filter @ratly/ui typecheck
 pnpm --filter @ratly/ui lint
+pnpm --filter @ratly/server test
+pnpm --filter @ratly/ui test -- --run

@@ -112,10 +112,15 @@ function UserDetailHeader({
           {userId}
         </h1>
         <Badge variant={status}>{statusLabel}</Badge>
-        {isStreaming && (
+        {isStreaming ? (
           <span className="font-mono text-sm text-success-text flex items-center gap-1.5">
             <StatusDot variant="live" pulsating />
             streaming
+          </span>
+        ) : (
+          <span className="font-mono text-sm text-warning-text flex items-center gap-1.5">
+            <StatusDot variant="warning" />
+            disconnected
           </span>
         )}
       </PageHeader>

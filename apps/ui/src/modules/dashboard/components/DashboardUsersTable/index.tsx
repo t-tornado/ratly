@@ -14,9 +14,10 @@ import type { RowEventStore } from "../../hooks/useRowEventStore";
 interface DashboardUsersTableProps {
   store: RowEventStore;
   isLoading?: boolean;
+  isConnected: boolean;
 }
 
-function DashboardUsersTable({ store, isLoading = false }: DashboardUsersTableProps) {
+function DashboardUsersTable({ store, isLoading = false, isConnected }: DashboardUsersTableProps) {
   const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState<UserStatusFilter>("All");
   const [windowFilter, setWindowFilter] = useState<TimeWindowFilter>("any");
@@ -47,6 +48,7 @@ function DashboardUsersTable({ store, isLoading = false }: DashboardUsersTablePr
         className="max-h-[800px]"
         userIds={filteredUserIds}
         isLoading={isLoading}
+        isDisconnected={!isConnected}
         renderRow={(userId) => (
           <DashboardTableRow
             key={userId}

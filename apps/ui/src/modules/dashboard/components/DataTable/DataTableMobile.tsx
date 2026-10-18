@@ -1,12 +1,15 @@
-import { Users } from "lucide-react";
+import { Users, WifiOff } from "lucide-react";
 import { cn } from "../../../../lib/utils";
 import { EmptyState } from "../../../../components/EmptyState";
+
+const DISCONNECTED_MESSAGE = "Connection to server lost. Data shown may be stale.";
 
 interface DataTableMobileProps extends React.ComponentProps<"div"> {
   userIds: string[];
   renderRow: (userId: string) => React.ReactNode;
   footer?: React.ReactNode;
   isLoading: boolean;
+  isDisconnected?: boolean;
   mobileTitle?: string;
 }
 
@@ -15,6 +18,7 @@ function DataTableMobile({
   renderRow,
   footer,
   isLoading,
+  isDisconnected = false,
   mobileTitle,
   className,
   ...props
@@ -37,6 +41,13 @@ function DataTableMobile({
       <div className="flex-1 min-h-0 overflow-auto" tabIndex={0}>
         {isLoading ? (
           <div className="py-16 text-center text-sm text-text-muted">Loading…</div>
+        ) : isDisconnected ? (
+          <EmptyState
+            icon={WifiOff}
+            variant="warning"
+            message={DISCONNECTED_MESSAGE}
+            className="border-0 rounded-none bg-transparent"
+          />
         ) : isEmpty ? (
           <EmptyState icon={Users} className="border-0 rounded-none bg-transparent" />
         ) : (
