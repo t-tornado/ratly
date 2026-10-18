@@ -1,5 +1,6 @@
 import { BarChart3 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { Typography } from "../Typography";
 
 interface ChartEmptyProps {
   message?: string;
@@ -18,8 +19,8 @@ function ChartEmpty({
         <BarChart3 className="w-5 h-5 text-text-muted" />
       </div>
       <div>
-        <p className="text-sm font-medium text-text-secondary">{message}</p>
-        <p className="text-xs text-text-muted mt-1 max-w-56">{description}</p>
+        <Typography variant="label" className="font-semibold text-text-primary">{message}</Typography>
+        <Typography variant="labelSm" className="text-text-muted mt-1 max-w-56">{description}</Typography>
       </div>
     </div>
   );

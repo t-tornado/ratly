@@ -57,7 +57,7 @@ function DashboardUsersTable({ store, isLoading = false }: DashboardUsersTablePr
           />
         )}
         footer={
-          <span>{filteredUserIds.length} of {store.userIds.length} shown &middot; sorted by usage &darr;</span>
+          <span>{filteredUserIds.length} of {store.userIds.length} shown</span>
         }
       />
     </div>

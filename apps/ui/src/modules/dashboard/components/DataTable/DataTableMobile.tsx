@@ -1,3 +1,4 @@
+import { Users } from "lucide-react";
 import { cn } from "../../../../lib/utils";
 import { EmptyState } from "../../../../components/EmptyState";
 
@@ -37,7 +38,7 @@ function DataTableMobile({
         {isLoading ? (
           <div className="py-16 text-center text-sm text-text-muted">Loading…</div>
         ) : isEmpty ? (
-          <EmptyState className="border-0 rounded-none bg-transparent" />
+          <EmptyState icon={Users} className="border-0 rounded-none bg-transparent" />
         ) : (
           userIds.map((userId) => (
             <div key={userId}>{renderRow(userId)}</div>

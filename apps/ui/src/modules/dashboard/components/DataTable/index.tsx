@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { Users } from "lucide-react";
 import { cn } from "../../../../lib/utils";
 import { useMediaQuery } from "../../../../lib/hooks/useMediaQuery";
 import { EmptyState } from "../../../../components/EmptyState";
@@ -86,7 +87,7 @@ function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle,
             ) : isEmpty ? (
               <tr>
                 <td colSpan={6}>
-                  <EmptyState className="border-0 rounded-none bg-transparent" />
+                  <EmptyState icon={Users} className="border-0 rounded-none bg-transparent" />
                 </td>
               </tr>
             ) : (
