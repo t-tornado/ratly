@@ -13,7 +13,7 @@ export const Default: Story = {
   args: {
     filters: [
       { label: "All", count: 10, active: true },
-      { label: "OK", count: 5 },
+      { label: "OK", count: 5, color: "var(--color-success)" },
       { label: "Warning", count: 2, color: "var(--color-warning)" },
       { label: "Exceeded", count: 3, color: "var(--color-error)" },
     ],

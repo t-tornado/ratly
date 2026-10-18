@@ -27,7 +27,7 @@ export function buildUserStatusFilterOptions(
 
   return [
     { label: "All",      count: rows.length,   active: activeFilter === "All" },
-    { label: "OK",       count: okCount,        active: activeFilter === "OK" },
+    { label: "OK",       count: okCount,        active: activeFilter === "OK",       color: "var(--color-success)" },
     { label: "Warning",  count: warningCount,   active: activeFilter === "Warning",  color: "var(--color-warning)" },
     { label: "Exceeded", count: exceededCount,  active: activeFilter === "Exceeded", color: "var(--color-error)" },
   ];

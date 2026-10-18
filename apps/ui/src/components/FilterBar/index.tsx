@@ -1,3 +1,4 @@
+import { SlidersHorizontal } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { SearchInput } from "../SearchInput";
 import { Button } from "../Button";
@@ -33,7 +34,7 @@ function FilterBar({
 }: FilterBarProps) {
   return (
     <div
-      className={cn("flex flex-wrap items-center gap-3", className)}
+      className={cn("flex items-center gap-3", className)}
       {...props}
     >
       <SearchInput
@@ -42,7 +43,11 @@ function FilterBar({
         className="flex-1 min-w-[200px]"
       />
 
-      <div role="group" aria-label="Status filter" className="flex gap-0.5">
+      <div className="w-px h-5 bg-border-default shrink-0" />
+
+      <SlidersHorizontal size={13} className="text-text-tertiary opacity-40 shrink-0" />
+
+      <div role="group" aria-label="Status filter" className="flex gap-0.5 shrink-0">
         {filters.map((f) => (
           <Button
             key={f.label}
@@ -50,34 +55,40 @@ function FilterBar({
             size="filter"
             onClick={() => onFilterChange?.(f.label)}
             aria-pressed={f.active}
-            style={f.color ? { color: f.color } : undefined}
           >
-            {f.label}
-            {f.count != null && (
-              <span className="ml-1 text-xs opacity-70">{f.count}</span>
+            {f.color && (
+              <span
+                className="size-1.5 rounded-full shrink-0 mr-1.5"
+                style={{ backgroundColor: f.color }}
+              />
             )}
+            {f.label}
+            {f.count != null && <span className="ml-1 opacity-60">[{f.count}]</span>}
           </Button>
         ))}
       </div>
 
       {selectOptions && (
-        <div className="flex items-center gap-2">
-          {selectLabel && (
-            <span className="text-text-secondary text-sm">
-              {selectLabel}
-            </span>
-          )}
-          <Select
-            aria-label={selectLabel ?? "Filter"}
-            onChange={(e) => onSelectChange?.(e.target.value)}
-          >
-            {selectOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </Select>
-        </div>
+        <>
+          <div className="w-px h-5 bg-border-default shrink-0" />
+          <div className="flex items-center gap-2 shrink-0">
+            {selectLabel && (
+              <span className="text-text-secondary text-sm whitespace-nowrap">
+                {selectLabel}
+              </span>
+            )}
+            <Select
+              aria-label={selectLabel ?? "Filter"}
+              onChange={(e) => onSelectChange?.(e.target.value)}
+            >
+              {selectOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </Select>
+          </div>
+        </>
       )}
     </div>
   );
