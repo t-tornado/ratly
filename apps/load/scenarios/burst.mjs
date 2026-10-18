@@ -1,12 +1,15 @@
 // Burst scenario — aggressive traffic to trigger rate limits
 // Assumes: 100 req limit / 3600s window per user
-// No sleep — each target user exhausts their limit within seconds
+// 1s between requests — each user exhausts limit in ~50s without overwhelming server
 
 import { BASE_URL } from "../lib/config.mjs";
 import { RETURNING_USERS } from "../lib/users.mjs";
 
-const TARGET_USERS = RETURNING_USERS.slice(0, 5);
+const TARGET_USERS = RETURNING_USERS.slice(0, 10);
 const VUS_PER_USER = 2;
+const REQUEST_GAP_MS = 1_000;
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function hit(userId) {
   const res = await fetch(`${BASE_URL}/test`, {
@@ -19,6 +22,7 @@ async function hit(userId) {
 async function burstUser(userId) {
   while (true) {
     await hit(userId);
+    await sleep(REQUEST_GAP_MS);
   }
 }
 
@@ -26,5 +30,7 @@ const vus = TARGET_USERS.flatMap((userId) =>
   Array.from({ length: VUS_PER_USER }, () => userId)
 );
 
-console.log(`Starting burst load — ${TARGET_USERS.length} users × ${VUS_PER_USER} VUs each`);
+console.log(
+  `Starting burst load — ${TARGET_USERS.length} users x ${VUS_PER_USER} VUs each, ${REQUEST_GAP_MS / 1_000}s between requests`
+);
 await Promise.all(vus.map((userId) => burstUser(userId)));

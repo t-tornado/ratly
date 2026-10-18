@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 
-export const RETURNING_USERS = Array.from({ length: 50 }, (_, i) =>
+export const RETURNING_USERS = Array.from({ length: 200 }, (_, i) =>
   `user-${String(i + 1).padStart(3, "0")}`
 );
 
