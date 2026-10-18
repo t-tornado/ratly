@@ -1,0 +1,11 @@
+{
+  "name": "@ratly/load",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "steady": "node --env-file=.env scenarios/steady.mjs",
+    "burst": "node --env-file=.env scenarios/burst.mjs",
+    "mixed": "node --env-file=.env scenarios/mixed.mjs"
+  }
+}
