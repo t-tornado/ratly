@@ -81,8 +81,7 @@ Each step:
 ```
 `verify` is a concrete check (e.g. "pnpm test passes", "file X exists", "endpoint returns 200").
 
-**Acceptance** — list of pass/fail checks that together confirm the issue is resolved.
-Derive from the issue body. If not explicit, infer from the scope and type of change.
+**Acceptance** — copy every acceptance criterion from the issue body verbatim. One entry per checkbox or bullet. Do not filter, reword, or drop any criterion — every item the issue lists must appear in this array. If the issue has no explicit criteria, infer from scope and change type.
 
 ### Step 5: Write Task File
 

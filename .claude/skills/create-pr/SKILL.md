@@ -65,11 +65,10 @@ Run independent gates in parallel where possible.
 
 ### Step 3: Collect Task Gate (if applicable)
 
-If the current task has a `RUN_DIR` (check for `.agent-runs/*/manifest.json` matching the branch name or ask the user):
+If the current task has a `RUN_DIR` (check for `.agent-runs/issue-<N>/task.json` matching the branch, or ask the user):
 
-1. Read `RUN_DIR/manifest.json` — confirm status is `"completed"`
-2. Glob all `RUN_DIR/step-*.json` files
-3. Read each step JSON and collect into an acceptance criteria table:
+1. Glob all `RUN_DIR/step-*.json` files
+2. Read each step JSON and collect into an acceptance criteria table:
 
 ```markdown
 | Step | Name | Status | Checks passed | Detail |
@@ -79,6 +78,12 @@ If the current task has a `RUN_DIR` (check for `.agent-runs/*/manifest.json` mat
 ```
 
 If any step has `"status": "fail"`, STOP. Tell the user which step failed and what check failed. Do not create the PR.
+
+3. If `RUN_DIR/screenshots.json` exists:
+   - Read it: `{ "sha": "<SCREENSHOTS_SHA>", "files": [...] }`
+   - Run `gh repo view --json owner,name` to get `owner` and `repo`
+   - Build raw URL for each file: `https://raw.githubusercontent.com/<owner>/<repo>/<SCREENSHOTS_SHA>/<file>`
+   - Collect into a screenshots map: `{ criterion → url }`
 
 ### Step 4: Gate Check
 
@@ -108,7 +113,12 @@ If any step has `"status": "fail"`, STOP. Tell the user which step failed and wh
 
 ### Acceptance Criteria
 
-<table from Step 3, or "N/A — no task gate" if not task-driven>
+<Every criterion from task.json.acceptance listed verbatim, with pass/fail status>
+
+| # | Criterion | Status |
+|---|-----------|--------|
+| 1 | <verbatim criterion text from issue> | ✅ pass |
+| 2 | ... | ✅ pass |
 
 <details>
 <summary>Step verification details</summary>
@@ -120,6 +130,16 @@ If any step has `"status": "fail"`, STOP. Tell the user which step failed and wh
 - [x] <check description>
 
 </details>
+
+## Screenshots
+
+<Only present if RUN_DIR/screenshots.json exists. One row per screenshot criterion.>
+
+| Criterion | Preview |
+|-----------|---------|
+| <criterion text> | ![<slug>](<raw.githubusercontent.com URL using SCREENSHOTS_SHA>) |
+
+<If no screenshots: omit this section entirely.>
 
 ## Test Plan
 

@@ -77,15 +77,33 @@ Before Step 3: verify every `step-<id>.json` file exists in `RUN_DIR` — one pe
 
 ### Step 3: Run Acceptance
 
-Run each check in `task.json.acceptance` in order. Capture exit code and output for each.
+Partition `task.json.acceptance` into two groups:
+- **Command checks** — criteria that can be verified by a shell command (build, test, file exists, grep)
+- **Screenshot checks** — criteria whose text contains "screenshot" or "PR includes screenshot"
 
-If ALL pass: write `RUN_DIR/acceptance.json`:
+**Command checks:** run each in order. Capture exit code and output.
+
+**Screenshot checks:** for each:
+1. Determine the target from the criterion text (story name, page, component state)
+2. Start the relevant server:
+   - Storybook stories → `pnpm --filter @ratly/ui build-storybook` then `npx serve apps/ui/storybook-static -p 6007 -s`
+   - App page → `pnpm --filter @ratly/ui build` then `npx serve apps/ui/dist -p 6007 -s`
+3. Use playwright MCP (`browser_navigate`, `browser_take_screenshot`) to navigate to the target and capture
+4. Save screenshot to `screenshots/issue-<N>/<slug>.png` at repo root (tracked, not gitignored)
+5. Verify file exists on disk — if missing, mark fail and STOP
+6. Record: `{ "criterion": "<text>", "file": "screenshots/issue-<N>/<slug>.png", "status": "pass" }`
+7. Kill the server after all screenshots for that server are captured
+
+If ALL checks pass: write `RUN_DIR/acceptance.json`:
 
 ```json
 {
   "status": "pass",
   "checks": [
     { "description": "...", "status": "pass", "output": "..." }
+  ],
+  "screenshots": [
+    { "criterion": "...", "file": "screenshots/issue-<N>/<slug>.png", "status": "pass" }
   ]
 }
 ```
@@ -96,8 +114,20 @@ If ANY fail:
 
 ### Step 4: Commit
 
-Call the `commit` skill. All changes from Step 2 are committed together.
-If commit fails → STOP. Show the error. Do not proceed to report.
+**4a — Code commit:** call the `commit` skill. All changes from Step 2 are committed together.
+If commit fails → STOP. Show the error. Do not proceed.
+
+**4b — Screenshots commit (only if `acceptance.json` has screenshot entries):**
+1. `git add screenshots/issue-<N>/`
+2. Commit with message: `chore: add pr screenshots for issue-<N>`
+3. Capture the commit SHA: `git rev-parse HEAD` → `SCREENSHOTS_SHA`
+4. Write `RUN_DIR/screenshots.json`: `{ "sha": "<SCREENSHOTS_SHA>", "files": ["screenshots/issue-<N>/slug.png", ...] }`
+
+**4c — Screenshots delete commit:**
+1. `git rm -r screenshots/issue-<N>/`
+2. Commit with message: `chore: remove pr screenshots (ref: <SCREENSHOTS_SHA>)`
+
+After 4c the working tree has no screenshots, but they are permanently accessible via `SCREENSHOTS_SHA`.
 
 ### Step 5: Report
 
