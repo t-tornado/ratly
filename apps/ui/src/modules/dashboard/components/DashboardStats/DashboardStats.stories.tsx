@@ -11,9 +11,9 @@ export default meta;
 type Story = StoryObj<typeof DashboardStats>;
 
 export const Loaded: Story = {
-  args: { stats: mockStats, isLoading: false },
+  args: { stats: mockStats, isLoading: false, isError: false },
 };
 
 export const Loading: Story = {
-  args: { stats: null, isLoading: true },
+  args: { stats: null, isLoading: true, isError: false },
 };

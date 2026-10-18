@@ -14,6 +14,7 @@ import { SectionHeading } from "../../../../components/SectionHeading";
 import { routes } from "../../../../routes";
 import { TopUsersChartTooltip } from "./TopUsersChartTooltip";
 import { UserIdTick } from "./UserIdTick";
+import { FetchStatusIndicator } from "../../../../components/FetchStatusIndicator";
 
 const BAR_COLOR = "var(--color-accent-blue)";
 const EXCEEDED_COLOR = "var(--color-error)";
@@ -22,9 +23,10 @@ const BAR_GAP = 8;
 
 interface TopUsersChartProps {
   topUsers: TopUser[];
+  isError: boolean;
 }
 
-function TopUsersChart({ topUsers }: TopUsersChartProps) {
+function TopUsersChart({ topUsers, isError }: TopUsersChartProps) {
   const navigate = useNavigate();
 
   const handleClickUser = (userId: string) => {
@@ -33,7 +35,10 @@ function TopUsersChart({ topUsers }: TopUsersChartProps) {
 
   return (
     <div className="rounded-xl border border-border-default bg-bg-surface-raised px-4.5 py-4 mt-5 w-full lg:w-2/3 min-h-[560px] flex flex-col">
-      <SectionHeading className="mb-3">Top Requests by Window</SectionHeading>
+      <div className="flex items-center justify-between mb-3">
+        <SectionHeading>Top Requests by Window</SectionHeading>
+        <FetchStatusIndicator isError={isError} />
+      </div>
       {topUsers.length === 0 ? (
         <ChartEmpty
           className="flex-1"
