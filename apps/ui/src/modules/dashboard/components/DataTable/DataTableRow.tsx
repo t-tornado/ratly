@@ -70,7 +70,7 @@ function DataTableRow({
               ))}
             </div>
             <span className="font-mono text-base-sm text-text-muted">
-              {resetTime} &middot; in {resetIn}
+              {resetTime ? <>{resetTime}{resetIn && <> &middot; in {resetIn}</>}</> : "No active window"}
             </span>
           </div>
           {actionContent && (
@@ -132,10 +132,18 @@ function DataTableRow({
         </div>
       </td>
       <td className="py-3 px-4 font-mono text-base-sm">
-        <span>{resetTime}</span>
-        <span className="text-text-muted ml-1">
-          &middot; in {resetIn}
-        </span>
+        {resetTime ? (
+          <>
+            <span>{resetTime}</span>
+            {resetIn && (
+              <span className="text-text-muted ml-1">
+                &middot; in {resetIn}
+              </span>
+            )}
+          </>
+        ) : (
+          <span className="text-text-muted">No active window</span>
+        )}
       </td>
       <td className="py-3 px-4">
         <Badge variant={STATUS_TO_BADGE[status]}>

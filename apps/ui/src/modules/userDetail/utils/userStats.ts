@@ -41,13 +41,12 @@ function buildLiveStatItems(row: UserRow): StatItem[] {
   const resetsInItem: StatItem = {
     label: "Resets in",
     value: row.resetAt ? formatCountdown(row.resetAt) : "--",
+    sub: row.resetAt ? undefined : "no active window — starts on next request",
   };
 
-  const lastResetTimestamp = row.resetAt;
   const lastResetItem: StatItem = {
     label: "Last reset",
-    value: lastResetTimestamp ? formatTimestamp(lastResetTimestamp) : "--",
-    sub: lastResetTimestamp ? "today" : undefined,
+    value: row.lastAdminResetAt ? formatTimestamp(row.lastAdminResetAt) : "--",
   };
 
   const rejectedCount = row.rejectedToday ?? 0;
