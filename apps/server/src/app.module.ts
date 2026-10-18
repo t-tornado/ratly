@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { APP_INTERCEPTOR } from "@nestjs/core";
+import { ConfigModule } from "@nestjs/config";
 import { AppController } from "./app.controller.js";
 import { RedisModule } from "./lib/infra/redis/redis.module.js";
 import { RateLimitModule } from "./services/rate-limit/rate-limit.module.js";
@@ -10,6 +11,7 @@ import { DashboardStatsModule } from "./services/dashboard/dashboard-stats.modul
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     RedisModule,
     RateLimitModule,
     EventsModule,

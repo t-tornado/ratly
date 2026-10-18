@@ -2,6 +2,10 @@
   "name": "ratly",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@9.15.4",
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  },
   "scripts": {
     "dev:ui": "pnpm --filter @ratly/ui dev",
     "dev:server": "pnpm --filter @ratly/server dev",
