@@ -24,6 +24,7 @@ interface DataTableRowProps {
   isClickable?: boolean;
   onClick?: () => void;
   actionContent?: React.ReactNode;
+  variant?: "table" | "card";
 }
 
 function DataTableRow({
@@ -40,7 +41,58 @@ function DataTableRow({
   isClickable,
   onClick,
   actionContent,
+  variant = "table",
 }: DataTableRowProps) {
+  if (variant === "card") {
+    return (
+      <div
+        className={cn(
+          "flex flex-col gap-2 p-4 border-b border-bg-hover",
+          status === "exceeded" && "bg-error-bg shadow-inset-error",
+          isClickable && "cursor-pointer hover:bg-bg-hover"
+        )}
+        onClick={onClick}
+      >
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <a
+                href={href ?? "#"}
+                className="font-mono text-base-sm text-accent-blue no-underline hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {id}
+              </a>
+              {tags?.map((tag) => (
+                <Badge key={tag.label} variant={tag.variant}>
+                  {tag.label}
+                </Badge>
+              ))}
+            </div>
+            <span className="font-mono text-base-sm text-text-muted">
+              {resetTime} &middot; in {resetIn}
+            </span>
+          </div>
+          {actionContent && (
+            <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+              {actionContent}
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1 font-mono text-base-sm">
+          <ProgressBar value={total - remaining} max={total} variant={status} />
+          <span>{remaining} / {total}</span>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <Badge variant={STATUS_TO_BADGE[status]}>{statusLabel}</Badge>
+          <span className="text-text-muted text-base-sm">{lastRequest}</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <tr
       className={cn(

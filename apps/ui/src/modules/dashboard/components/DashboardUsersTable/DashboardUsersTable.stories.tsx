@@ -17,3 +17,10 @@ export const Populated: Story = {
 export const Empty: Story = {
   args: { rows: [] },
 };
+
+export const Mobile: Story = {
+  args: { rows: mockRows },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+};
