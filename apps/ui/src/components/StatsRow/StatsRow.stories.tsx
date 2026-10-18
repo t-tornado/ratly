@@ -20,3 +20,26 @@ export const Default: Story = {
     ],
   },
 };
+
+export const Mobile: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: "mobile375",
+      viewports: {
+        mobile375: {
+          name: "Mobile 375px",
+          styles: { width: "375px", height: "812px" },
+        },
+      },
+    },
+  },
+  args: {
+    items: [
+      { label: "Remaining", value: "6 / 100" },
+      { label: "Resets in", value: "4m 02s", sub: "at 14:21:07 · full 100 back" },
+      { label: "Current window", value: "13:21 → 14:21", sub: "94 used · limit 100 · extra 0" },
+      { label: "Last reset", value: "13:21:07", sub: "automatic · window rolled over" },
+      { label: "429s today", value: "14", sub: "last at 13:02:11" },
+    ],
+  },
+};
