@@ -14,12 +14,13 @@ export class RateLimitService {
 
     const result = (await this.redis.eval(
       fixedWindowScript,
-      5,
+      6,
       redisKeys.userRate(userId),
       redisKeys.userLimit(userId),
       redisKeys.userPaused(userId),
       redisKeys.usersLastSeen,
       redisKeys.stats429(today),
+      redisKeys.activityBucket(userId, today),
       userId,
       String(DEFAULT_LIMIT),
       String(WINDOW_SECONDS),
