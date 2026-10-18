@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { RedisService } from "../../lib/infra/redis/redis.service.js";
 import { RateLimitService } from "../rate-limit/rate-limit.service.js";
-import { addExtraScript } from "../rate-limit/scripts/index.js";
+import { addExtraScript, resetWindowScript } from "../rate-limit/scripts/index.js";
 import { UserRow } from "../../lib/types/index.js";
 import { redisKeys } from "../../lib/redis-keys.js";
 
@@ -19,7 +19,13 @@ export class AdminService {
 
   async resetWindow(userId: string): Promise<UserRow> {
     await this.assertUserExists(userId);
-    await this.redis.del(redisKeys.userRate(userId));
+    await this.redis.eval(
+      resetWindowScript,
+      2,
+      redisKeys.userRate(userId),
+      redisKeys.userLastReset(userId),
+      String(Date.now()),
+    );
     return (await this.rateLimitService.readRow(userId))!;
   }
 

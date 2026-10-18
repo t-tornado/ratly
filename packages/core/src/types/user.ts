@@ -11,6 +11,7 @@ export interface UserRow {
   resetAt: number | null;
   status: "ok" | "warning" | "exceeded";
   lastRequestAt: number;
+  lastAdminResetAt: number | null;
   at: number;
 }
 
