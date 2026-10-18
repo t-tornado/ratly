@@ -14,24 +14,5 @@
     scrollbar-width: thin;
     scrollbar-color: var(--color-border-default) transparent;
   }
-
-  .Toastify__toast {
-    background: var(--color-bg-surface-raised);
-    color: var(--color-text-primary);
-    font-family: var(--font-sans);
-    border-radius: var(--radius-md);
-  }
-
-  .Toastify__toast--success {
-    border-left: 3px solid var(--color-success);
-  }
-
-  .Toastify__toast--error {
-    border-left: 3px solid var(--color-error);
-  }
-
-  .Toastify__close-button {
-    color: var(--color-text-primary);
-    opacity: 0.6;
-  }
 }
+
