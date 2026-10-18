@@ -23,7 +23,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=test
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
