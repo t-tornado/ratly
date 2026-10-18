@@ -47,6 +47,7 @@ function buildLiveStatItems(row: UserRow): StatItem[] {
   const lastResetItem: StatItem = {
     label: "Last reset",
     value: row.lastAdminResetAt ? formatTimestamp(row.lastAdminResetAt) : "--",
+    sub: row.lastAdminResetAt ? undefined : "no admin reset yet",
   };
 
   const rejectedCount = row.rejectedToday ?? 0;
