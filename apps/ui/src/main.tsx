@@ -1,5 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./styles/index.css";
 import { QueryProvider } from "./providers/query";
 import { ThemeProvider } from "./providers/ThemeProvider";
@@ -14,6 +16,14 @@ createRoot(document.getElementById("root")!).render(
         <ThemeProvider>
           <SocketProvider>
             <App />
+            <ToastContainer
+              position="bottom-right"
+              autoClose={4000}
+              hideProgressBar
+              newestOnTop
+              closeOnClick
+              theme="dark"
+            />
           </SocketProvider>
         </ThemeProvider>
       </QueryProvider>

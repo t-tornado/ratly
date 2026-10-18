@@ -14,12 +14,12 @@ type ActiveModal = "reset-window" | "add-extra" | "adjust-limit" | "throttling" 
 
 interface DashboardActionMenuProps {
   row: UserRow;
-  onResetWindow: () => void;
-  onAddExtra: (amount: number) => void;
-  onAdjustLimit: (limit: number) => void;
-  onResetLimit: () => void;
-  onPause: (seconds: number) => void;
-  onUnlock: () => void;
+  onResetWindow: () => Promise<unknown>;
+  onAddExtra: (amount: number) => Promise<unknown>;
+  onAdjustLimit: (limit: number) => Promise<unknown>;
+  onResetLimit: () => Promise<unknown>;
+  onPause: (seconds: number) => Promise<unknown>;
+  onUnlock: () => Promise<unknown>;
 }
 
 function DashboardActionMenu({
@@ -37,13 +37,17 @@ function DashboardActionMenu({
     setActiveModal(null);
   }
 
-  function handleThrottlingConfirm(duration?: ThrottlingDuration) {
-    if (duration !== undefined) {
-      onPause(throttleDurationToSeconds(duration));
-    } else {
-      onUnlock();
+  async function handleThrottlingConfirm(duration?: ThrottlingDuration) {
+    try {
+      if (duration !== undefined) {
+        await onPause(throttleDurationToSeconds(duration));
+      } else {
+        await onUnlock();
+      }
+      closeModal();
+    } catch {
+      // modal stays open, toast shows error
     }
-    closeModal();
   }
 
   const menuItems = [
@@ -61,7 +65,7 @@ function DashboardActionMenu({
     },
     {
       label: "Reset to default",
-      onClick: onResetLimit,
+      onClick: () => { onResetLimit().catch(() => {}); },
       hidden: row.limit === DEFAULT_LIMIT,
     },
     {
@@ -80,9 +84,13 @@ function DashboardActionMenu({
       <ResetWindowModal
         isOpen={activeModal === "reset-window"}
         onClose={closeModal}
-        onConfirm={() => {
-          onResetWindow();
-          closeModal();
+        onConfirm={async () => {
+          try {
+            await onResetWindow();
+            closeModal();
+          } catch {
+            // modal stays open, toast shows error
+          }
         }}
         userId={row.userId}
         currentRemaining={row.remaining}
@@ -93,9 +101,13 @@ function DashboardActionMenu({
       <AddExtraRequestsModal
         isOpen={activeModal === "add-extra"}
         onClose={closeModal}
-        onConfirm={(amount) => {
-          onAddExtra(amount);
-          closeModal();
+        onConfirm={async (amount) => {
+          try {
+            await onAddExtra(amount);
+            closeModal();
+          } catch {
+            // modal stays open, toast shows error
+          }
         }}
         userId={row.userId}
         currentRemaining={row.remaining}
@@ -105,9 +117,13 @@ function DashboardActionMenu({
       <AdjustLimitModal
         isOpen={activeModal === "adjust-limit"}
         onClose={closeModal}
-        onConfirm={(newLimit) => {
-          onAdjustLimit(newLimit);
-          closeModal();
+        onConfirm={async (newLimit) => {
+          try {
+            await onAdjustLimit(newLimit);
+            closeModal();
+          } catch {
+            // modal stays open, toast shows error
+          }
         }}
         userId={row.userId}
         currentLimit={row.limit}

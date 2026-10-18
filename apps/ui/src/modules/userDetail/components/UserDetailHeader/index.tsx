@@ -22,10 +22,10 @@ interface UserDetailHeaderProps {
   isThrottling: boolean;
   currentLimit: number;
   currentRemaining: number;
-  onResetWindow?: () => void;
-  onAdjustLimit?: (newLimit: number) => void;
-  onAddExtraRequests?: (extraRequests: number) => void;
-  onToggleThrottling?: (duration?: ThrottlingDuration) => void;
+  onResetWindow?: () => Promise<unknown>;
+  onAdjustLimit?: (newLimit: number) => Promise<unknown>;
+  onAddExtraRequests?: (extraRequests: number) => Promise<unknown>;
+  onToggleThrottling?: (duration?: ThrottlingDuration) => Promise<unknown>;
 }
 
 type ModalName =
@@ -113,9 +113,13 @@ function UserDetailHeader({
       <ResetWindowModal
         isOpen={activeModal === "resetWindow"}
         onClose={closeModal}
-        onConfirm={() => {
-          onResetWindow?.();
-          closeModal();
+        onConfirm={async () => {
+          try {
+            await onResetWindow?.();
+            closeModal();
+          } catch {
+            // modal stays open, toast shows error
+          }
         }}
         userId={userId}
         currentRemaining={currentRemaining}
@@ -126,9 +130,13 @@ function UserDetailHeader({
       <AdjustLimitModal
         isOpen={activeModal === "adjustLimit"}
         onClose={closeModal}
-        onConfirm={(newLimit) => {
-          onAdjustLimit?.(newLimit);
-          closeModal();
+        onConfirm={async (newLimit) => {
+          try {
+            await onAdjustLimit?.(newLimit);
+            closeModal();
+          } catch {
+            // modal stays open, toast shows error
+          }
         }}
         userId={userId}
         currentLimit={currentLimit}
@@ -138,9 +146,13 @@ function UserDetailHeader({
       <AddExtraRequestsModal
         isOpen={activeModal === "addExtraRequests"}
         onClose={closeModal}
-        onConfirm={(extraRequests) => {
-          onAddExtraRequests?.(extraRequests);
-          closeModal();
+        onConfirm={async (extraRequests) => {
+          try {
+            await onAddExtraRequests?.(extraRequests);
+            closeModal();
+          } catch {
+            // modal stays open, toast shows error
+          }
         }}
         userId={userId}
         currentRemaining={currentRemaining}
@@ -150,9 +162,13 @@ function UserDetailHeader({
       <ThrottlingModal
         isOpen={activeModal === "throttling"}
         onClose={closeModal}
-        onConfirm={(duration) => {
-          onToggleThrottling?.(duration);
-          closeModal();
+        onConfirm={async (duration) => {
+          try {
+            await onToggleThrottling?.(duration);
+            closeModal();
+          } catch {
+            // modal stays open, toast shows error
+          }
         }}
         userId={userId}
         isThrottling={isThrottling}

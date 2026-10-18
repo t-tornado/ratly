@@ -46,36 +46,34 @@ export default function UserDetailPage() {
     unlockMutation,
   } = useAdminActions();
 
-  const handleResetWindow = useCallback(() => {
-    resetWindowMutation.mutate(safeUserId);
-  }, [resetWindowMutation, safeUserId]);
+  const handleResetWindow = useCallback(
+    () => resetWindowMutation.mutateAsync(safeUserId),
+    [resetWindowMutation, safeUserId],
+  );
 
   const handleAdjustLimit = useCallback(
-    (newLimit: number) => {
-      adjustLimitMutation.mutate({ userId: safeUserId, limit: newLimit });
-    },
-    [adjustLimitMutation, safeUserId]
+    (newLimit: number) =>
+      adjustLimitMutation.mutateAsync({ userId: safeUserId, limit: newLimit }),
+    [adjustLimitMutation, safeUserId],
   );
 
   const handleAddExtraRequests = useCallback(
-    (amount: number) => {
-      addExtraMutation.mutate({ userId: safeUserId, amount });
-    },
-    [addExtraMutation, safeUserId]
+    (amount: number) =>
+      addExtraMutation.mutateAsync({ userId: safeUserId, amount }),
+    [addExtraMutation, safeUserId],
   );
 
   const handleToggleThrottling = useCallback(
     (duration?: ThrottlingDuration) => {
       if (duration) {
-        pauseMutation.mutate({
+        return pauseMutation.mutateAsync({
           userId: safeUserId,
           seconds: THROTTLE_DURATION_SECONDS[duration],
         });
-      } else {
-        unlockMutation.mutate(safeUserId);
       }
+      return unlockMutation.mutateAsync(safeUserId);
     },
-    [pauseMutation, unlockMutation, safeUserId]
+    [pauseMutation, unlockMutation, safeUserId],
   );
 
   const badgeVariant = status
