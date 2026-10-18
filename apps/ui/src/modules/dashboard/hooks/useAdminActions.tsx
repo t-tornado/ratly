@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import {
   resetWindow,
   adjustLimit,
@@ -9,8 +9,6 @@ import {
   unlockUser,
   queryKeys,
 } from "../../../lib/api";
-
-const ERROR_TOAST_DURATION_MS = 6000;
 
 function extractServerErrorMessage(error: unknown): string | undefined {
   if (error !== null && typeof error === "object" && "response" in error) {
@@ -24,15 +22,7 @@ function extractServerErrorMessage(error: unknown): string | undefined {
 
 function showErrorToast(title: string, error: unknown) {
   const serverMessage = extractServerErrorMessage(error);
-  toast.error(
-    <div>
-      <p className="font-medium">{title}</p>
-      {serverMessage && (
-        <p className="mt-1 text-sm opacity-70">{serverMessage}</p>
-      )}
-    </div>,
-    { autoClose: ERROR_TOAST_DURATION_MS },
-  );
+  toast.error(title, { description: serverMessage });
 }
 
 function useAdminActions() {
