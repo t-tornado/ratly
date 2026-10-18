@@ -49,7 +49,7 @@ function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction,
     return (
       <div
         className={cn(
-          "rounded-xl border border-border-default bg-bg-surface-raised flex flex-col overflow-hidden",
+          "rounded-xl border border-border-default bg-bg-surface-raised flex flex-col overflow-hidden min-h-[400px]",
           className
         )}
         {...props}
