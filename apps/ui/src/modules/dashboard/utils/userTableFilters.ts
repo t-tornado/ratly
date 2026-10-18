@@ -15,11 +15,21 @@ export function buildUserStatusFilterOptions(
   rows: UserRow[],
   activeFilter: UserStatusFilter,
 ): FilterOption[] {
+  let okCount = 0;
+  let warningCount = 0;
+  let exceededCount = 0;
+
+  for (const row of rows) {
+    if (row.status === "ok") okCount++;
+    else if (row.status === "warning") warningCount++;
+    else if (row.status === "exceeded") exceededCount++;
+  }
+
   return [
-    { label: "All", count: rows.length, active: activeFilter === "All" },
-    { label: "OK", count: rows.filter((r) => r.status === "ok").length, active: activeFilter === "OK" },
-    { label: "Warning", count: rows.filter((r) => r.status === "warning").length, active: activeFilter === "Warning", color: "var(--color-warning)" },
-    { label: "Exceeded", count: rows.filter((r) => r.status === "exceeded").length, active: activeFilter === "Exceeded", color: "var(--color-error)" },
+    { label: "All",      count: rows.length,   active: activeFilter === "All" },
+    { label: "OK",       count: okCount,        active: activeFilter === "OK" },
+    { label: "Warning",  count: warningCount,   active: activeFilter === "Warning",  color: "var(--color-warning)" },
+    { label: "Exceeded", count: exceededCount,  active: activeFilter === "Exceeded", color: "var(--color-error)" },
   ];
 }
 
@@ -27,22 +37,22 @@ export function applyUserTableFilters(
   rows: UserRow[],
   { statusFilter, searchQuery, windowFilter }: UserTableFilterState,
 ): UserRow[] {
-  let filtered = rows;
+  const hasStatusFilter = statusFilter !== "All";
+  const hasSearchFilter = searchQuery !== "";
+  const hasWindowFilter = windowFilter !== "any";
 
-  if (statusFilter !== "All") {
-    filtered = filtered.filter((row) => row.status === statusFilter.toLowerCase());
-  }
+  if (!hasStatusFilter && !hasSearchFilter && !hasWindowFilter) return rows;
 
-  if (searchQuery !== "") {
-    const lowerQuery = searchQuery.toLowerCase();
-    filtered = filtered.filter((row) => row.userId.toLowerCase().includes(lowerQuery));
-  }
+  const lowerQuery = hasSearchFilter ? searchQuery.toLowerCase() : "";
+  const lowerStatus = hasStatusFilter ? statusFilter.toLowerCase() : "";
+  const cutoff = hasWindowFilter
+    ? Date.now() - (windowFilter === "1h" ? WINDOW_1H_MS : WINDOW_24H_MS)
+    : 0;
 
-  if (windowFilter !== "any") {
-    const windowMs = windowFilter === "1h" ? WINDOW_1H_MS : WINDOW_24H_MS;
-    const cutoff = Date.now() - windowMs;
-    filtered = filtered.filter((row) => row.lastRequestAt >= cutoff);
-  }
-
-  return filtered;
+  return rows.filter((row) => {
+    if (hasStatusFilter && row.status !== lowerStatus) return false;
+    if (hasSearchFilter && !row.userId.toLowerCase().includes(lowerQuery)) return false;
+    if (hasWindowFilter && row.lastRequestAt < cutoff) return false;
+    return true;
+  });
 }
