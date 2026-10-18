@@ -20,6 +20,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
 
+      - name: Build core
+        run: pnpm --filter @ratly/core build
+
       - name: Lint
         run: pnpm --filter @ratly/ui lint
 
@@ -36,6 +39,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
 
+      - name: Build core
+        run: pnpm --filter @ratly/core build
+
       - name: Run unit tests
         run: pnpm --filter @ratly/ui vitest run --project unit
 
@@ -45,6 +51,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
+
+      - name: Build core
+        run: pnpm --filter @ratly/core build
 
       - name: Run guards
         run: pnpm --filter @ratly/ui test:guards
