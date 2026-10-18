@@ -24,13 +24,13 @@ interface DataTableProps extends React.ComponentProps<"div"> {
   rows: UserRow[];
   footer?: React.ReactNode;
   isLoading?: boolean;
-  onAction?: (userId: string) => void;
+  renderAction?: (userId: string) => React.ReactNode;
   onRowClick?: (userId: string) => void;
 }
 
 const ROW_ESTIMATED_HEIGHT = 48;
 
-function DataTable({ rows, footer, isLoading = false, onAction, onRowClick, className, ...props }: DataTableProps) {
+function DataTable({ rows, footer, isLoading = false, renderAction, onRowClick, className, ...props }: DataTableProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const virtualizer = useVirtualizer({
@@ -98,7 +98,7 @@ function DataTable({ rows, footer, isLoading = false, onAction, onRowClick, clas
                       {...row}
                       isClickable={!!onRowClick}
                       onClick={() => onRowClick?.(row.id)}
-                      onAction={() => onAction?.(row.id)}
+                      actionContent={renderAction?.(row.id)}
                     />
                   );
                 })}

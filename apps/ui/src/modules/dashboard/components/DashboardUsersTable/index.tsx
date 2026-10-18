@@ -8,6 +8,8 @@ import { useDebouncedSearch } from "../../../../lib/hooks/useDebouncedSearch";
 import { routes } from "../../../../routes";
 import { applyUserTableFilters, buildUserStatusFilterOptions, USER_TABLE_TIME_OPTIONS } from "../../utils/userTableFilters";
 import type { UserStatusFilter, TimeWindowFilter } from "../../types/userTableFilters";
+import { useAdminActions } from "../../hooks/useAdminActions";
+import { DashboardActionMenu } from "../DashboardActionMenu";
 
 interface DashboardUsersTableProps {
   rows: UserRow[];
@@ -20,8 +22,33 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
   const [windowFilter, setWindowFilter] = useState<TimeWindowFilter>("any");
   const { searchQuery, onSearchChange } = useDebouncedSearch();
 
+  const {
+    resetWindowMutation,
+    adjustLimitMutation,
+    resetLimitMutation,
+    addExtraMutation,
+    pauseMutation,
+    unlockMutation,
+  } = useAdminActions();
+
   const filteredRows = applyUserTableFilters(rows, { statusFilter, searchQuery, windowFilter });
   const statusFilterOptions = buildUserStatusFilterOptions(rows, statusFilter);
+
+  function renderRowAction(userId: string) {
+    const targetRow = rows.find((r) => r.userId === userId);
+    if (!targetRow) return null;
+    return (
+      <DashboardActionMenu
+        row={targetRow}
+        onResetWindow={() => resetWindowMutation.mutate(userId)}
+        onAddExtra={(amount) => addExtraMutation.mutate({ userId, amount })}
+        onAdjustLimit={(limit) => adjustLimitMutation.mutate({ userId, limit })}
+        onResetLimit={() => resetLimitMutation.mutate(userId)}
+        onPause={(seconds) => pauseMutation.mutate({ userId, seconds })}
+        onUnlock={() => unlockMutation.mutate(userId)}
+      />
+    );
+  }
 
   return (
     <div data-testid="dashboard-users-table" className="flex flex-col flex-1 min-h-0 gap-3">
@@ -38,6 +65,10 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
         rows={filteredRows.map(mapUserRowToTableRow)}
         isLoading={isLoading}
         onRowClick={(userId) => navigate(routes.userDetail(userId))}
+        renderAction={renderRowAction}
+        footer={
+          <span>{filteredRows.length} of {rows.length} shown &middot; sorted by usage &darr;</span>
+        }
       />
     </div>
   );

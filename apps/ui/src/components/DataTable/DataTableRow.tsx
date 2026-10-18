@@ -1,7 +1,6 @@
 import { cn } from "../../lib/utils";
 import { ProgressBar } from "../ProgressBar";
 import { Badge, type BadgeProps } from "../Badge";
-import { Button } from "../Button";
 
 type StatusVariant = NonNullable<BadgeProps["variant"]>;
 
@@ -24,7 +23,7 @@ interface DataTableRowProps {
   tags?: { label: string; variant: StatusVariant }[];
   isClickable?: boolean;
   onClick?: () => void;
-  onAction?: () => void;
+  actionContent?: React.ReactNode;
 }
 
 function DataTableRow({
@@ -40,7 +39,7 @@ function DataTableRow({
   tags,
   isClickable,
   onClick,
-  onAction,
+  actionContent,
 }: DataTableRowProps) {
   return (
     <tr
@@ -94,18 +93,8 @@ function DataTableRow({
       <td className="py-3 px-4 text-text-muted text-base-sm">
         {lastRequest}
       </td>
-      <td className="py-3 pl-2 pr-4">
-        <Button
-          variant="icon-only"
-          size="icon"
-          aria-label={`Admin actions for ${id}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            onAction?.();
-          }}
-        >
-          &#x22EF;
-        </Button>
+      <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
+        {actionContent ?? null}
       </td>
     </tr>
   );

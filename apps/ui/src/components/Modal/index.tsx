@@ -7,7 +7,7 @@ import {
   DialogBody,
   DialogFooter,
   DialogHeader,
-} from "../ui/dialog";
+} from "../Dialog";
 import { cn } from "../../lib/utils";
 import { Button } from "../Button";
 
