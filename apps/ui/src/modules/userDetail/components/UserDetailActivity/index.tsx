@@ -18,6 +18,7 @@ import {
   formatBucketTimestamp,
   formatTooltipTimestamp,
 } from "../../utils/activity";
+import { UserDetailActivityEmpty } from "../UserDetailActivityEmpty";
 
 const CHART_HEIGHT = 200;
 const ALLOWED_COLOR = "var(--color-accent-blue)";
@@ -74,71 +75,79 @@ function UserDetailActivity({ userId }: UserDetailActivityProps) {
   }, []);
 
   const tickInterval = TICK_INTERVAL_BY_RANGE[activeRange];
+  const isEmpty = !isLoading && activityBuckets.length === 0;
 
   return (
-    <div data-testid="user-detail-activity">
+    <div data-testid="user-detail-activity" className="h-full">
       <ActivityChart
+        className="h-full flex flex-col"
         title="Activity · requests per minute"
         activeRange={activeRange}
         onRangeChange={handleRangeChange}
         activeRefresh={activeRefresh}
         onRefreshChange={handleRefreshChange}
       >
-        {isLoading && activityBuckets.length === 0 ? (
+        {isEmpty ? (
+          <div className="flex-1 flex items-center justify-center">
+            <UserDetailActivityEmpty />
+          </div>
+        ) : isLoading && activityBuckets.length === 0 ? (
           <div className="flex items-center justify-center" style={{ height: CHART_HEIGHT }}>
             <span className="text-sm text-text-muted">Loading activity data…</span>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
-            <BarChart
-              data={activityBuckets}
-              margin={{ top: 4, right: 0, bottom: 0, left: -16 }}
-            >
-              <XAxis
-                dataKey="timestamp"
-                tickFormatter={(value: string) =>
-                  formatBucketTimestamp(value, activeRange)
-                }
-                interval={tickInterval}
-                tick={{ fontSize: 11, fill: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}
-                axisLine={{ stroke: "var(--color-border-strong)" }}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: "var(--color-text-muted)" }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip
-                content={<ActivityTooltipContent />}
-                cursor={{ fill: "var(--color-bg-hover)", opacity: 0.5 }}
-              />
-              <Bar
-                dataKey="allowed"
-                stackId="activity"
-                fill={ALLOWED_COLOR}
-                opacity={0.85}
-                radius={[1, 1, 0, 0]}
-              />
-              <Bar
-                dataKey="rejected"
-                stackId="activity"
-                fill={REJECTED_COLOR}
-                radius={[1, 1, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <>
+            <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
+              <BarChart
+                data={activityBuckets}
+                margin={{ top: 4, right: 0, bottom: 0, left: -16 }}
+              >
+                <XAxis
+                  dataKey="timestamp"
+                  tickFormatter={(value: string) =>
+                    formatBucketTimestamp(value, activeRange)
+                  }
+                  interval={tickInterval}
+                  tick={{ fontSize: 11, fill: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}
+                  axisLine={{ stroke: "var(--color-border-strong)" }}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 11, fill: "var(--color-text-muted)" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  content={<ActivityTooltipContent />}
+                  cursor={{ fill: "var(--color-bg-hover)", opacity: 0.5 }}
+                />
+                <Bar
+                  dataKey="allowed"
+                  stackId="activity"
+                  fill={ALLOWED_COLOR}
+                  opacity={0.85}
+                  radius={[1, 1, 0, 0]}
+                />
+                <Bar
+                  dataKey="rejected"
+                  stackId="activity"
+                  fill={REJECTED_COLOR}
+                  radius={[1, 1, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+            <div className="flex items-center gap-4 mt-3 text-xs text-text-muted">
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block w-2.5 h-2.5 rounded-xs bg-accent-blue opacity-85" />
+                Allowed
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block w-2.5 h-2.5 rounded-xs bg-error" />
+                Rejected
+              </span>
+            </div>
+          </>
         )}
-        <div className="flex items-center gap-4 mt-3 text-xs text-text-muted">
-          <span className="flex items-center gap-1.5">
-            <span className="inline-block w-2.5 h-2.5 rounded-xs bg-accent-blue opacity-85" />
-            Allowed
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="inline-block w-2.5 h-2.5 rounded-xs bg-error" />
-            Rejected
-          </span>
-        </div>
       </ActivityChart>
     </div>
   );
