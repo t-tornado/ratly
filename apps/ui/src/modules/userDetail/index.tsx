@@ -35,7 +35,7 @@ export default function UserDetailPage() {
   const safeUserId = userId ?? "";
 
   const { isConnected } = useSocket();
-  const { status, currentRemaining, currentLimit, paused } =
+  const { status, currentRemaining, currentLimit, paused, hasActiveWindow } =
     useUserDetailStats(safeUserId);
 
   const {
@@ -93,6 +93,7 @@ export default function UserDetailPage() {
         currentRemaining={currentRemaining ?? 0}
         onResetWindow={handleResetWindow}
         onAdjustLimit={handleAdjustLimit}
+        hasActiveWindow={hasActiveWindow}
         onAddExtraRequests={handleAddExtraRequests}
         onToggleThrottling={handleToggleThrottling}
         isResetWindowPending={resetWindowMutation.isPending}

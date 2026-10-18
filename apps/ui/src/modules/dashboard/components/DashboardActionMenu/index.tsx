@@ -121,6 +121,7 @@ function DashboardActionMenu({
         userId={row.userId}
         currentRemaining={row.remaining}
         limit={row.limit}
+        hasActiveWindow={row.resetAt !== null}
         isLoading={isAddExtraPending}
       />
 

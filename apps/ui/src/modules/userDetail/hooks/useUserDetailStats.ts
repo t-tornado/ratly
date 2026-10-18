@@ -16,6 +16,7 @@ interface UserDetailStatsResult {
   currentRemaining: number | null;
   currentLimit: number | null;
   paused: boolean;
+  hasActiveWindow: boolean;
 }
 
 const EMPTY_STATS: StatItem[] = [
@@ -72,6 +73,7 @@ function useUserDetailStats(userId: string): UserDetailStatsResult {
       currentRemaining: null,
       currentLimit: null,
       paused: false,
+      hasActiveWindow: false,
     };
   }
 
@@ -88,6 +90,7 @@ function useUserDetailStats(userId: string): UserDetailStatsResult {
     currentRemaining: latestRow.remaining,
     currentLimit: latestRow.limit,
     paused: latestRow.paused,
+    hasActiveWindow: latestRow.resetAt !== null,
   };
 }
 
