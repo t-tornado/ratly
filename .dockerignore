@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+.git
+worktrees
+.agent-runs
+.claude
+prototypes
+storybook-static
+**/coverage
+**/*.tsbuildinfo
+apps/ui

@@ -26,11 +26,11 @@ export const WarningGhost: Story = {
 };
 
 export const Filter: Story = {
-  args: { children: "OK 5", variant: "filter" },
+  args: { children: "OK [5]", variant: "filter", size: "filter" },
 };
 
 export const FilterActive: Story = {
-  args: { children: "All 10", variant: "filter-active" },
+  args: { children: "All [10]", variant: "filter-active", size: "filter" },
 };
 
 export const IconOnly: Story = {

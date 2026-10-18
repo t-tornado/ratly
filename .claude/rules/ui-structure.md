@@ -54,6 +54,17 @@ components/
 - Module-scoped types → `modules/<module>/types/<subject>.ts`
 - Shared types → `lib/types/<subject>.ts`
 
+### Design system first
+
+Never use native HTML elements (`<button>`, `<select>`, `<input>`, etc.) with custom Tailwind classes when a design system component exists. Always use the design system component and extend styling through its props or variants. For icons, always use `lucide-react` — never inline SVG or a custom Icon wrapper.
+
+- Wrong: `<button className="px-3 h-8 rounded-md bg-bg-hover text-text-muted">…</button>`
+- Right: `<Button variant="filter" size="filter">…</Button>`
+
+If no existing variant fits, add a new variant to the component — do not bypass the design system.
+
+For active/inactive state toggling, map the state to a variant: `variant={isActive ? "filter-active" : "filter"}`. Do not write long inline `cn()` conditionals that duplicate variant class logic.
+
 ### Placement
 
 - Shared (used by multiple modules) → `components/`

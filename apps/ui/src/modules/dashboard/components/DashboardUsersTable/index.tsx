@@ -60,21 +60,16 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
         onSearchChange={onSearchChange}
         onSelectChange={(val) => setWindowFilter(val as TimeWindowFilter)}
       />
-      {isLoading ? (
-        <div className="rounded-xl border border-border-default bg-bg-surface-raised p-8 text-center text-text-muted text-sm">
-          Loading…
-        </div>
-      ) : (
-        <DataTable
-          className="flex-1 min-h-0"
-          rows={filteredRows.map(mapUserRowToTableRow)}
-          onRowClick={(userId) => navigate(routes.userDetail(userId))}
-          renderAction={renderRowAction}
-          footer={
-            <span>{filteredRows.length} of {rows.length} shown &middot; sorted by usage &darr;</span>
-          }
-        />
-      )}
+      <DataTable
+        className="flex-1 min-h-0"
+        rows={filteredRows.map(mapUserRowToTableRow)}
+        isLoading={isLoading}
+        onRowClick={(userId) => navigate(routes.userDetail(userId))}
+        renderAction={renderRowAction}
+        footer={
+          <span>{filteredRows.length} of {rows.length} shown &middot; sorted by usage &darr;</span>
+        }
+      />
     </div>
   );
 }

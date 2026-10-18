@@ -1,4 +1,17 @@
 gitleaks detect --no-banner --no-git
+
+# Core
+pnpm --filter @ratly/core typecheck
+pnpm --filter @ratly/core build
+
+# Server (core must build first)
+pnpm --filter @ratly/server typecheck
+pnpm --filter @ratly/server build
+pnpm --filter @ratly/server test
+
+# UI
 pnpm --filter @ratly/ui lint
 pnpm --filter @ratly/ui typecheck
-pnpm --filter @ratly/ui test
+pnpm --filter @ratly/ui build
+pnpm --filter @ratly/ui vitest run --project unit
+pnpm --filter @ratly/ui test:guards
