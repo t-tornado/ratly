@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DashboardContent } from "./index";
-import { mockRows } from "../../../../test/fixtures";
+import { mockRows, createMockRowEventStore } from "../../../../test/fixtures";
 
 const meta: Meta<typeof DashboardContent> = {
   title: "Dashboard/DashboardContent",
@@ -11,9 +11,9 @@ export default meta;
 type Story = StoryObj<typeof DashboardContent>;
 
 export const Loaded: Story = {
-  args: { rows: mockRows, isLoading: false },
+  args: { store: createMockRowEventStore(mockRows), isLoading: false },
 };
 
 export const Loading: Story = {
-  args: { rows: [], isLoading: true },
+  args: { store: createMockRowEventStore([]), isLoading: true },
 };
