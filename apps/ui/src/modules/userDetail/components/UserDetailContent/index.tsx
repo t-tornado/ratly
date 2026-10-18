@@ -12,7 +12,7 @@ function UserDetailContent({ userId }: UserDetailContentProps) {
       <UserDetailStats userId={userId} />
       <div className="flex flex-wrap gap-5 items-start">
         <div className="min-w-0" style={{ flex: "999 1 640px" }}>
-          <UserDetailActivity />
+          <UserDetailActivity userId={userId} />
         </div>
         <div className="min-w-0" style={{ flex: "1 1 360px" }}>
           <UserDetailEvents userId={userId} />

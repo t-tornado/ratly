@@ -1,97 +1,134 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
 import { ActivityChart } from "../../../../components/ActivityChart";
+import type { RefreshOption } from "../../../../components/ActivityChart";
+import { useActivityData } from "../../hooks/useActivityData";
+import type { ActivityRange } from "../../types/activity";
+import {
+  REFRESH_INTERVAL_MS,
+  TICK_INTERVAL_BY_RANGE,
+  formatBucketTimestamp,
+  formatTooltipTimestamp,
+} from "../../utils/activity";
 
-const CHART_HEIGHT = 160;
-const BAR_GAP = 3;
-const TIME_LABELS = ["13:17", "13:32", "13:47", "14:02"];
+const CHART_HEIGHT = 200;
+const ALLOWED_COLOR = "var(--color-accent-blue)";
+const REJECTED_COLOR = "var(--color-error)";
 
-const ALLOWED_HEIGHTS = [
-  7, 35, 22, 27, 33, 13, 36, 16, 31, 29, 19, 36, 10, 34, 25, 25, 34, 10, 36,
-  19, 29, 31, 16, 36, 13, 33, 27, 22, 35, 7, 35, 22, 27, 33, 13, 36, 16, 31,
-  29, 19, 107, 88, 43, 97, 104, 60, 74, 108, 87, 44, 97, 104, 59, 75, 108, 86,
-  46, 98, 103, 58,
-];
+interface UserDetailActivityProps {
+  userId: string;
+}
 
-const REJECTED_HEIGHTS = [
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 14, 0, 0, 14, 0, 0,
-];
+function ActivityTooltipContent({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: Array<{ payload: { timestamp: string; allowed: number; rejected: number } }>;
+}) {
+  if (!active || !payload?.length) return null;
 
-const BAR_COUNT = ALLOWED_HEIGHTS.length;
+  const bucket = payload[0].payload;
 
-function UserDetailActivity() {
-  const [activeRange, setActiveRange] = useState<"hour" | "day">("hour");
+  return (
+    <div className="rounded-lg border border-border-default bg-bg-surface-raised px-3 py-2 text-xs shadow-md">
+      <p className="font-mono text-text-primary mb-1">
+        {formatTooltipTimestamp(bucket.timestamp)}
+      </p>
+      <p className="text-text-muted">
+        <span className="inline-block w-2 h-2 rounded-xs mr-1.5" style={{ backgroundColor: ALLOWED_COLOR, opacity: 0.85 }} />
+        Allowed: {bucket.allowed}
+      </p>
+      <p className="text-text-muted">
+        <span className="inline-block w-2 h-2 rounded-xs mr-1.5" style={{ backgroundColor: REJECTED_COLOR }} />
+        Rejected: {bucket.rejected}
+      </p>
+    </div>
+  );
+}
 
-  const chartWidth = BAR_COUNT * (8 + BAR_GAP);
-  const labelSpacing = chartWidth / (TIME_LABELS.length + 1);
+function UserDetailActivity({ userId }: UserDetailActivityProps) {
+  const [activeRange, setActiveRange] = useState<ActivityRange>("hour");
+  const [activeRefresh, setActiveRefresh] = useState<RefreshOption>("off");
+
+  const { activityBuckets, isLoading } = useActivityData({
+    userId,
+    range: activeRange,
+    refreshIntervalMs: REFRESH_INTERVAL_MS[activeRefresh],
+  });
+
+  const handleRangeChange = useCallback((range: ActivityRange) => {
+    setActiveRange(range);
+  }, []);
+
+  const handleRefreshChange = useCallback((option: RefreshOption) => {
+    setActiveRefresh(option);
+  }, []);
+
+  const tickInterval = TICK_INTERVAL_BY_RANGE[activeRange];
 
   return (
     <div data-testid="user-detail-activity">
       <ActivityChart
         title="Activity · requests per minute"
         activeRange={activeRange}
-        onRangeChange={setActiveRange}
+        onRangeChange={handleRangeChange}
+        activeRefresh={activeRefresh}
+        onRefreshChange={handleRefreshChange}
       >
-        <svg
-          role="img"
-          aria-label="Requests per minute over the past hour, with a burst near the end"
-          viewBox={`0 0 ${chartWidth} ${CHART_HEIGHT + 24}`}
-          className="w-full"
-          preserveAspectRatio="none"
-        >
-          {ALLOWED_HEIGHTS.map((allowedHeight, index) => {
-            const rejectedHeight = REJECTED_HEIGHTS[index];
-            const barX = index * (8 + BAR_GAP);
-            const allowedY = CHART_HEIGHT - allowedHeight - rejectedHeight;
-            const rejectedY = CHART_HEIGHT - rejectedHeight;
-
-            return (
-              <g key={index}>
-                {rejectedHeight > 0 && (
-                  <rect
-                    x={barX}
-                    y={rejectedY}
-                    width={8}
-                    height={rejectedHeight}
-                    rx={1}
-                    fill="var(--color-error)"
-                  />
-                )}
-                <rect
-                  x={barX}
-                  y={allowedY}
-                  width={8}
-                  height={allowedHeight}
-                  rx={1}
-                  fill="var(--color-accent-blue)"
-                  opacity={0.85}
-                />
-              </g>
-            );
-          })}
-          <line
-            x1={0}
-            y1={CHART_HEIGHT}
-            x2={chartWidth}
-            y2={CHART_HEIGHT}
-            stroke="var(--color-border-strong)"
-            strokeWidth={1}
-          />
-          {TIME_LABELS.map((label, index) => (
-            <text
-              key={label}
-              x={(index + 1) * labelSpacing}
-              y={CHART_HEIGHT + 16}
-              textAnchor="middle"
-              fill="var(--color-text-muted)"
-              fontSize={11}
-              fontFamily="var(--font-mono)"
+        {isLoading && activityBuckets.length === 0 ? (
+          <div className="flex items-center justify-center" style={{ height: CHART_HEIGHT }}>
+            <span className="text-sm text-text-muted">Loading activity data…</span>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
+            <BarChart
+              data={activityBuckets}
+              margin={{ top: 4, right: 0, bottom: 0, left: -16 }}
             >
-              {label}
-            </text>
-          ))}
-        </svg>
+              <XAxis
+                dataKey="timestamp"
+                tickFormatter={(value: string) =>
+                  formatBucketTimestamp(value, activeRange)
+                }
+                interval={tickInterval}
+                tick={{ fontSize: 11, fill: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}
+                axisLine={{ stroke: "var(--color-border-strong)" }}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: "var(--color-text-muted)" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                content={<ActivityTooltipContent />}
+                cursor={{ fill: "var(--color-bg-hover)", opacity: 0.5 }}
+              />
+              <Bar
+                dataKey="allowed"
+                stackId="activity"
+                fill={ALLOWED_COLOR}
+                opacity={0.85}
+                radius={[1, 1, 0, 0]}
+              />
+              <Bar
+                dataKey="rejected"
+                stackId="activity"
+                fill={REJECTED_COLOR}
+                radius={[1, 1, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
         <div className="flex items-center gap-4 mt-3 text-xs text-text-muted">
           <span className="flex items-center gap-1.5">
             <span className="inline-block w-2.5 h-2.5 rounded-xs bg-accent-blue opacity-85" />
@@ -108,3 +145,4 @@ function UserDetailActivity() {
 }
 
 export { UserDetailActivity };
+export type { UserDetailActivityProps };
