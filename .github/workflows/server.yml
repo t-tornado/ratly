@@ -1,0 +1,43 @@
+name: Server
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/server/**"
+      - "packages/core/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/server/**"
+      - "packages/core/**"
+
+jobs:
+  checks:
+    name: Typecheck & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Build core
+        run: pnpm --filter @ratly/core build
+
+      - name: Typecheck
+        run: pnpm --filter @ratly/server typecheck
+
+      - name: Build
+        run: pnpm --filter @ratly/server build
+
+  tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Build core
+        run: pnpm --filter @ratly/core build
+
+      - name: Run unit tests
+        run: pnpm --filter @ratly/server test

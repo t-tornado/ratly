@@ -43,3 +43,5 @@
 
 - `.claude/rules/coding-guidelines.md` — naming, types, imports, error handling, code style. Strict adherence required.
 - `.claude/rules/ui-structure.md` — component structure, folder layout, module conventions. Applies to `apps/ui/`.
+- `.claude/rules/server-structure.md` — feature module pattern, controller rules, Redis keys, Lua scripts, types/constants flow, core boundary. Applies to `apps/server/`.
+- `.claude/rules/packages.md` — what belongs in `@ratly/core`: shared-only, no deps, pure types/constants/logic used by both server and UI.

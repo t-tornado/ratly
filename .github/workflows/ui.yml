@@ -1,0 +1,50 @@
+name: UI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/ui/**"
+      - "packages/core/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/ui/**"
+      - "packages/core/**"
+
+jobs:
+  checks:
+    name: Lint, typecheck & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Lint
+        run: pnpm --filter @ratly/ui lint
+
+      - name: Typecheck
+        run: pnpm --filter @ratly/ui typecheck
+
+      - name: Build
+        run: pnpm --filter @ratly/ui build
+
+  tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Run unit tests
+        run: pnpm --filter @ratly/ui vitest run --project unit
+
+  guards:
+    name: Guards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Run guards
+        run: pnpm --filter @ratly/ui test:guards
