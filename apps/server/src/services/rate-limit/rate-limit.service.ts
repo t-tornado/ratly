@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { RedisService } from "../../lib/infra/redis/redis.service.js";
-import { fixedWindowScript, userRowScript } from "./scripts/index.js";
+import { fixedWindowScript, userRowScript, allRowsScript, unpackAllRows } from "./scripts/index.js";
 import { ConsumeResult, UserRow } from "../../lib/types/index.js";
 import { DEFAULT_LIMIT, WINDOW_SECONDS } from "../../lib/constants.js";
 import { redisKeys } from "../../lib/redis-keys.js";
@@ -79,8 +79,13 @@ export class RateLimitService {
   }
 
   async readAllRows(): Promise<UserRow[]> {
-    const userIds = await this.redis.zrange(redisKeys.usersLastSeen, 0, -1, "REV");
-    const rows = await Promise.all(userIds.map((id) => this.readRow(id)));
-    return rows.filter((row): row is UserRow => row !== null);
+    const flat = (await this.redis.eval(
+      allRowsScript,
+      1,
+      redisKeys.usersLastSeen,
+      String(DEFAULT_LIMIT),
+    )) as (string | number)[];
+
+    return unpackAllRows(flat);
   }
 }
