@@ -42,7 +42,17 @@
 
 ## Rules
 
-- `.claude/rules/coding-guidelines.md` — naming, types, imports, error handling, code style. Strict adherence required.
-- `.claude/rules/ui-structure.md` — component structure, folder layout, module conventions. Applies to `apps/ui/`.
-- `.claude/rules/server-structure.md` — feature module pattern, controller rules, Redis keys, Lua scripts, types/constants flow, core boundary. Applies to `apps/server/`.
-- `.claude/rules/packages.md` — what belongs in `@ratly/core`: shared-only, no deps, pure types/constants/logic used by both server and UI.
+**Before writing any code**, read the rule files that apply to the scope of work. This is mandatory, not optional. Do not rely on memory or summaries — open and read the actual files every session.
+
+| Scope | Rule file | Read when |
+|-------|-----------|-----------|
+| All code | `.claude/rules/coding-guidelines.md` | Always — naming, types, imports, error handling, code style |
+| UI app (`apps/ui/`) | `.claude/rules/ui-structure.md` | Any change to UI components, modules, hooks, or utils |
+| UI app (`apps/ui/`) | `.claude/rules/ui-components.md` | Creating or modifying any component |
+| UI app (`apps/ui/`) | `.claude/rules/ui-hooks.md` | Creating or modifying any hook |
+| UI app (`apps/ui/`) | `.claude/rules/frontend-routing.md` | Any navigation or route change |
+| Server app (`apps/server/`) | `.claude/rules/server-structure.md` | Any change to server modules, controllers, services |
+| Shared packages | `.claude/rules/packages.md` | Adding anything to `@ratly/core` |
+| Git | `.claude/rules/branching.md` | Creating branches |
+
+**Enforcement**: Every rule in every loaded file applies strictly. No shortcuts, no "close enough". If a rule says use the design system component, use it. If a rule says extract utils from hooks, extract them. Violations are bugs — fix them before moving on.
