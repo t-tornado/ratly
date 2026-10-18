@@ -19,3 +19,18 @@ export const WithRetry: Story = {
     onRetry: () => {},
   },
 };
+
+export const Inline: Story = {
+  args: {
+    title: "Failed to load",
+    message: "This section encountered an error.",
+    onRetry: () => {},
+  },
+  decorators: [
+    (Story) => (
+      <div className="max-w-md">
+        <Story />
+      </div>
+    ),
+  ],
+};

@@ -20,7 +20,7 @@ import {
 } from "../../utils/activity";
 import { UserDetailActivityEmpty } from "../UserDetailActivityEmpty";
 
-const CHART_HEIGHT = 200;
+const CHART_MIN_HEIGHT = 200;
 const ALLOWED_COLOR = "var(--color-accent-blue)";
 const REJECTED_COLOR = "var(--color-error)";
 
@@ -92,12 +92,12 @@ function UserDetailActivity({ userId }: UserDetailActivityProps) {
             <UserDetailActivityEmpty />
           </div>
         ) : isLoading && activityBuckets.length === 0 ? (
-          <div className="flex items-center justify-center" style={{ height: CHART_HEIGHT }}>
+          <div className="flex-1 flex items-center justify-center" style={{ minHeight: CHART_MIN_HEIGHT }}>
             <span className="text-sm text-text-muted">Loading activity data…</span>
           </div>
         ) : (
-          <>
-            <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
+          <div className="flex-1 flex flex-col" style={{ minHeight: CHART_MIN_HEIGHT }}>
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={activityBuckets}
                 margin={{ top: 4, right: 0, bottom: 0, left: -16 }}
@@ -146,7 +146,7 @@ function UserDetailActivity({ userId }: UserDetailActivityProps) {
                 Rejected
               </span>
             </div>
-          </>
+          </div>
         )}
       </ActivityChart>
     </div>

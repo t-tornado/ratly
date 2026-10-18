@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchActivity, queryKeys } from "../../../lib/api";
-import type { ActivityRange, ActivityResponse } from "../types/activity";
+import type { ActivityRange, ActivityBucket } from "../types/activity";
 
 interface UseActivityDataOptions {
   userId: string;
@@ -10,7 +10,7 @@ interface UseActivityDataOptions {
 }
 
 interface UseActivityDataResult {
-  activityBuckets: ActivityResponse;
+  activityBuckets: ActivityBucket[];
   isLoading: boolean;
   isError: boolean;
 }

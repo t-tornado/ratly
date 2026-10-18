@@ -15,6 +15,7 @@ function formatTimeWithSeconds(epochMs: number): string {
 
 function formatRelativeTime(epochMs: number): string {
   const diffSeconds = Math.floor((Date.now() - epochMs) / 1000);
+  if (diffSeconds < 5) return "just now";
   if (diffSeconds < 60) return `${diffSeconds}s ago`;
   const diffMinutes = Math.floor(diffSeconds / 60);
   if (diffMinutes < 60) return `${diffMinutes}m ago`;

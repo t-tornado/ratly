@@ -13,30 +13,12 @@ const TICK_INTERVAL_BY_RANGE: Record<ActivityRange, number> = {
   day: 3,
 };
 
-function formatBucketTimestamp(timestamp: string, range: ActivityRange): string {
-  const date = new Date(timestamp);
-  if (range === "hour") {
-    return date.toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  }
-  return date.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
+function formatBucketTimestamp(timestamp: string, _range: ActivityRange): string {
+  return timestamp;
 }
 
 function formatTooltipTimestamp(timestamp: string): string {
-  const date = new Date(timestamp);
-  return date.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
+  return timestamp;
 }
 
 export {

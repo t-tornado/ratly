@@ -6,6 +6,10 @@ interface ActivityBucket {
   rejected: number;
 }
 
-type ActivityResponse = ActivityBucket[];
+interface ActivityApiResponse {
+  range: ActivityRange;
+  bucketSize: string;
+  buckets: Array<{ time: string; allowed: number; rejected: number }>;
+}
 
-export type { ActivityRange, ActivityBucket, ActivityResponse };
+export type { ActivityRange, ActivityBucket, ActivityApiResponse };

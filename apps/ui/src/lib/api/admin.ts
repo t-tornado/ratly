@@ -1,6 +1,6 @@
 import { apiClient } from "./client";
 import type { UserRow, DashboardStats } from "@ratly/core";
-import type { ActivityRange, ActivityResponse } from "../../modules/userDetail/types/activity";
+import type { ActivityRange, ActivityBucket, ActivityApiResponse } from "../../modules/userDetail/types/activity";
 
 interface DashboardResponse {
   stats: DashboardStats;
@@ -47,12 +47,16 @@ async function fetchUser(userId: string): Promise<UserRow> {
   return data;
 }
 
-async function fetchActivity(userId: string, range: ActivityRange): Promise<ActivityResponse> {
-  const { data } = await apiClient.get<ActivityResponse>(
+async function fetchActivity(userId: string, range: ActivityRange): Promise<ActivityBucket[]> {
+  const { data } = await apiClient.get<ActivityApiResponse>(
     `/admin/users/${encodeURIComponent(userId)}/activity`,
     { params: { range } }
   );
-  return data;
+  return data.buckets.map((bucket) => ({
+    timestamp: bucket.time,
+    allowed: bucket.allowed,
+    rejected: bucket.rejected,
+  }));
 }
 
 export { fetchDashboard, fetchUser, fetchActivity, resetWindow, adjustLimit, resetLimitToDefault, addExtra, pauseUser, unlockUser };
