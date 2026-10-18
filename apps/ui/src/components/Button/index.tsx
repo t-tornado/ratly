@@ -22,7 +22,7 @@ const buttonVariants = cva(
         filter:
           "border-0 bg-transparent text-text-tertiary text-base-sm",
         "filter-active":
-          "border-0 bg-border-active text-text-primary text-base-sm",
+          "border-0 bg-bg-surface-raised text-text-primary font-medium text-base-sm ring-1 ring-border-strong",
         "icon-only":
           "border border-border-strong bg-transparent text-text-tertiary",
       },
