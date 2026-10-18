@@ -41,18 +41,19 @@ export class RateLimitService {
   async readRow(userId: string): Promise<UserRow | null> {
     const result = (await this.redis.eval(
       userRowScript,
-      4,
+      5,
       redisKeys.userRate(userId),
       redisKeys.userLimit(userId),
       redisKeys.userPaused(userId),
       redisKeys.usersLastSeen,
+      redisKeys.userLastReset(userId),
       userId,
       String(DEFAULT_LIMIT),
     )) as number[] | null;
 
     if (!result) return null;
 
-    const [used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastRequestAt, now] = result;
+    const [used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastRequestAt, now, lastAdminResetAt] = result;
     const allowedTotal = limit + bonus;
     const ratio = allowedTotal > 0 ? used / allowedTotal : 0;
 
@@ -69,6 +70,7 @@ export class RateLimitService {
       resetAt: windowTtl > 0 ? now + windowTtl * 1000 : null,
       status: ratio >= 1 ? "exceeded" : ratio >= 0.9 ? "warning" : "ok",
       lastRequestAt,
+      lastAdminResetAt: lastAdminResetAt > 0 ? lastAdminResetAt : null,
       at: now,
     };
   }

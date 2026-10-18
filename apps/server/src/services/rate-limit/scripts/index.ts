@@ -11,3 +11,4 @@ export const allRowsScript = loadScript("all-rows.lua");
 export { unpackAllRows } from "./all-rows.js";
 export const dashboardStatsScript = loadScript("dashboard-stats.lua");
 export const addExtraScript = loadScript("add-extra.lua");
+export const resetWindowScript = loadScript("reset-window.lua");
