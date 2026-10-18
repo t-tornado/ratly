@@ -59,7 +59,7 @@ function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction,
             {mobileTitle}
           </div>
         )}
-        <div className="flex-1 min-h-0 overflow-auto">
+        <div className="flex-1 min-h-0 overflow-auto" tabIndex={0}>
           {isLoading ? (
             <div className="py-16 text-center text-sm text-text-muted">Loading…</div>
           ) : isEmpty ? (
