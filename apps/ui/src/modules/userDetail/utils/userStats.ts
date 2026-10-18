@@ -60,4 +60,11 @@ function buildLiveStatItems(row: UserRow): StatItem[] {
   return [remainingItem, resetsInItem, lastResetItem, rejectedTodayItem];
 }
 
-export { formatCountdown, buildLiveStatItems };
+const EMPTY_STATS: StatItem[] = [
+  { label: "Remaining", value: "--" },
+  { label: "Resets in", value: "--" },
+  { label: "Last reset", value: "--" },
+  { label: "Rejected today", value: "--" },
+];
+
+export { formatCountdown, buildLiveStatItems, EMPTY_STATS };

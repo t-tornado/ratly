@@ -8,7 +8,7 @@ import { useSocket } from "../../../lib/hooks";
 import { fetchUser, queryKeys } from "../../../lib/api";
 import type { StatItem } from "../../../components/StatsRow";
 import type { UserStatus } from "../types/userStats";
-import { formatCountdown, buildLiveStatItems } from "../utils/userStats";
+import { formatCountdown, buildLiveStatItems, EMPTY_STATS } from "../utils/userStats";
 
 interface UserDetailStatsResult {
   statItems: StatItem[];
@@ -17,21 +17,15 @@ interface UserDetailStatsResult {
   currentLimit: number | null;
   paused: boolean;
   hasActiveWindow: boolean;
+  isError: boolean;
 }
-
-const EMPTY_STATS: StatItem[] = [
-  { label: "Remaining", value: "--" },
-  { label: "Resets in", value: "--" },
-  { label: "Last reset", value: "--" },
-  { label: "Rejected today", value: "--" },
-];
 
 function useUserDetailStats(userId: string): UserDetailStatsResult {
   const { socket } = useSocket();
   const queryClient = useQueryClient();
   const [, setTick] = useState(0);
 
-  const { data: latestRow } = useQuery({
+  const { data: latestRow, isError } = useQuery({
     queryKey: queryKeys.user(userId),
     queryFn: () => fetchUser(userId),
     retry: false,
@@ -74,6 +68,7 @@ function useUserDetailStats(userId: string): UserDetailStatsResult {
       currentLimit: null,
       paused: false,
       hasActiveWindow: false,
+      isError,
     };
   }
 
@@ -91,6 +86,7 @@ function useUserDetailStats(userId: string): UserDetailStatsResult {
     currentLimit: latestRow.limit,
     paused: latestRow.paused,
     hasActiveWindow: latestRow.resetAt !== null,
+    isError,
   };
 }
 
