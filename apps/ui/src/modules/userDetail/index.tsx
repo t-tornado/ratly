@@ -95,6 +95,10 @@ export default function UserDetailPage() {
         onAdjustLimit={handleAdjustLimit}
         onAddExtraRequests={handleAddExtraRequests}
         onToggleThrottling={handleToggleThrottling}
+        isResetWindowPending={resetWindowMutation.isPending}
+        isAdjustLimitPending={adjustLimitMutation.isPending}
+        isAddExtraPending={addExtraMutation.isPending}
+        isThrottlingPending={pauseMutation.isPending || unlockMutation.isPending}
       />
       <PageSection className="flex-1 min-h-0 pb-5">
         <UserDetailContent userId={safeUserId} />

@@ -9,12 +9,12 @@ import type { RowEventStore } from "../../hooks/useRowEventStore";
 const MOBILE_BREAKPOINT = "(max-width: 639px)";
 
 interface AdminActions {
-  resetWindowMutation: { mutateAsync: (userId: string) => Promise<unknown> };
-  addExtraMutation: { mutateAsync: (params: { userId: string; amount: number }) => Promise<unknown> };
-  adjustLimitMutation: { mutateAsync: (params: { userId: string; limit: number }) => Promise<unknown> };
-  resetLimitMutation: { mutateAsync: (userId: string) => Promise<unknown> };
-  pauseMutation: { mutateAsync: (params: { userId: string; seconds: number }) => Promise<unknown> };
-  unlockMutation: { mutateAsync: (userId: string) => Promise<unknown> };
+  resetWindowMutation: { mutateAsync: (userId: string) => Promise<unknown>; isPending: boolean };
+  addExtraMutation: { mutateAsync: (params: { userId: string; amount: number }) => Promise<unknown>; isPending: boolean };
+  adjustLimitMutation: { mutateAsync: (params: { userId: string; limit: number }) => Promise<unknown>; isPending: boolean };
+  resetLimitMutation: { mutateAsync: (userId: string) => Promise<unknown>; isPending: boolean };
+  pauseMutation: { mutateAsync: (params: { userId: string; seconds: number }) => Promise<unknown>; isPending: boolean };
+  unlockMutation: { mutateAsync: (userId: string) => Promise<unknown>; isPending: boolean };
 }
 
 interface DashboardTableRowProps {
@@ -53,6 +53,10 @@ function renderActionMenu(row: UserRow, userId: string, adminActions: AdminActio
       onResetLimit={() => adminActions.resetLimitMutation.mutateAsync(userId)}
       onPause={(seconds) => adminActions.pauseMutation.mutateAsync({ userId, seconds })}
       onUnlock={() => adminActions.unlockMutation.mutateAsync(userId)}
+      isResetWindowPending={adminActions.resetWindowMutation.isPending}
+      isAddExtraPending={adminActions.addExtraMutation.isPending}
+      isAdjustLimitPending={adminActions.adjustLimitMutation.isPending}
+      isThrottlingPending={adminActions.pauseMutation.isPending || adminActions.unlockMutation.isPending}
     />
   );
 }

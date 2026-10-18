@@ -23,6 +23,7 @@ export interface AdjustLimitModalProps {
   userId: string;
   currentLimit: number;
   currentRemaining: number;
+  isLoading?: boolean;
 }
 
 function AdjustLimitModal({
@@ -32,6 +33,7 @@ function AdjustLimitModal({
   userId,
   currentLimit,
   currentRemaining,
+  isLoading = false,
 }: AdjustLimitModalProps) {
   const [limitValue, setLimitValue] = useState(currentLimit);
 
@@ -70,6 +72,7 @@ function AdjustLimitModal({
           onConfirm={handleConfirm}
           confirmLabel={`Set limit to ${limitValue}`}
           confirmVariant="accent"
+          isConfirmLoading={isLoading}
         />
       }
     >

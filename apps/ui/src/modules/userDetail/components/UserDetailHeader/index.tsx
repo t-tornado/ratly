@@ -26,6 +26,10 @@ interface UserDetailHeaderProps {
   onAdjustLimit?: (newLimit: number) => Promise<unknown>;
   onAddExtraRequests?: (extraRequests: number) => Promise<unknown>;
   onToggleThrottling?: (duration?: ThrottlingDuration) => Promise<unknown>;
+  isResetWindowPending?: boolean;
+  isAdjustLimitPending?: boolean;
+  isAddExtraPending?: boolean;
+  isThrottlingPending?: boolean;
 }
 
 type ModalName =
@@ -47,6 +51,10 @@ function UserDetailHeader({
   onAdjustLimit,
   onAddExtraRequests,
   onToggleThrottling,
+  isResetWindowPending = false,
+  isAdjustLimitPending = false,
+  isAddExtraPending = false,
+  isThrottlingPending = false,
 }: UserDetailHeaderProps) {
   const [activeModal, setActiveModal] = useState<ModalName>(null);
 
@@ -125,6 +133,7 @@ function UserDetailHeader({
         currentRemaining={currentRemaining}
         currentStatus={statusLabel}
         limit={currentLimit}
+        isLoading={isResetWindowPending}
       />
 
       <AdjustLimitModal
@@ -141,6 +150,7 @@ function UserDetailHeader({
         userId={userId}
         currentLimit={currentLimit}
         currentRemaining={currentRemaining}
+        isLoading={isAdjustLimitPending}
       />
 
       <AddExtraRequestsModal
@@ -157,6 +167,7 @@ function UserDetailHeader({
         userId={userId}
         currentRemaining={currentRemaining}
         limit={currentLimit}
+        isLoading={isAddExtraPending}
       />
 
       <ThrottlingModal
@@ -173,6 +184,7 @@ function UserDetailHeader({
         userId={userId}
         isThrottling={isThrottling}
         currentRemaining={currentRemaining}
+        isLoading={isThrottlingPending}
       />
     </div>
   );

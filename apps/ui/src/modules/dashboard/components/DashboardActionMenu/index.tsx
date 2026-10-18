@@ -20,6 +20,10 @@ interface DashboardActionMenuProps {
   onResetLimit: () => Promise<unknown>;
   onPause: (seconds: number) => Promise<unknown>;
   onUnlock: () => Promise<unknown>;
+  isResetWindowPending?: boolean;
+  isAddExtraPending?: boolean;
+  isAdjustLimitPending?: boolean;
+  isThrottlingPending?: boolean;
 }
 
 function DashboardActionMenu({
@@ -30,6 +34,10 @@ function DashboardActionMenu({
   onResetLimit,
   onPause,
   onUnlock,
+  isResetWindowPending = false,
+  isAddExtraPending = false,
+  isAdjustLimitPending = false,
+  isThrottlingPending = false,
 }: DashboardActionMenuProps) {
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
 
@@ -96,6 +104,7 @@ function DashboardActionMenu({
         currentRemaining={row.remaining}
         currentStatus={row.status}
         limit={row.limit}
+        isLoading={isResetWindowPending}
       />
 
       <AddExtraRequestsModal
@@ -112,6 +121,7 @@ function DashboardActionMenu({
         userId={row.userId}
         currentRemaining={row.remaining}
         limit={row.limit}
+        isLoading={isAddExtraPending}
       />
 
       <AdjustLimitModal
@@ -128,6 +138,7 @@ function DashboardActionMenu({
         userId={row.userId}
         currentLimit={row.limit}
         currentRemaining={row.remaining}
+        isLoading={isAdjustLimitPending}
       />
 
       <ThrottlingModal
@@ -137,6 +148,7 @@ function DashboardActionMenu({
         userId={row.userId}
         isThrottling={!row.paused}
         currentRemaining={row.remaining}
+        isLoading={isThrottlingPending}
       />
     </>
   );

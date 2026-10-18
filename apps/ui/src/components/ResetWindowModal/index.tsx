@@ -8,6 +8,7 @@ export interface ResetWindowModalProps {
   currentRemaining: number;
   currentStatus: string;
   limit: number;
+  isLoading?: boolean;
 }
 
 export function ResetWindowModal({
@@ -18,6 +19,7 @@ export function ResetWindowModal({
   currentRemaining,
   currentStatus,
   limit,
+  isLoading = false,
 }: ResetWindowModalProps) {
   return (
     <Modal
@@ -35,6 +37,7 @@ export function ResetWindowModal({
           onConfirm={onConfirm}
           confirmLabel="Reset window"
           confirmVariant="destructive"
+          isConfirmLoading={isLoading}
         />
       }
     >

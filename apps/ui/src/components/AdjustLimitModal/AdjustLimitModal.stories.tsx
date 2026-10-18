@@ -38,3 +38,15 @@ export const HighLimit: Story = {
     currentRemaining: 800,
   },
 };
+
+export const ConfirmLoading: Story = {
+  args: {
+    isOpen: true,
+    onClose: () => {},
+    onConfirm: () => {},
+    userId: "usr_3e88d1",
+    currentLimit: 100,
+    currentRemaining: 42,
+    isLoading: true,
+  },
+};

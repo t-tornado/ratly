@@ -36,3 +36,15 @@ export const FilterActive: Story = {
 export const IconOnly: Story = {
   args: { children: "⋯", variant: "icon-only", size: "icon" },
 };
+
+export const Loading: Story = {
+  args: { children: "Pause throttling", variant: "primary", isLoading: true },
+};
+
+export const LoadingDestructive: Story = {
+  args: { children: "Reset window", variant: "destructive", isLoading: true },
+};
+
+export const LoadingAccent: Story = {
+  args: { children: "Add 10 requests", variant: "accent", isLoading: true },
+};

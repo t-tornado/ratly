@@ -42,6 +42,7 @@ interface ModalFooterProps {
   confirmLabel: string;
   confirmVariant?: "primary" | "accent" | "destructive" | "ghost" | "destructive-ghost" | "warning-ghost";
   isConfirmDisabled?: boolean;
+  isConfirmLoading?: boolean;
 }
 
 function ModalFooter({
@@ -51,6 +52,7 @@ function ModalFooter({
   confirmLabel,
   confirmVariant = "primary",
   isConfirmDisabled = false,
+  isConfirmLoading = false,
 }: ModalFooterProps) {
   return (
     <>
@@ -61,6 +63,7 @@ function ModalFooter({
         variant={confirmVariant}
         onClick={onConfirm}
         disabled={isConfirmDisabled}
+        isLoading={isConfirmLoading}
       >
         {confirmLabel}
       </Button>

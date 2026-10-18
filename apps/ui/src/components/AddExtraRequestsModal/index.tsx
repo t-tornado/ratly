@@ -15,6 +15,7 @@ export interface AddExtraRequestsModalProps {
   userId: string;
   currentRemaining: number;
   limit: number;
+  isLoading?: boolean;
 }
 
 export function AddExtraRequestsModal({
@@ -24,6 +25,7 @@ export function AddExtraRequestsModal({
   userId,
   currentRemaining,
   limit,
+  isLoading = false,
 }: AddExtraRequestsModalProps) {
   const [extraRequests, setExtraRequests] = useState(DEFAULT_EXTRA_REQUESTS);
 
@@ -68,6 +70,7 @@ export function AddExtraRequestsModal({
           onConfirm={handleConfirm}
           confirmLabel={`Add ${extraRequests} requests`}
           confirmVariant="accent"
+          isConfirmLoading={isLoading}
         />
       }
     >
