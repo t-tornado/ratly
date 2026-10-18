@@ -96,7 +96,7 @@ function DataTableRow({
   return (
     <tr
       className={cn(
-        "border-t border-bg-hover",
+        "group border-t border-bg-hover",
         status === "exceeded" &&
           "bg-error-bg shadow-inset-error",
         isClickable && "cursor-pointer hover:bg-bg-hover"
@@ -145,7 +145,14 @@ function DataTableRow({
       <td className="py-3 px-4 text-text-muted text-base-sm">
         {lastRequest}
       </td>
-      <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
+      <td
+        className={cn(
+          "py-3 px-2 sticky right-0",
+          status === "exceeded" ? "bg-error-bg" : "bg-bg-surface-raised",
+          isClickable && "group-hover:bg-bg-hover"
+        )}
+        onClick={(e) => e.stopPropagation()}
+      >
         {actionContent ?? null}
       </td>
     </tr>

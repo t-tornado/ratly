@@ -71,7 +71,7 @@ function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle,
               <th className="py-3 px-4 font-medium">Reset time</th>
               <th className="py-3 px-4 font-medium">Status</th>
               <th className="py-3 px-4 font-medium">Last request</th>
-              <th className="py-3 px-4 font-medium">
+              <th className="py-3 px-2 font-medium sticky right-0 z-20 bg-bg-surface">
                 <span className="sr-only">Actions</span>
               </th>
             </tr>
