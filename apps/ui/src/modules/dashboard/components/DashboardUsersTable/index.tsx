@@ -20,7 +20,6 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
   const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState<UserStatusFilter>("All");
   const [windowFilter, setWindowFilter] = useState<TimeWindowFilter>("any");
-  const [activeRow, setActiveRow] = useState<UserRow | null>(null);
   const { searchQuery, onSearchChange } = useDebouncedSearch();
 
   const {
@@ -35,13 +34,20 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
   const filteredRows = applyUserTableFilters(rows, { statusFilter, searchQuery, windowFilter });
   const statusFilterOptions = buildUserStatusFilterOptions(rows, statusFilter);
 
-  function handleAction(userId: string) {
-    const row = rows.find((r) => r.userId === userId) ?? null;
-    setActiveRow(row);
-  }
-
-  function handleMenuClose() {
-    setActiveRow(null);
+  function renderRowAction(userId: string) {
+    const targetRow = rows.find((r) => r.userId === userId);
+    if (!targetRow) return null;
+    return (
+      <DashboardActionMenu
+        row={targetRow}
+        onResetWindow={() => resetWindowMutation.mutate(userId)}
+        onAddExtra={(amount) => addExtraMutation.mutate({ userId, amount })}
+        onAdjustLimit={(limit) => adjustLimitMutation.mutate({ userId, limit })}
+        onResetLimit={() => resetLimitMutation.mutate(userId)}
+        onPause={(seconds) => pauseMutation.mutate({ userId, seconds })}
+        onUnlock={() => unlockMutation.mutate(userId)}
+      />
+    );
   }
 
   return (
@@ -63,22 +69,10 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
           className="flex-1 min-h-0"
           rows={filteredRows.map(mapUserRowToTableRow)}
           onRowClick={(userId) => navigate(routes.userDetail(userId))}
-          onAction={handleAction}
+          renderAction={renderRowAction}
           footer={
             <span>{filteredRows.length} of {rows.length} shown &middot; sorted by usage &darr;</span>
           }
-        />
-      )}
-      {activeRow !== null && (
-        <DashboardActionMenu
-          row={activeRow}
-          onClose={handleMenuClose}
-          onResetWindow={() => resetWindowMutation.mutate(activeRow.userId)}
-          onAddExtra={(amount) => addExtraMutation.mutate({ userId: activeRow.userId, amount })}
-          onAdjustLimit={(limit) => adjustLimitMutation.mutate({ userId: activeRow.userId, limit })}
-          onResetLimit={() => resetLimitMutation.mutate(activeRow.userId)}
-          onPause={(seconds) => pauseMutation.mutate({ userId: activeRow.userId, seconds })}
-          onUnlock={() => unlockMutation.mutate(activeRow.userId)}
         />
       )}
     </div>

@@ -83,6 +83,8 @@ describe("DashboardPage", () => {
       name: `Admin actions for ${firstRow.userId}`,
     });
     act(() => {
+      fireEvent.pointerDown(actionButton, { button: 0, ctrlKey: false });
+      fireEvent.pointerUp(actionButton, { button: 0 });
       fireEvent.click(actionButton);
     });
     await waitFor(() => {

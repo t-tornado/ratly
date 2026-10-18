@@ -3,7 +3,6 @@ import { DashboardActionMenu } from ".";
 import { mockUserRow, mockPausedRow, mockCustomLimitRow } from "../../../../test/fixtures";
 
 const NOOP_CALLBACKS = {
-  onClose: () => {},
   onResetWindow: () => {},
   onAddExtra: () => {},
   onAdjustLimit: () => {},

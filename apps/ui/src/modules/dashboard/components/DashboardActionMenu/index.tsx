@@ -14,7 +14,6 @@ type ActiveModal = "reset-window" | "add-extra" | "adjust-limit" | "throttling" 
 
 interface DashboardActionMenuProps {
   row: UserRow;
-  onClose: () => void;
   onResetWindow: () => void;
   onAddExtra: (amount: number) => void;
   onAdjustLimit: (limit: number) => void;
@@ -25,7 +24,6 @@ interface DashboardActionMenuProps {
 
 function DashboardActionMenu({
   row,
-  onClose,
   onResetWindow,
   onAddExtra,
   onAdjustLimit,
@@ -37,7 +35,6 @@ function DashboardActionMenu({
 
   function closeModal() {
     setActiveModal(null);
-    onClose();
   }
 
   function handleThrottlingConfirm(duration?: ThrottlingDuration) {
@@ -64,10 +61,7 @@ function DashboardActionMenu({
     },
     {
       label: "Reset to default",
-      onClick: () => {
-        onResetLimit();
-        onClose();
-      },
+      onClick: onResetLimit,
       hidden: row.limit === DEFAULT_LIMIT,
     },
     {
@@ -81,8 +75,6 @@ function DashboardActionMenu({
       <ActionMenu
         items={menuItems}
         triggerLabel={`Admin actions for ${row.userId}`}
-        defaultOpen
-        onOpenChange={(isOpen) => { if (!isOpen && activeModal === null) onClose(); }}
       />
 
       <ResetWindowModal
