@@ -7,6 +7,7 @@ interface StatItem {
   value: React.ReactNode;
   sub?: React.ReactNode;
   accent?: StatCardAccent;
+  indicator?: React.ReactNode;
 }
 
 interface StatsRowProps extends React.ComponentProps<"section"> {
@@ -30,6 +31,7 @@ function StatsRow({ items, className, ...props }: StatsRowProps) {
           value={item.value}
           sub={item.sub}
           accent={item.accent}
+          indicator={item.indicator}
         />
       ))}
     </section>
