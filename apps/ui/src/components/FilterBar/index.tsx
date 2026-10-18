@@ -34,7 +34,7 @@ function FilterBar({
 }: FilterBarProps) {
   return (
     <div
-      className={cn("flex items-center gap-3", className)}
+      className={cn("flex flex-wrap items-center gap-3", className)}
       {...props}
     >
       <SearchInput

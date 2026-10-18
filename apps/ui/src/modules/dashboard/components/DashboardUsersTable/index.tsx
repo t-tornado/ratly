@@ -52,14 +52,16 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
 
   return (
     <div data-testid="dashboard-users-table" className="flex flex-col flex-1 min-h-0 gap-3">
-      <FilterBar
-        filters={statusFilterOptions}
-        selectLabel="Last active"
-        selectOptions={USER_TABLE_TIME_OPTIONS}
-        onFilterChange={(label) => setStatusFilter(label as UserStatusFilter)}
-        onSearchChange={onSearchChange}
-        onSelectChange={(val) => setWindowFilter(val as TimeWindowFilter)}
-      />
+      <div className="sticky top-0 z-10 sm:static bg-bg-base">
+        <FilterBar
+          filters={statusFilterOptions}
+          selectLabel="Last active"
+          selectOptions={USER_TABLE_TIME_OPTIONS}
+          onFilterChange={(label) => setStatusFilter(label as UserStatusFilter)}
+          onSearchChange={onSearchChange}
+          onSelectChange={(val) => setWindowFilter(val as TimeWindowFilter)}
+        />
+      </div>
       <DataTable
         className="flex-1 min-h-0"
         rows={filteredRows.map(mapUserRowToTableRow)}

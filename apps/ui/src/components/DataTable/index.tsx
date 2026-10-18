@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "../../lib/utils";
+import { useMediaQuery } from "../../lib/hooks/useMediaQuery";
 import { DataTableRow } from "./DataTableRow";
 import { EmptyState } from "../EmptyState";
 import type { BadgeProps } from "../Badge";
@@ -24,13 +25,16 @@ interface DataTableProps extends React.ComponentProps<"div"> {
   rows: UserRow[];
   footer?: React.ReactNode;
   isLoading?: boolean;
+  mobileTitle?: string;
   renderAction?: (userId: string) => React.ReactNode;
   onRowClick?: (userId: string) => void;
 }
 
 const ROW_ESTIMATED_HEIGHT = 48;
+const MOBILE_BREAKPOINT = "(max-width: 639px)";
 
-function DataTable({ rows, footer, isLoading = false, renderAction, onRowClick, className, ...props }: DataTableProps) {
+function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction, onRowClick, className, ...props }: DataTableProps) {
+  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const virtualizer = useVirtualizer({
@@ -40,6 +44,48 @@ function DataTable({ rows, footer, isLoading = false, renderAction, onRowClick, 
   });
 
   const isEmpty = !isLoading && rows.length === 0;
+
+  if (isMobile) {
+    return (
+      <div
+        className={cn(
+          "rounded-xl border border-border-default bg-bg-surface-raised flex flex-col overflow-hidden",
+          className
+        )}
+        {...props}
+      >
+        {mobileTitle && (
+          <div className="px-4 py-3 text-sm text-text-muted uppercase tracking-wide border-b border-border-default font-medium">
+            {mobileTitle}
+          </div>
+        )}
+        <div className="flex-1 min-h-0 overflow-auto" tabIndex={0}>
+          {isLoading ? (
+            <div className="py-16 text-center text-sm text-text-muted">Loading…</div>
+          ) : isEmpty ? (
+            <EmptyState className="border-0 rounded-none bg-transparent" />
+          ) : (
+            rows.map((row) => (
+              <DataTableRow
+                key={row.id}
+                {...row}
+                variant="card"
+                isClickable={!!onRowClick}
+                onClick={() => onRowClick?.(row.id)}
+                actionContent={renderAction?.(row.id)}
+              />
+            ))
+          )}
+        </div>
+        {footer && (
+          <div className="flex justify-between items-center px-4 py-3 text-sm text-text-muted border-t border-border-default">
+            {footer}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   const virtualItems = virtualizer.getVirtualItems();
   const topSpacerHeight = virtualItems[0]?.start ?? 0;
   const bottomSpacerHeight = virtualizer.getTotalSize() - (virtualItems.at(-1)?.end ?? 0);

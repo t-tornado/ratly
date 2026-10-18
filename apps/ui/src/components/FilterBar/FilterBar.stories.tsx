@@ -25,3 +25,23 @@ export const Default: Story = {
     ],
   },
 };
+
+export const Mobile: Story = {
+  args: {
+    filters: [
+      { label: "All", count: 10, active: true },
+      { label: "OK", count: 5, color: "var(--color-success)" },
+      { label: "Warning", count: 2, color: "var(--color-warning)" },
+      { label: "Exceeded", count: 3, color: "var(--color-error)" },
+    ],
+    selectLabel: "Last active",
+    selectOptions: [
+      { label: "any time", value: "any" },
+      { label: "last 15 min", value: "15m" },
+      { label: "last hour", value: "1h" },
+    ],
+  },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+};
