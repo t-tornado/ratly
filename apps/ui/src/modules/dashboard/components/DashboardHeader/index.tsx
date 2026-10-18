@@ -7,7 +7,7 @@ interface DashboardHeaderProps {
 
 function DashboardHeader({ isConnected }: DashboardHeaderProps) {
   return (
-    <div data-testid="dashboard-header" className="sticky top-0 z-20 sm:static sm:z-auto">
+    <div data-testid="dashboard-header" className="sticky top-0 z-20">
       <PageHeader
         rightSlot={
           <div
