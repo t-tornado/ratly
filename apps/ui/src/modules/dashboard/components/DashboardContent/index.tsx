@@ -8,7 +8,7 @@ interface DashboardContentProps {
 
 function DashboardContent({ rows, isLoading }: DashboardContentProps) {
   return (
-    <div data-testid="dashboard-content" className="flex-1 min-h-0 flex flex-col mt-5">
+    <div data-testid="dashboard-content" className="sm:flex-1 sm:min-h-0 flex flex-col mt-5">
       <DashboardUsersTable rows={rows} isLoading={isLoading} />
     </div>
   );

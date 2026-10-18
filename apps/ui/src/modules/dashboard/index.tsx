@@ -40,7 +40,7 @@ export default function DashboardPage() {
   return (
     <PageLayout testId="dashboard-page">
       <DashboardHeader isConnected={isConnected} />
-      <PageSection className="flex-1 min-h-0 pb-5 flex flex-col overflow-hidden">
+      <PageSection className="sm:flex-1 sm:min-h-0 pb-5 flex flex-col sm:overflow-hidden">
         <DashboardStats stats={stats} isLoading={isLoading} />
         <DashboardContent rows={rows} isLoading={isLoading} />
       </PageSection>

@@ -51,8 +51,8 @@ function DashboardUsersTable({ rows, isLoading = false }: DashboardUsersTablePro
   }
 
   return (
-    <div data-testid="dashboard-users-table" className="flex flex-col flex-1 min-h-0 gap-3">
-      <div className="sticky top-0 z-10 sm:static bg-bg-base">
+    <div data-testid="dashboard-users-table" className="flex flex-col sm:flex-1 sm:min-h-0 gap-3">
+      <div className="sticky top-14 z-10 sm:static bg-bg-base">
         <FilterBar
           filters={statusFilterOptions}
           selectLabel="Last active"
