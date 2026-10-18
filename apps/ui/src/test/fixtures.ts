@@ -1,4 +1,5 @@
 import type { UserRow, DashboardStats, TopUser } from "@ratly/core";
+import type { RowEventStore } from "../modules/dashboard/hooks/useRowEventStore";
 
 const NOW = 1_700_000_000_000;
 const HOUR_MS = 3_600_000;
@@ -81,3 +82,16 @@ export const mockStats: DashboardStats = {
   topUsers: mockTopUsers,
   at: NOW,
 };
+
+export function createMockRowEventStore(rows: UserRow[]): RowEventStore {
+  const rowsMap = new Map<string, UserRow>();
+  for (const row of rows) {
+    rowsMap.set(row.userId, row);
+  }
+  return {
+    userIds: rows.map((row) => row.userId),
+    subscribe: () => {},
+    unsubscribe: () => {},
+    getRow: (userId: string) => rowsMap.get(userId),
+  };
+}

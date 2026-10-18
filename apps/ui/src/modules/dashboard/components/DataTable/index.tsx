@@ -1,49 +1,31 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { cn } from "../../lib/utils";
-import { useMediaQuery } from "../../lib/hooks/useMediaQuery";
-import { DataTableRow } from "./DataTableRow";
-import { EmptyState } from "../EmptyState";
-import type { BadgeProps } from "../Badge";
-
-type StatusVariant = NonNullable<BadgeProps["variant"]>;
-
-interface UserRow {
-  id: string;
-  href?: string;
-  remaining: number;
-  total: number;
-  resetTime: string;
-  resetIn: string;
-  status: "ok" | "warning" | "exceeded";
-  statusLabel: string;
-  lastRequest: string;
-  tags?: { label: string; variant: StatusVariant }[];
-}
+import { cn } from "../../../../lib/utils";
+import { useMediaQuery } from "../../../../lib/hooks/useMediaQuery";
+import { EmptyState } from "../../../../components/EmptyState";
 
 interface DataTableProps extends React.ComponentProps<"div"> {
-  rows: UserRow[];
+  userIds: string[];
+  renderRow: (userId: string) => React.ReactNode;
   footer?: React.ReactNode;
   isLoading?: boolean;
   mobileTitle?: string;
-  renderAction?: (userId: string) => React.ReactNode;
-  onRowClick?: (userId: string) => void;
 }
 
 const ROW_ESTIMATED_HEIGHT = 48;
 const MOBILE_BREAKPOINT = "(max-width: 639px)";
 
-function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction, onRowClick, className, ...props }: DataTableProps) {
+function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle, className, ...props }: DataTableProps) {
   const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const virtualizer = useVirtualizer({
-    count: rows.length,
+    count: userIds.length,
     getScrollElement: () => containerRef.current,
     estimateSize: () => ROW_ESTIMATED_HEIGHT,
   });
 
-  const isEmpty = !isLoading && rows.length === 0;
+  const isEmpty = !isLoading && userIds.length === 0;
 
   if (isMobile) {
     return (
@@ -65,15 +47,8 @@ function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction,
           ) : isEmpty ? (
             <EmptyState className="border-0 rounded-none bg-transparent" />
           ) : (
-            rows.map((row) => (
-              <DataTableRow
-                key={row.id}
-                {...row}
-                variant="card"
-                isClickable={!!onRowClick}
-                onClick={() => onRowClick?.(row.id)}
-                actionContent={renderAction?.(row.id)}
-              />
+            userIds.map((userId) => (
+              <div key={userId}>{renderRow(userId)}</div>
             ))
           )}
         </div>
@@ -98,7 +73,7 @@ function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction,
       )}
       {...props}
     >
-      <div ref={containerRef} className="flex-1 min-h-0 overflow-auto">
+      <div ref={containerRef} className="flex-1 min-h-0 overflow-auto" tabIndex={0}>
         <table className="w-full border-collapse min-w-[860px] table-fixed">
           <colgroup>
             <col className="w-[340px]" />
@@ -137,16 +112,8 @@ function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction,
               <>
                 <tr style={{ height: topSpacerHeight }} />
                 {virtualItems.map((virtualRow) => {
-                  const row = rows[virtualRow.index];
-                  return (
-                    <DataTableRow
-                      key={row.id}
-                      {...row}
-                      isClickable={!!onRowClick}
-                      onClick={() => onRowClick?.(row.id)}
-                      actionContent={renderAction?.(row.id)}
-                    />
-                  );
+                  const userId = userIds[virtualRow.index];
+                  return renderRow(userId);
                 })}
                 <tr style={{ height: bottomSpacerHeight }} />
               </>
@@ -163,4 +130,4 @@ function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction,
   );
 }
 
-export { DataTable, type DataTableProps, type UserRow };
+export { DataTable, type DataTableProps };

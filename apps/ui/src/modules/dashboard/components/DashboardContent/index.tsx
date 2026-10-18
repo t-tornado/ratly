@@ -1,15 +1,15 @@
-import type { UserRow } from "@ratly/core";
+import type { RowEventStore } from "../../hooks/useRowEventStore";
 import { DashboardUsersTable } from "../DashboardUsersTable";
 
 interface DashboardContentProps {
-  rows: UserRow[];
+  store: RowEventStore;
   isLoading: boolean;
 }
 
-function DashboardContent({ rows, isLoading }: DashboardContentProps) {
+function DashboardContent({ store, isLoading }: DashboardContentProps) {
   return (
     <div data-testid="dashboard-content" className="sm:flex-1 sm:min-h-0 flex flex-col mt-5">
-      <DashboardUsersTable rows={rows} isLoading={isLoading} />
+      <DashboardUsersTable store={store} isLoading={isLoading} />
     </div>
   );
 }

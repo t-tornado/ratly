@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DashboardUsersTable } from "./index";
-import { mockRows } from "../../../../test/fixtures";
+import { mockRows, createMockRowEventStore } from "../../../../test/fixtures";
 
 const meta: Meta<typeof DashboardUsersTable> = {
   title: "Dashboard/DashboardUsersTable",
@@ -11,15 +11,15 @@ export default meta;
 type Story = StoryObj<typeof DashboardUsersTable>;
 
 export const Populated: Story = {
-  args: { rows: mockRows },
+  args: { store: createMockRowEventStore(mockRows) },
 };
 
 export const Empty: Story = {
-  args: { rows: [] },
+  args: { store: createMockRowEventStore([]) },
 };
 
 export const Mobile: Story = {
-  args: { rows: mockRows },
+  args: { store: createMockRowEventStore(mockRows) },
   parameters: {
     viewport: { defaultViewport: "mobile1" },
   },

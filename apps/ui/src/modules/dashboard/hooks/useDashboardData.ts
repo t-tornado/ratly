@@ -1,10 +1,15 @@
+import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+import type { Socket } from "socket.io-client";
 import { fetchDashboard, queryKeys } from "../../../lib/api";
-import type { UserRow, DashboardStats } from "@ratly/core";
+import { DASHBOARD_STATS_UPDATE_EVENT } from "@ratly/core";
+import type { UserRow, DashboardStats, DashboardStatsEvent } from "@ratly/core";
 import type { DashboardResponse } from "../../../lib/api";
 
-function useDashboardData() {
+const EMPTY_ROWS: UserRow[] = [];
+
+function useDashboardData(socket: Socket) {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
@@ -12,18 +17,7 @@ function useDashboardData() {
     queryFn: fetchDashboard,
   });
 
-  const updateSingleRow = useCallback((row: UserRow) => {
-    queryClient.setQueryData<DashboardResponse>(queryKeys.dashboard, (old) => {
-      if (!old) return old;
-      const existingIndex = old.rows.findIndex((r) => r.userId === row.userId);
-      if (existingIndex >= 0) {
-        const updatedRows = old.rows.slice();
-        updatedRows[existingIndex] = row;
-        return { ...old, rows: updatedRows };
-      }
-      return { ...old, rows: [row, ...old.rows] };
-    });
-  }, [queryClient]);
+  const initialRows = useMemo(() => data?.rows ?? EMPTY_ROWS, [data?.rows]);
 
   const updateStats = useCallback((stats: DashboardStats) => {
     queryClient.setQueryData<DashboardResponse>(queryKeys.dashboard, (old) => {
@@ -32,13 +26,23 @@ function useDashboardData() {
     });
   }, [queryClient]);
 
+  useEffect(() => {
+    const handleDashboardStats = ({ stats: dashboardStats }: DashboardStatsEvent) => {
+      updateStats(dashboardStats);
+    };
+
+    socket.on(DASHBOARD_STATS_UPDATE_EVENT, handleDashboardStats);
+
+    return () => {
+      socket.off(DASHBOARD_STATS_UPDATE_EVENT, handleDashboardStats);
+    };
+  }, [socket, updateStats]);
+
   return {
     stats: data?.stats ?? null,
-    rows: data?.rows ?? [],
+    initialRows,
     isLoading,
     isError,
-    updateSingleRow,
-    updateStats,
   };
 }
 
