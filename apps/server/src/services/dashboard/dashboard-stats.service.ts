@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { RedisService } from "../../lib/infra/redis/redis.service.js";
 import { dashboardStatsScript } from "../rate-limit/scripts/index.js";
 import { DashboardStats, TopUser } from "../../lib/types/index.js";
@@ -7,9 +8,13 @@ import { redisKeys } from "../../lib/redis-keys.js";
 
 @Injectable()
 export class DashboardStatsService {
-  constructor(private readonly redis: RedisService) {}
+  constructor(
+    private readonly redis: RedisService,
+    @InjectPinoLogger(DashboardStatsService.name) private readonly logger: PinoLogger,
+  ) {}
 
   async getStats(): Promise<DashboardStats> {
+    const startTime = Date.now();
     const today = new Date().toISOString().slice(0, 10);
 
     const raw = (await this.redis.eval(
@@ -38,6 +43,14 @@ export class DashboardStatsService {
       });
     }
 
-    return { totalUsers, activeUsers, rejectedToday, nearLimitPercent, topUsers, at };
+    const stats = { totalUsers, activeUsers, rejectedToday, nearLimitPercent, topUsers, at };
+    const durationMs = Date.now() - startTime;
+
+    this.logger.debug(
+      { totalUsers, activeUsers, rejectedToday, durationMs },
+      "Dashboard:ComputeStats [Success]",
+    );
+
+    return stats;
   }
 }
