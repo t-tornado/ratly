@@ -1,10 +1,15 @@
 import { useCallback } from "react";
 import { useParams } from "react-router-dom";
+
 import { PageLayout } from "../../components/PageLayout";
 import { PageSection } from "../../components/PageSection";
+import { useSocket } from "../../lib/hooks";
+import type { BadgeProps } from "../../components/Badge";
+
 import { UserDetailHeader } from "./components/UserDetailHeader";
 import { UserDetailContent } from "./components/UserDetailContent";
 import { useAdminActions } from "../dashboard/hooks/useAdminActions";
+import { useUserDetailStats } from "./hooks/useUserDetailStats";
 import type { ThrottlingDuration } from "../../components/ThrottlingModal";
 
 const THROTTLE_DURATION_SECONDS: Record<ThrottlingDuration, number> = {
@@ -13,9 +18,25 @@ const THROTTLE_DURATION_SECONDS: Record<ThrottlingDuration, number> = {
   "24h": 86400,
 };
 
+const STATUS_TO_BADGE_VARIANT: Record<string, BadgeProps["variant"]> = {
+  ok: "status-ok",
+  warning: "status-warning",
+  exceeded: "status-exceeded",
+};
+
+const STATUS_TO_LABEL: Record<string, string> = {
+  ok: "OK",
+  warning: "Warning",
+  exceeded: "Exceeded",
+};
+
 export default function UserDetailPage() {
   const { userId } = useParams<{ userId: string }>();
   const safeUserId = userId ?? "";
+
+  const { isConnected } = useSocket();
+  const { status, currentRemaining, currentLimit, paused } =
+    useUserDetailStats(safeUserId);
 
   const {
     resetWindowMutation,
@@ -57,22 +78,28 @@ export default function UserDetailPage() {
     [pauseMutation, unlockMutation, safeUserId]
   );
 
+  const badgeVariant = status
+    ? STATUS_TO_BADGE_VARIANT[status] ?? "status-ok"
+    : "status-ok";
+  const statusLabel = status ? STATUS_TO_LABEL[status] ?? "OK" : "OK";
+
   return (
     <PageLayout testId="user-detail-page">
       <UserDetailHeader
         userId={safeUserId}
-        status="status-ok"
-        statusLabel="OK"
-        isThrottling={false}
-        currentLimit={100}
-        currentRemaining={42}
+        status={badgeVariant}
+        statusLabel={statusLabel}
+        isStreaming={isConnected}
+        isThrottling={paused}
+        currentLimit={currentLimit ?? 0}
+        currentRemaining={currentRemaining ?? 0}
         onResetWindow={handleResetWindow}
         onAdjustLimit={handleAdjustLimit}
         onAddExtraRequests={handleAddExtraRequests}
         onToggleThrottling={handleToggleThrottling}
       />
       <PageSection className="flex-1 min-h-0 pb-5">
-        <UserDetailContent />
+        <UserDetailContent userId={safeUserId} />
       </PageSection>
     </PageLayout>
   );

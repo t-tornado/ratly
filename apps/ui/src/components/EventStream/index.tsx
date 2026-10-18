@@ -59,4 +59,4 @@ function EventStream({
   );
 }
 
-export { EventStream };
+export { EventStream, type StreamEvent };

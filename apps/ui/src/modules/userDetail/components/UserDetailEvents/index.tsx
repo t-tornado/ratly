@@ -1,11 +1,18 @@
 import { EventStream } from "../../../../components/EventStream";
+import { useUserDetailEvents } from "../../hooks/useUserDetailEvents";
 
-function UserDetailEvents() {
+interface UserDetailEventsProps {
+  userId: string;
+}
+
+function UserDetailEvents({ userId }: UserDetailEventsProps) {
+  const events = useUserDetailEvents(userId);
+
   return (
     <div data-testid="user-detail-events">
-      <EventStream title="Event stream" events={[]} />
+      <EventStream title="Event stream" events={events} />
     </div>
   );
 }
 
-export { UserDetailEvents };
+export { UserDetailEvents, type UserDetailEventsProps };
