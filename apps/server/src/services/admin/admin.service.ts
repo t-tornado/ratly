@@ -8,6 +8,7 @@ import { RedisService } from "../../lib/infra/redis/redis.service.js";
 import { RateLimitService } from "../rate-limit/rate-limit.service.js";
 import { addExtraScript } from "../rate-limit/scripts/index.js";
 import { UserRow } from "../../lib/types/index.js";
+import { redisKeys } from "../../lib/redis-keys.js";
 
 @Injectable()
 export class AdminService {
@@ -18,7 +19,7 @@ export class AdminService {
 
   async resetWindow(userId: string): Promise<UserRow> {
     await this.assertUserExists(userId);
-    await this.redis.del(`rate:user:${userId}`);
+    await this.redis.del(redisKeys.userRate(userId));
     return (await this.rateLimitService.readRow(userId))!;
   }
 
@@ -27,13 +28,13 @@ export class AdminService {
       throw new BadRequestException("limit must be a whole number >= 1");
     }
     await this.assertUserExists(userId);
-    await this.redis.set(`limit:user:${userId}`, String(limit));
+    await this.redis.set(redisKeys.userLimit(userId), String(limit));
     return (await this.rateLimitService.readRow(userId))!;
   }
 
   async resetLimitToDefault(userId: string): Promise<UserRow> {
     await this.assertUserExists(userId);
-    await this.redis.del(`limit:user:${userId}`);
+    await this.redis.del(redisKeys.userLimit(userId));
     return (await this.rateLimitService.readRow(userId))!;
   }
 
@@ -46,7 +47,7 @@ export class AdminService {
     const result = (await this.redis.eval(
       addExtraScript,
       1,
-      `rate:user:${userId}`,
+      redisKeys.userRate(userId),
       String(amount),
     )) as number;
 
@@ -62,13 +63,13 @@ export class AdminService {
       throw new BadRequestException("seconds must be a whole number between 60 and 86400");
     }
     await this.assertUserExists(userId);
-    await this.redis.set(`paused:user:${userId}`, "1", "EX", seconds);
+    await this.redis.set(redisKeys.userPaused(userId), "1", "EX", seconds);
     return (await this.rateLimitService.readRow(userId))!;
   }
 
   async unlock(userId: string): Promise<UserRow> {
     await this.assertUserExists(userId);
-    await this.redis.del(`paused:user:${userId}`);
+    await this.redis.del(redisKeys.userPaused(userId));
     return (await this.rateLimitService.readRow(userId))!;
   }
 

@@ -3,6 +3,7 @@ import { RedisService } from "../../lib/infra/redis/redis.service.js";
 import { fixedWindowScript, userRowScript } from "./scripts/index.js";
 import { ConsumeResult, UserRow } from "../../lib/types/index.js";
 import { DEFAULT_LIMIT, WINDOW_SECONDS } from "../../lib/constants.js";
+import { redisKeys } from "../../lib/redis-keys.js";
 
 @Injectable()
 export class RateLimitService {
@@ -14,11 +15,11 @@ export class RateLimitService {
     const result = (await this.redis.eval(
       fixedWindowScript,
       5,
-      `rate:user:${userId}`,
-      `limit:user:${userId}`,
-      `paused:user:${userId}`,
-      "users:last_seen",
-      `stats:429:${today}`,
+      redisKeys.userRate(userId),
+      redisKeys.userLimit(userId),
+      redisKeys.userPaused(userId),
+      redisKeys.usersLastSeen,
+      redisKeys.stats429(today),
       userId,
       String(DEFAULT_LIMIT),
       String(WINDOW_SECONDS),
@@ -41,10 +42,10 @@ export class RateLimitService {
     const result = (await this.redis.eval(
       userRowScript,
       4,
-      `rate:user:${userId}`,
-      `limit:user:${userId}`,
-      `paused:user:${userId}`,
-      "users:last_seen",
+      redisKeys.userRate(userId),
+      redisKeys.userLimit(userId),
+      redisKeys.userPaused(userId),
+      redisKeys.usersLastSeen,
       userId,
       String(DEFAULT_LIMIT),
     )) as number[] | null;
@@ -73,12 +74,12 @@ export class RateLimitService {
   }
 
   async userExists(userId: string): Promise<boolean> {
-    const score = await this.redis.zscore("users:last_seen", userId);
+    const score = await this.redis.zscore(redisKeys.usersLastSeen, userId);
     return score !== null;
   }
 
   async readAllRows(): Promise<UserRow[]> {
-    const userIds = await this.redis.zrange("users:last_seen", 0, -1, "REV");
+    const userIds = await this.redis.zrange(redisKeys.usersLastSeen, 0, -1, "REV");
     const rows = await Promise.all(userIds.map((id) => this.readRow(id)));
     return rows.filter((row): row is UserRow => row !== null);
   }

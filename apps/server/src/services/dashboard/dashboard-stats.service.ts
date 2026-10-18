@@ -3,6 +3,7 @@ import { RedisService } from "../../lib/infra/redis/redis.service.js";
 import { dashboardStatsScript } from "../rate-limit/scripts/index.js";
 import { DashboardStats, TopUser } from "../../lib/types/index.js";
 import { DEFAULT_LIMIT, ACTIVE_WINDOW_MS, TOP_USERS_COUNT } from "../../lib/constants.js";
+import { redisKeys } from "../../lib/redis-keys.js";
 
 @Injectable()
 export class DashboardStatsService {
@@ -14,8 +15,8 @@ export class DashboardStatsService {
     const raw = (await this.redis.eval(
       dashboardStatsScript,
       2,
-      "users:last_seen",
-      `stats:429:${today}`,
+      redisKeys.usersLastSeen,
+      redisKeys.stats429(today),
       String(ACTIVE_WINDOW_MS),
       String(DEFAULT_LIMIT),
       String(TOP_USERS_COUNT),
