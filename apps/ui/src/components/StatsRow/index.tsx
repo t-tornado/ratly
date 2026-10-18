@@ -18,7 +18,7 @@ function StatsRow({ items, className, ...props }: StatsRowProps) {
     <section
       aria-label="Current stats"
       className={cn(
-        "grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3",
+        "grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3",
         className
       )}
       {...props}
