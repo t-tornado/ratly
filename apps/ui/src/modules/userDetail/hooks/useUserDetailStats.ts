@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { RATE_UPDATE_EVENT, RATE_LIMIT_EXCEEDED_EVENT } from "@ratly/core";
 import type { RateUpdateEvent, RateLimitExceededEvent, UserRow } from "@ratly/core";
 
 import { useSocket } from "../../../lib/hooks";
+import { fetchUser, queryKeys } from "../../../lib/api";
 import type { StatItem } from "../../../components/StatsRow";
 
 type UserStatus = "ok" | "warning" | "exceeded" | null;
@@ -83,16 +85,26 @@ const STATIC_STAT_ITEMS: StatItem[] = [
 
 function useUserDetailStats(userId: string): UserDetailStatsResult {
   const { socket } = useSocket();
-  const [latestRow, setLatestRow] = useState<UserRow | null>(null);
+  const queryClient = useQueryClient();
   const [, setTick] = useState(0);
+
+  const { data: latestRow } = useQuery({
+    queryKey: queryKeys.user(userId),
+    queryFn: () => fetchUser(userId),
+    retry: false,
+  });
+
+  const updateRow = useCallback((row: UserRow) => {
+    queryClient.setQueryData<UserRow>(queryKeys.user(userId), row);
+  }, [queryClient, userId]);
 
   useEffect(() => {
     const handleRateUpdate = ({ row }: RateUpdateEvent) => {
-      if (row.userId === userId) setLatestRow(row);
+      if (row.userId === userId) updateRow(row);
     };
 
     const handleLimitExceeded = ({ row }: RateLimitExceededEvent) => {
-      if (row.userId === userId) setLatestRow(row);
+      if (row.userId === userId) updateRow(row);
     };
 
     socket.on(RATE_UPDATE_EVENT, handleRateUpdate);
@@ -102,7 +114,7 @@ function useUserDetailStats(userId: string): UserDetailStatsResult {
       socket.off(RATE_UPDATE_EVENT, handleRateUpdate);
       socket.off(RATE_LIMIT_EXCEEDED_EVENT, handleLimitExceeded);
     };
-  }, [socket, userId]);
+  }, [socket, userId, updateRow]);
 
   useEffect(() => {
     if (!latestRow?.resetAt) return;

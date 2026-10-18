@@ -17,6 +17,12 @@ export class AdminService {
     private readonly rateLimitService: RateLimitService,
   ) {}
 
+  async getUser(userId: string): Promise<UserRow> {
+    const row = await this.rateLimitService.readRow(userId);
+    if (!row) throw new NotFoundException(`User ${userId} not found`);
+    return row;
+  }
+
   async resetWindow(userId: string): Promise<UserRow> {
     await this.assertUserExists(userId);
     await this.redis.eval(
