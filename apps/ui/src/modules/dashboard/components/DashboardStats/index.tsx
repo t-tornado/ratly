@@ -12,29 +12,26 @@ function buildStatItems(stats: DashboardStatsData): StatItem[] {
     {
       label: "Total users",
       value: stats.totalUsers.toLocaleString(),
-      sub: (
-        <span className="text-success-text">
-          {stats.activeUsers} active in last 15 min
-        </span>
-      ),
+      sub: `${stats.activeUsers} active in last 15 min`,
+    },
+    {
+      label: "Near limit",
+      value: `${stats.nearLimitPercent ?? 0}%`,
+      sub: "users at 90%+ usage",
+      accent: "warning",
     },
     {
       label: "Rejected today",
       value: stats.rejectedToday.toLocaleString(),
       accent: "error",
     },
-    {
-      label: "Active users",
-      value: stats.activeUsers.toLocaleString(),
-      sub: `of ${stats.totalUsers} total`,
-    },
   ];
 }
 
 const LOADING_ITEMS: StatItem[] = [
   { label: "Total users", value: "—" },
+  { label: "Near limit", value: "0%", accent: "warning" },
   { label: "Rejected today", value: "—", accent: "error" },
-  { label: "Active users", value: "—" },
 ];
 
 function DashboardStats({ stats, isLoading }: DashboardStatsProps) {

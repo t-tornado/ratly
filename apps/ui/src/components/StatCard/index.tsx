@@ -3,7 +3,7 @@ import { cn } from "../../lib/utils";
 type StatCardAccent = "default" | "success" | "warning" | "error";
 
 const ACCENT_VALUE_CLASSES: Record<StatCardAccent, string> = {
-  default: "",
+  default: "text-text-primary",
   success: "text-success-text",
   warning: "text-warning-text",
   error: "text-error-text",

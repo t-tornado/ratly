@@ -19,18 +19,17 @@ export const Default: Story = {
 
 export const Warning: Story = {
   args: {
-    label: "Near limit (\u2265 90%)",
+    label: "Near limit",
     value: "4.7%",
-    sub: "61 users \u00b7 9 of them exceeded",
+    sub: "users at 90%+ usage",
     accent: "warning",
   },
 };
 
 export const Error: Story = {
   args: {
-    label: "429s today",
+    label: "Rejected today",
     value: "14",
-    sub: "last at 13:02:11",
     accent: "error",
   },
 };

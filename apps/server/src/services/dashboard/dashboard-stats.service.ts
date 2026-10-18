@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { RedisService } from "../../lib/infra/redis/redis.service.js";
 import { dashboardStatsScript } from "../rate-limit/scripts/index.js";
 import { DashboardStats, TopUser } from "../../lib/types/index.js";
-import { DEFAULT_LIMIT, ACTIVE_WINDOW_MS, TOP_USERS_COUNT } from "../../lib/constants.js";
+import { DEFAULT_LIMIT, ACTIVE_WINDOW_MS, TOP_USERS_COUNT, NEAR_LIMIT_THRESHOLD } from "../../lib/constants.js";
 import { redisKeys } from "../../lib/redis-keys.js";
 
 @Injectable()
@@ -20,15 +20,17 @@ export class DashboardStatsService {
       String(ACTIVE_WINDOW_MS),
       String(DEFAULT_LIMIT),
       String(TOP_USERS_COUNT),
+      String(NEAR_LIMIT_THRESHOLD),
     )) as (number | string)[];
 
     const totalUsers = Number(raw[0]);
     const activeUsers = Number(raw[1]);
     const rejectedToday = Number(raw[2]);
     const at = Number(raw[3]);
+    const nearLimitPercent = Number(raw[4]);
 
     const topUsers: TopUser[] = [];
-    for (let i = 4; i < raw.length; i += 3) {
+    for (let i = 5; i < raw.length; i += 3) {
       const used = Number(raw[i + 1]);
       const allowedTotal = Number(raw[i + 2]);
       topUsers.push({
@@ -39,6 +41,6 @@ export class DashboardStatsService {
       });
     }
 
-    return { totalUsers, activeUsers, rejectedToday, topUsers, at };
+    return { totalUsers, activeUsers, rejectedToday, nearLimitPercent, topUsers, at };
   }
 }

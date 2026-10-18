@@ -79,6 +79,7 @@ export const mockStats: DashboardStats = {
   totalUsers: 6,
   activeUsers: 4,
   rejectedToday: 3,
+  nearLimitPercent: 33.3,
   topUsers: mockTopUsers,
   at: NOW,
 };
