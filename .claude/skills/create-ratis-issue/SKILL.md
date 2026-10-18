@@ -33,7 +33,7 @@ From the user's description, infer:
 | `title` | Imperative phrase, ≤70 chars, describes the change precisely |
 | `what` | What is changing and where — specific component/file/behavior |
 | `why` | Why this change is needed — omit if obvious from `what` |
-| `scope` | Search the codebase to locate exact file paths (1–3 files). If found confidently, use them. If ambiguous, flag for Step 2. |
+| `scope` | Search the codebase to locate exact file paths (1–10 files). If found confidently, use them. If ambiguous, flag for Step 2. |
 | `acceptance` | Derive from what "done" looks like — concrete, runnable checks (commands or observable outputs). If cannot be derived, flag for Step 2. |
 | `out_of_scope` | Infer what adjacent things this change should NOT touch. If none obvious, flag for Step 2. |
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { AdminService } from "../../services/admin/admin.service.js";
 import { EventsGateway } from "../../events/events.gateway.js";
 import { SkipRateLimit } from "../../services/rate-limit/skip-rate-limit.decorator.js";
@@ -14,6 +14,11 @@ export class AdminController {
   @Get(":id")
   async getUser(@Param("id") userId: string) {
     return this.adminService.getUser(userId);
+  }
+
+  @Get(":id/activity")
+  async getActivity(@Param("id") userId: string, @Query("range") range: string | undefined) {
+    return this.adminService.getActivity(userId, range);
   }
 
   @Post(":id/reset")

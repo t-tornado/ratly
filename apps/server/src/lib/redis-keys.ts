@@ -5,4 +5,5 @@ export const redisKeys = {
   userLastReset:  (userId: string) => `last_reset:user:${userId}`,
   usersLastSeen:  "users:last_seen",
   stats429:       (date: string)   => `stats:429:${date}`,
+  activityBucket: (userId: string, date: string) => `activity:user:${userId}:${date}`,
 };

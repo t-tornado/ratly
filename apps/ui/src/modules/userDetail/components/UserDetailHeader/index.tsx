@@ -60,7 +60,7 @@ function UserDetailHeader({
             data-testid="admin-actions"
             role="group"
             aria-label="Admin actions"
-            className="flex flex-wrap gap-2"
+            className="hidden md:flex flex-wrap gap-2"
           >
             <Button
               variant="ghost"

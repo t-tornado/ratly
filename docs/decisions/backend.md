@@ -35,3 +35,25 @@ Each user gets a Redis hash (`rate:user:<id>`) with a TTL equal to the window le
 The admin actions (reset, extra requests, pause) were the deciding factor. They all operate on the same hash. Implementing "add 20 extra requests" or "reset the window" against a sorted set of timestamps is significantly more complex and error-prone.
 
 **Known tradeoff:** a user can burst up to 2× the limit across a window boundary (max requests at end of window N, max again at start of window N+1). This is acceptable for this use case. The window length is short enough that the burst is bounded, and pausing or adjusting the limit are the correct tools if a specific user abuses it.
+
+---
+
+## 3. Activity tracking uses pre-aggregated per-minute counters
+
+Activity tracking uses per-minute counters in Redis hashes, not individual request timestamps. One hash per user per day (`activity:user:<id>:YYYY-MM-DD`) with fields `HH:MM:allowed` and `HH:MM:rejected`, incremented atomically inside `fixed-window.lua`.
+
+**Why pre-aggregated counters over individual timestamps:**
+
+| Criterion | Pre-aggregated counters | Individual timestamps |
+| --- | --- | --- |
+| Storage | Fixed: max 2880 fields/day (1440 min × 2) | Unbounded: one entry per request |
+| Write cost | HINCRBY (O(1)) | ZADD or LPUSH per request |
+| Read cost | HGETALL one hash | Range query + aggregation |
+| Lua complexity | One HINCRBY per exit point | Timestamp serialization per request |
+
+**Key design choices:**
+
+- **TTL: 48 hours.** Covers "past day" queries that span midnight (need today's hash + yesterday's hash). No data needed beyond that.
+- **Minute granularity.** Matches the finest useful resolution for a stacked bar chart. Sub-minute is noise for this use case.
+- **30-minute aggregation for "day" range.** The server aggregates minute-level data into 30-minute buckets (48 bars) to match the density of the "hour" view (60 bars). Aggregation happens at read time, not write time, so the raw minute data is always available.
+- **Atomic increment inside `fixed-window.lua`.** The activity counter is updated in the same Lua script that decides allow/reject. No extra round-trip, no race between the decision and the counter.
