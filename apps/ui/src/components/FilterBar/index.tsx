@@ -43,11 +43,10 @@ function FilterBar({
         className="flex-1 min-w-[200px]"
       />
 
-      <div className="w-px h-5 bg-border-default shrink-0" />
+      <div className="hidden sm:block w-px h-5 bg-border-default shrink-0" />
 
-      <SlidersHorizontal size={13} className="text-text-tertiary opacity-40 shrink-0" />
-
-      <div role="group" aria-label="Status filter" className="flex gap-0.5 shrink-0">
+      <div role="group" aria-label="Status filter" className="flex items-center gap-1.5 shrink-0">
+        <SlidersHorizontal size={13} className="text-text-tertiary opacity-40 shrink-0" />
         {filters.map((f) => (
           <Button
             key={f.label}
@@ -70,7 +69,7 @@ function FilterBar({
 
       {selectOptions && (
         <>
-          <div className="w-px h-5 bg-border-default shrink-0" />
+          <div className="hidden sm:block w-px h-5 bg-border-default shrink-0" />
           <div className="flex items-center gap-2 shrink-0">
             {selectLabel && (
               <span className="text-text-secondary text-sm whitespace-nowrap">

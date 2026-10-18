@@ -22,6 +22,7 @@ interface UserDetailHeaderProps {
   isThrottling: boolean;
   currentLimit: number;
   currentRemaining: number;
+  hasActiveWindow: boolean;
   onResetWindow?: () => Promise<unknown>;
   onAdjustLimit?: (newLimit: number) => Promise<unknown>;
   onAddExtraRequests?: (extraRequests: number) => Promise<unknown>;
@@ -47,6 +48,7 @@ function UserDetailHeader({
   isThrottling,
   currentLimit,
   currentRemaining,
+  hasActiveWindow,
   onResetWindow,
   onAdjustLimit,
   onAddExtraRequests,
@@ -167,6 +169,7 @@ function UserDetailHeader({
         userId={userId}
         currentRemaining={currentRemaining}
         limit={currentLimit}
+        hasActiveWindow={hasActiveWindow}
         isLoading={isAddExtraPending}
       />
 

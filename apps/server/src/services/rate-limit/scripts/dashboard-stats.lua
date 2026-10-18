@@ -44,8 +44,8 @@ for i = 1, #userIds do
   end
 end
 
--- Sort descending by ratio, keep top N.
-table.sort(top, function(a, b) return a[1] > b[1] end)
+-- Sort descending by count, keep top N.
+table.sort(top, function(a, b) return a[3] > b[3] end)
 
 -- Flatten into a single array: [ uid, count, allowed, uid, count, allowed, ... ]
 local flat = {}

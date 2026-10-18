@@ -15,6 +15,7 @@ export interface AddExtraRequestsModalProps {
   userId: string;
   currentRemaining: number;
   limit: number;
+  hasActiveWindow: boolean;
   isLoading?: boolean;
 }
 
@@ -25,6 +26,7 @@ export function AddExtraRequestsModal({
   userId,
   currentRemaining,
   limit,
+  hasActiveWindow,
   isLoading = false,
 }: AddExtraRequestsModalProps) {
   const [extraRequests, setExtraRequests] = useState(DEFAULT_EXTRA_REQUESTS);
@@ -70,15 +72,23 @@ export function AddExtraRequestsModal({
           onConfirm={handleConfirm}
           confirmLabel={`Add ${extraRequests} requests`}
           confirmVariant="accent"
+          isConfirmDisabled={!hasActiveWindow}
           isConfirmLoading={isLoading}
         />
       }
     >
       <div className="flex flex-col gap-3.5">
-        <p className="text-text-tertiary leading-normal">
-          A one-off top-up for this window only. It disappears when the window
-          resets; the limit stays {limit}.
-        </p>
+        {hasActiveWindow ? (
+          <p className="text-text-tertiary leading-normal">
+            A one-off top-up for this window only. It disappears when the window
+            resets; the limit stays {limit}.
+          </p>
+        ) : (
+          <p className="text-warning-text leading-normal">
+            No active window. Extra requests can only be added when the user has
+            an active rate-limit window — it starts on their next request.
+          </p>
+        )}
 
         <div className="flex items-center gap-2.5 flex-wrap">
           <Button
@@ -95,7 +105,7 @@ export function AddExtraRequestsModal({
             onChange={handleInputChange}
             min={MIN_EXTRA_REQUESTS}
             aria-label="Extra requests"
-            className="h-11 w-[100px] text-center bg-bg-base border border-border-strong rounded-lg font-mono text-2xl text-text-primary"
+            className="h-11 w-[100px] text-center bg-bg-base border border-border-strong rounded-lg font-mono text-2xl text-text-primary outline-none"
           />
           <Button
             variant="ghost"

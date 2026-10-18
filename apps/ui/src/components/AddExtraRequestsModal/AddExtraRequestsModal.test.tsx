@@ -13,6 +13,7 @@ function renderModal(
     userId: "usr_abc123",
     currentRemaining: 50,
     limit: 100,
+    hasActiveWindow: true,
   };
   return render(<AddExtraRequestsModal {...defaultProps} {...props} />);
 }
@@ -35,6 +36,15 @@ describe("AddExtraRequestsModal", () => {
     expect(
       screen.getByText(/the limit stays 200/)
     ).toBeInTheDocument();
+  });
+
+  it("shows no-window warning and disables confirm when no active window", () => {
+    const handleConfirm = vi.fn();
+    renderModal({ hasActiveWindow: false, onConfirm: handleConfirm });
+    expect(screen.getByText(/No active window/)).toBeInTheDocument();
+    const confirmButton = screen.getByText("Add 10 requests");
+    fireEvent.click(confirmButton);
+    expect(handleConfirm).not.toHaveBeenCalled();
   });
 
   it("shows stepper with default value", () => {

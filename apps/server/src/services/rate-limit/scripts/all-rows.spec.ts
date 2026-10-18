@@ -17,8 +17,9 @@ function user(
   pauseTtl: number,
   lastSeen: number,
   lastResetAt: number = 0,
+  rejectedToday: number = 0,
 ): (string | number)[] {
-  return [userId, used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastSeen, lastResetAt];
+  return [userId, used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastSeen, lastResetAt, rejectedToday];
 }
 
 describe("unpackAllRows", () => {

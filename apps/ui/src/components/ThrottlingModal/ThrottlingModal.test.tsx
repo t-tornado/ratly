@@ -95,12 +95,12 @@ describe("ThrottlingModal — Pause variant", () => {
 });
 
 describe("ThrottlingModal — Start variant", () => {
-  it("renders resume title when isThrottling=false", () => {
+  it("renders start title when isThrottling=false", () => {
     render(
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={false} />
     );
     expect(screen.getByTestId("modal-title")).toHaveTextContent(
-      "Resume throttling for usr_abc123"
+      "Start throttling for usr_abc123"
     );
   });
 
@@ -140,14 +140,14 @@ describe("ThrottlingModal — Start variant", () => {
         onConfirm={handleConfirm}
       />
     );
-    fireEvent.click(screen.getByText("Resume throttling"));
+    fireEvent.click(screen.getByText("Start throttling"));
     expect(handleConfirm).toHaveBeenCalledWith();
   });
 
-  it('confirm button says "Resume throttling"', () => {
+  it('confirm button says "Start throttling"', () => {
     render(
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={false} />
     );
-    expect(screen.getByText("Resume throttling")).toBeInTheDocument();
+    expect(screen.getByText("Start throttling")).toBeInTheDocument();
   });
 });

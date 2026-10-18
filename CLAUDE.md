@@ -30,6 +30,7 @@
 | Classifying a GitHub issue | `issue-intake` | Fetch issue (must have ratis label), classify doable/not, write task spec |
 | Implementing a classified issue | `issue-implement` | Execute task spec steps, verify each, commit |
 | Running doability gate on a description | `ratis-classify` | Standalone: takes title + description, returns doable/not-doable + failed criteria |
+| Reviewing local changes against main | `code-review` | Diff against main, check logic + rule violations, write structured report |
 
 ## Skill rules
 

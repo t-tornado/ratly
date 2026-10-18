@@ -1,5 +1,4 @@
-import type { RefreshOption } from "../../../components/ActivityChart";
-import type { ActivityRange } from "../types/activity";
+import type { RefreshOption, ActivityRange } from "../types/activity";
 
 const REFRESH_INTERVAL_MS: Record<RefreshOption, number | false> = {
   off: false,

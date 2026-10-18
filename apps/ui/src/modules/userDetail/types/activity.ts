@@ -1,4 +1,5 @@
 type ActivityRange = "hour" | "day";
+type RefreshOption = "off" | "30s" | "1m" | "5m";
 
 interface ActivityBucket {
   timestamp: string;
@@ -12,4 +13,4 @@ interface ActivityApiResponse {
   buckets: Array<{ time: string; allowed: number; rejected: number }>;
 }
 
-export type { ActivityRange, ActivityBucket, ActivityApiResponse };
+export type { ActivityRange, ActivityBucket, ActivityApiResponse, RefreshOption };

@@ -14,7 +14,7 @@ async function hit(userId) {
   const res = await fetch(`${BASE_URL}/test`, {
     headers: { "x-user-id": userId },
   });
-  const remaining = res.headers.get("x-ratelimit-remaining") ?? "?";
+  const remaining = res.headers.get("x-count") ?? "?";
   console.log(`[steady] ${userId} → ${res.status}  remaining: ${remaining}`);
 }
 

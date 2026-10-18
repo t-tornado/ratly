@@ -1,8 +1,10 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { Users } from "lucide-react";
 import { cn } from "../../../../lib/utils";
 import { useMediaQuery } from "../../../../lib/hooks/useMediaQuery";
 import { EmptyState } from "../../../../components/EmptyState";
+import { DataTableMobile } from "./DataTableMobile";
 
 interface DataTableProps extends React.ComponentProps<"div"> {
   userIds: string[];
@@ -29,35 +31,15 @@ function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle,
 
   if (isMobile) {
     return (
-      <div
-        className={cn(
-          "rounded-xl border border-border-default bg-bg-surface-raised flex flex-col overflow-hidden min-h-[400px]",
-          className
-        )}
+      <DataTableMobile
+        userIds={userIds}
+        renderRow={renderRow}
+        footer={footer}
+        isLoading={isLoading}
+        mobileTitle={mobileTitle}
+        className={className}
         {...props}
-      >
-        {mobileTitle && (
-          <div className="px-4 py-3 text-sm text-text-muted uppercase tracking-wide border-b border-border-default font-medium">
-            {mobileTitle}
-          </div>
-        )}
-        <div className="flex-1 min-h-0 overflow-auto" tabIndex={0}>
-          {isLoading ? (
-            <div className="py-16 text-center text-sm text-text-muted">Loading…</div>
-          ) : isEmpty ? (
-            <EmptyState className="border-0 rounded-none bg-transparent" />
-          ) : (
-            userIds.map((userId) => (
-              <div key={userId}>{renderRow(userId)}</div>
-            ))
-          )}
-        </div>
-        {footer && (
-          <div className="flex justify-between items-center px-4 py-3 text-sm text-text-muted border-t border-border-default">
-            {footer}
-          </div>
-        )}
-      </div>
+      />
     );
   }
 
@@ -68,7 +50,7 @@ function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle,
   return (
     <div
       className={cn(
-        "rounded-xl border border-border-default bg-bg-surface-raised flex flex-col overflow-hidden",
+        "rounded-xl border border-border-default bg-bg-surface-raised flex flex-col overflow-hidden ",
         className
       )}
       {...props}
@@ -90,7 +72,7 @@ function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle,
               <th className="py-3 px-4 font-medium">Reset time</th>
               <th className="py-3 px-4 font-medium">Status</th>
               <th className="py-3 px-4 font-medium">Last request</th>
-              <th className="py-3 px-4 font-medium">
+              <th className="py-3 px-2 font-medium sticky right-0 z-20 bg-bg-surface">
                 <span className="sr-only">Actions</span>
               </th>
             </tr>
@@ -105,7 +87,7 @@ function DataTable({ userIds, renderRow, footer, isLoading = false, mobileTitle,
             ) : isEmpty ? (
               <tr>
                 <td colSpan={6}>
-                  <EmptyState className="border-0 rounded-none bg-transparent" />
+                  <EmptyState icon={Users} className="border-0 rounded-none bg-transparent" />
                 </td>
               </tr>
             ) : (

@@ -25,6 +25,7 @@ export const Default: Story = {
     userId: "usr_3e88d1",
     currentRemaining: 42,
     limit: 100,
+    hasActiveWindow: true,
   },
 };
 
@@ -36,6 +37,7 @@ export const ConfirmLoading: Story = {
     userId: "usr_3e88d1",
     currentRemaining: 42,
     limit: 100,
+    hasActiveWindow: true,
     isLoading: true,
   },
 };

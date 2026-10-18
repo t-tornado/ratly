@@ -68,7 +68,7 @@ export class RateLimitInterceptor implements NestInterceptor {
       );
     }
 
-    response.header("x-ratelimit-remaining", String(consumeResult.remaining));
+    response.header("x-count", String(consumeResult.remaining));
 
     const row = await this.rateLimitService.readRow(userId);
     if (row) {

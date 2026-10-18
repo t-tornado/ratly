@@ -1,3 +1,7 @@
+---
+globs: apps/ui/**
+---
+
 # UI App Structure Rules
 
 Applies to: `apps/ui/`

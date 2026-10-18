@@ -1,6 +1,6 @@
 import { UserRow } from "../../../lib/types/index.js";
 
-const USER_FIELD_COUNT = 9;
+const USER_FIELD_COUNT = 10;
 
 export function unpackAllRows(flat: (string | number)[]): UserRow[] {
   if (!flat || flat.length < 1) return [];
@@ -18,6 +18,7 @@ export function unpackAllRows(flat: (string | number)[]): UserRow[] {
     const pauseTtl    = flat[i + 6] as number;
     const lastSeen          = flat[i + 7] as number;
     const lastAdminResetAt  = flat[i + 8] as number;
+    const rejectedToday     = flat[i + 9] as number;
 
     const allowedTotal = limit + bonus;
     const ratio = allowedTotal > 0 ? used / allowedTotal : 0;
@@ -36,6 +37,7 @@ export function unpackAllRows(flat: (string | number)[]): UserRow[] {
       status: ratio >= 1 ? "exceeded" : ratio >= 0.9 ? "warning" : "ok",
       lastRequestAt: lastSeen,
       lastAdminResetAt: lastAdminResetAt > 0 ? lastAdminResetAt : null,
+      rejectedToday,
       at: now,
     });
   }

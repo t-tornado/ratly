@@ -12,6 +12,7 @@ export interface UserRow {
   status: "ok" | "warning" | "exceeded";
   lastRequestAt: number;
   lastAdminResetAt: number | null;
+  rejectedToday: number;
   at: number;
 }
 
@@ -19,5 +20,4 @@ export interface TopUser {
   userId: string;
   used: number;
   allowedTotal: number;
-  ratio: number;
 }

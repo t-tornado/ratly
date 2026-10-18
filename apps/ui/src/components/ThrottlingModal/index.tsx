@@ -50,7 +50,7 @@ function ThrottlingModal({
 
   const title = (
     <>
-      {isThrottling ? "Pause" : "Resume"} throttling for{" "}
+      {isThrottling ? "Pause" : "Start"} throttling for{" "}
       <span className="font-mono">{userId}</span>
     </>
   );
@@ -67,7 +67,7 @@ function ThrottlingModal({
     <ModalFooter
       onCancel={onClose}
       onConfirm={handleConfirm}
-      confirmLabel={isThrottling ? "Pause throttling" : "Resume throttling"}
+      confirmLabel={isThrottling ? "Pause throttling" : "Start throttling"}
       confirmVariant={isThrottling ? "primary" : "accent"}
       isConfirmLoading={isLoading}
     />

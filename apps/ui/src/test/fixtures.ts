@@ -18,6 +18,7 @@ export const mockUserRow: UserRow = {
   status: "ok",
   lastRequestAt: NOW - 5_000,
   lastAdminResetAt: null,
+  rejectedToday: 0,
   at: NOW,
 };
 
@@ -70,9 +71,9 @@ export const mockRows: UserRow[] = [
 ];
 
 export const mockTopUsers: TopUser[] = [
-  { userId: "usr_exceeded", used: 100, allowedTotal: 100, ratio: 1.0 },
-  { userId: "usr_warning",  used: 92,  allowedTotal: 100, ratio: 0.92 },
-  { userId: "usr_ok",       used: 42,  allowedTotal: 100, ratio: 0.42 },
+  { userId: "usr_exceeded", used: 100, allowedTotal: 100 },
+  { userId: "usr_warning",  used: 92,  allowedTotal: 100 },
+  { userId: "usr_ok",       used: 42,  allowedTotal: 100 },
 ];
 
 export const mockStats: DashboardStats = {

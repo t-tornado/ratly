@@ -18,6 +18,7 @@ export const Default: Story = {
     isThrottling: false,
     currentLimit: 100,
     currentRemaining: 42,
+    hasActiveWindow: true,
   },
 };
 
@@ -30,6 +31,7 @@ export const Healthy: Story = {
     isThrottling: false,
     currentLimit: 500,
     currentRemaining: 480,
+    hasActiveWindow: true,
   },
 };
 
@@ -42,5 +44,6 @@ export const Exceeded: Story = {
     isThrottling: true,
     currentLimit: 100,
     currentRemaining: 0,
+    hasActiveWindow: false,
   },
 };

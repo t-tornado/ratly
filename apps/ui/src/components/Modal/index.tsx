@@ -8,8 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
 } from "../Dialog";
-import { cn } from "../../lib/utils";
-import { Button } from "../Button";
 
 interface ModalProps {
   isOpen: boolean;
@@ -35,65 +33,6 @@ function Modal({ isOpen, onClose, title, children, footer }: ModalProps) {
   );
 }
 
-interface ModalFooterProps {
-  onCancel: () => void;
-  cancelLabel?: string;
-  onConfirm: () => void;
-  confirmLabel: string;
-  confirmVariant?: "primary" | "accent" | "destructive" | "ghost" | "destructive-ghost" | "warning-ghost";
-  isConfirmDisabled?: boolean;
-  isConfirmLoading?: boolean;
-}
-
-function ModalFooter({
-  onCancel,
-  cancelLabel = "Cancel",
-  onConfirm,
-  confirmLabel,
-  confirmVariant = "primary",
-  isConfirmDisabled = false,
-  isConfirmLoading = false,
-}: ModalFooterProps) {
-  return (
-    <>
-      <Button variant="ghost" onClick={onCancel}>
-        {cancelLabel}
-      </Button>
-      <Button
-        variant={confirmVariant}
-        onClick={onConfirm}
-        disabled={isConfirmDisabled}
-        isLoading={isConfirmLoading}
-      >
-        {confirmLabel}
-      </Button>
-    </>
-  );
-}
-
-interface ModalPreviewBoxProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-function ModalPreviewBox({ children, className }: ModalPreviewBoxProps) {
-  return (
-    <div
-      className={cn(
-        "rounded-lg border border-border-strong bg-bg-base px-3 py-2.5 text-base-sm text-text-secondary",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-}
-
-export {
-  Modal,
-  ModalFooter,
-  ModalPreviewBox,
-  type ModalProps,
-  type ModalFooterProps,
-  type ModalPreviewBoxProps,
-};
+export { Modal, type ModalProps };
+export { ModalFooter, type ModalFooterProps } from "./ModalFooter";
+export { ModalPreviewBox, type ModalPreviewBoxProps } from "./ModalPreviewBox";

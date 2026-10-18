@@ -25,7 +25,7 @@ function StatCard({ label, value, sub, accent = "default", className, ...props }
       )}
       {...props}
     >
-      <div className="text-sm text-text-secondary mb-1">
+      <div className="text-base font-semibold text-text-secondary mb-1">
         {label}
       </div>
       <div

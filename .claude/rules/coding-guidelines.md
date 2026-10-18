@@ -35,6 +35,16 @@ Every rule in this file is enforced strictly. No exceptions. No shortcuts. If a 
 - Use `interface` for object shapes, `type` for unions and aliases.
 - No `any` — use `unknown` if the type is genuinely unknown, then narrow it.
 
+## Code Scoping
+
+Code lives at the narrowest scope that needs it:
+
+1. **Module-scoped** — used within a single module → stays in that module's directory (`modules/<module>/types/`, `modules/<module>/utils/`, etc.)
+2. **App-shared** — used by multiple modules within the same app → goes in the app's shared directories (`lib/types/`, `lib/utils/`, `lib/hooks/`, `components/`). Follow existing conventions in those directories.
+3. **Cross-app** — used by both server and UI → goes in `packages/core`. Must have zero runtime dependencies.
+
+Always place code at the narrowest applicable scope. Do not put module-scoped code in shared directories. Do not put app-scoped code in core.
+
 ## Error Handling
 
 - Never silently swallow errors. Log or rethrow.
