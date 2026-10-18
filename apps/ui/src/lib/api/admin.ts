@@ -41,5 +41,10 @@ async function unlockUser(userId: string): Promise<UserRow> {
   return data;
 }
 
-export { fetchDashboard, resetWindow, adjustLimit, resetLimitToDefault, addExtra, pauseUser, unlockUser };
+async function fetchUser(userId: string): Promise<UserRow> {
+  const { data } = await apiClient.get<UserRow>(`/admin/users/${encodeURIComponent(userId)}`);
+  return data;
+}
+
+export { fetchDashboard, fetchUser, resetWindow, adjustLimit, resetLimitToDefault, addExtra, pauseUser, unlockUser };
 export type { DashboardResponse };
