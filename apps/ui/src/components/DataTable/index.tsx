@@ -98,7 +98,7 @@ function DataTable({ rows, footer, isLoading = false, mobileTitle, renderAction,
       )}
       {...props}
     >
-      <div ref={containerRef} className="flex-1 min-h-0 overflow-auto">
+      <div ref={containerRef} className="flex-1 min-h-0 overflow-auto" tabIndex={0}>
         <table className="w-full border-collapse min-w-[860px] table-fixed">
           <colgroup>
             <col className="w-[340px]" />
