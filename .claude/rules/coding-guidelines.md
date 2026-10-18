@@ -14,6 +14,7 @@ Every rule in this file is enforced strictly. No exceptions. No shortcuts. If a 
 ## Function Naming
 
 - Functions describe the action — `collectSourceFiles` not `getFiles`, `validateTokenOutput` not `check`.
+- Functions must name their subject — a reader must know what the function operates on without reading its body. `buildUserStatusFilterOptions` not `buildFilters`. `applyUserTableFilters` not `applyFilters`. `filterUserRowsByStatus` not `filterRows`.
 - Predicate functions start with `is` or `has` — `isSourceFile` not `checkFile`.
 - Event handlers use `on` or `handle` — `onSubmit`, `handleClick`.
 

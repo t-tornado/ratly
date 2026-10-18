@@ -15,6 +15,7 @@ interface FilterBarProps extends React.ComponentProps<"div"> {
   filters: FilterOption[];
   onFilterChange?: (label: string) => void;
   onSearchChange?: (value: string) => void;
+  onSelectChange?: (value: string) => void;
   selectOptions?: { label: string; value: string }[];
   selectLabel?: string;
 }
@@ -24,6 +25,7 @@ function FilterBar({
   filters,
   onFilterChange,
   onSearchChange,
+  onSelectChange,
   selectOptions,
   selectLabel,
   className,
@@ -65,7 +67,10 @@ function FilterBar({
               {selectLabel}
             </span>
           )}
-          <Select aria-label={selectLabel ?? "Filter"}>
+          <Select
+            aria-label={selectLabel ?? "Filter"}
+            onChange={(e) => onSelectChange?.(e.target.value)}
+          >
             {selectOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}

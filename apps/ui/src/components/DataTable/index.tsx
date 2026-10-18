@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "../../lib/utils";
 import { DataTableRow } from "./DataTableRow";
 import { EmptyState } from "../EmptyState";
@@ -25,10 +27,24 @@ interface DataTableProps extends React.ComponentProps<"div"> {
   onRowClick?: (userId: string) => void;
 }
 
+const ROW_ESTIMATED_HEIGHT = 48;
+
 function DataTable({ rows, footer, onAction, onRowClick, className, ...props }: DataTableProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const virtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => containerRef.current,
+    estimateSize: () => ROW_ESTIMATED_HEIGHT,
+  });
+
   if (rows.length === 0) {
     return <EmptyState />;
   }
+
+  const virtualItems = virtualizer.getVirtualItems();
+  const topSpacerHeight = virtualItems[0]?.start ?? 0;
+  const bottomSpacerHeight = virtualizer.getTotalSize() - (virtualItems.at(-1)?.end ?? 0);
 
   return (
     <div
@@ -38,7 +54,7 @@ function DataTable({ rows, footer, onAction, onRowClick, className, ...props }: 
       )}
       {...props}
     >
-      <div className="flex-1 min-h-0 overflow-auto">
+      <div ref={containerRef} className="flex-1 min-h-0 overflow-auto">
         <table className="w-full border-collapse min-w-[860px]">
           <thead className="sticky top-0 z-10 bg-bg-surface-raised">
             <tr className="text-left text-sm text-text-muted uppercase tracking-wide border-b border-border-default">
@@ -53,15 +69,20 @@ function DataTable({ rows, footer, onAction, onRowClick, className, ...props }: 
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
-              <DataTableRow
-                key={row.id}
-                {...row}
-                isClickable={!!onRowClick}
-                onClick={() => onRowClick?.(row.id)}
-                onAction={() => onAction?.(row.id)}
-              />
-            ))}
+            <tr style={{ height: topSpacerHeight }} />
+            {virtualItems.map((virtualRow) => {
+              const row = rows[virtualRow.index];
+              return (
+                <DataTableRow
+                  key={row.id}
+                  {...row}
+                  isClickable={!!onRowClick}
+                  onClick={() => onRowClick?.(row.id)}
+                  onAction={() => onAction?.(row.id)}
+                />
+              );
+            })}
+            <tr style={{ height: bottomSpacerHeight }} />
           </tbody>
         </table>
       </div>
