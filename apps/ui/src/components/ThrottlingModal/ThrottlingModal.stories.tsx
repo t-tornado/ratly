@@ -37,3 +37,14 @@ export const StartThrottling: Story = {
     currentRemaining: 42,
   },
 };
+
+export const ConfirmLoading: Story = {
+  args: {
+    isOpen: true,
+    onClose: () => {},
+    onConfirm: () => {},
+    userId: "usr_3e88d1",
+    isThrottling: true,
+    isLoading: true,
+  },
+};

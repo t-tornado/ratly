@@ -13,6 +13,7 @@ interface ThrottlingModalProps {
   userId: string;
   isThrottling: boolean;
   currentRemaining?: number;
+  isLoading?: boolean;
 }
 
 const DURATION_OPTIONS: {
@@ -42,6 +43,7 @@ function ThrottlingModal({
   userId,
   isThrottling,
   currentRemaining,
+  isLoading = false,
 }: ThrottlingModalProps) {
   const [selectedDuration, setSelectedDuration] =
     useState<ThrottlingDuration>("1h");
@@ -67,6 +69,7 @@ function ThrottlingModal({
       onConfirm={handleConfirm}
       confirmLabel={isThrottling ? "Pause throttling" : "Resume throttling"}
       confirmVariant={isThrottling ? "primary" : "accent"}
+      isConfirmLoading={isLoading}
     />
   );
 

@@ -9,12 +9,12 @@ import type { RowEventStore } from "../../hooks/useRowEventStore";
 const MOBILE_BREAKPOINT = "(max-width: 639px)";
 
 interface AdminActions {
-  resetWindowMutation: { mutate: (userId: string) => void };
-  addExtraMutation: { mutate: (params: { userId: string; amount: number }) => void };
-  adjustLimitMutation: { mutate: (params: { userId: string; limit: number }) => void };
-  resetLimitMutation: { mutate: (userId: string) => void };
-  pauseMutation: { mutate: (params: { userId: string; seconds: number }) => void };
-  unlockMutation: { mutate: (userId: string) => void };
+  resetWindowMutation: { mutate: (userId: string) => void; isPending: boolean };
+  addExtraMutation: { mutate: (params: { userId: string; amount: number }) => void; isPending: boolean };
+  adjustLimitMutation: { mutate: (params: { userId: string; limit: number }) => void; isPending: boolean };
+  resetLimitMutation: { mutate: (userId: string) => void; isPending: boolean };
+  pauseMutation: { mutate: (params: { userId: string; seconds: number }) => void; isPending: boolean };
+  unlockMutation: { mutate: (userId: string) => void; isPending: boolean };
 }
 
 interface DashboardTableRowProps {
@@ -53,6 +53,10 @@ function renderActionMenu(row: UserRow, userId: string, adminActions: AdminActio
       onResetLimit={() => adminActions.resetLimitMutation.mutate(userId)}
       onPause={(seconds) => adminActions.pauseMutation.mutate({ userId, seconds })}
       onUnlock={() => adminActions.unlockMutation.mutate(userId)}
+      isResetWindowPending={adminActions.resetWindowMutation.isPending}
+      isAddExtraPending={adminActions.addExtraMutation.isPending}
+      isAdjustLimitPending={adminActions.adjustLimitMutation.isPending}
+      isThrottlingPending={adminActions.pauseMutation.isPending || adminActions.unlockMutation.isPending}
     />
   );
 }

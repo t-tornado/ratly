@@ -27,3 +27,16 @@ export const Default: Story = {
     limit: 100,
   },
 };
+
+export const ConfirmLoading: Story = {
+  args: {
+    isOpen: true,
+    onClose: () => {},
+    onConfirm: () => {},
+    userId: "usr_3e88d1",
+    currentRemaining: 42,
+    currentStatus: "OK",
+    limit: 100,
+    isLoading: true,
+  },
+};
