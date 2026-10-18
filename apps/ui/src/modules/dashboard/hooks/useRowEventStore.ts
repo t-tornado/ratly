@@ -3,55 +3,13 @@ import type { Socket } from "socket.io-client";
 import type { UserRow, RateUpdateEvent, RateLimitExceededEvent } from "@ratly/core";
 import { RATE_UPDATE_EVENT, RATE_LIMIT_EXCEEDED_EVENT } from "@ratly/core";
 
-type RowSubscriber = (row: UserRow) => void;
+import { createRowStore } from "../utils/rowStore";
 
 interface RowEventStore {
   userIds: string[];
-  subscribe: (userId: string, callback: RowSubscriber) => void;
+  subscribe: (userId: string, callback: (row: UserRow) => void) => void;
   unsubscribe: (userId: string) => void;
   getRow: (userId: string) => UserRow | undefined;
-}
-
-function createRowStore() {
-  const rowsMap = new Map<string, UserRow>();
-  const rowSubscribers = new Map<string, RowSubscriber>();
-  const storeListeners = new Set<() => void>();
-  let currentUserIds: string[] = [];
-
-  function notifyStoreChange() {
-    for (const listener of storeListeners) listener();
-  }
-
-  return {
-    initialize(rows: UserRow[]) {
-      rowsMap.clear();
-      for (const row of rows) rowsMap.set(row.userId, row);
-      currentUserIds = rows.map((row) => row.userId);
-      notifyStoreChange();
-    },
-    handleRowEvent(row: UserRow) {
-      const isNewUser = !rowsMap.has(row.userId);
-      rowsMap.set(row.userId, row);
-      if (isNewUser) {
-        currentUserIds = [row.userId, ...currentUserIds];
-        notifyStoreChange();
-      } else {
-        rowSubscribers.get(row.userId)?.(row);
-      }
-    },
-    getUserIds: () => currentUserIds,
-    getRow: (userId: string) => rowsMap.get(userId),
-    subscribeRow(userId: string, callback: RowSubscriber) {
-      rowSubscribers.set(userId, callback);
-    },
-    unsubscribeRow(userId: string) {
-      rowSubscribers.delete(userId);
-    },
-    subscribeStore(listener: () => void) {
-      storeListeners.add(listener);
-      return () => { storeListeners.delete(listener); };
-    },
-  };
 }
 
 function useRowEventStore(socket: Socket, initialRows: UserRow[]): RowEventStore {
