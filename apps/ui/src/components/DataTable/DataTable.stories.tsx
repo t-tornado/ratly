@@ -9,6 +9,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const Empty: Story = {
+  args: {
+    rows: [],
+    footer: <span>0 users</span>,
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    rows: [],
+    isLoading: true,
+    footer: <span>Loading…</span>,
+  },
+};
+
 export const Default: Story = {
   args: {
     rows: [
@@ -19,7 +34,7 @@ export const Default: Story = {
     ],
     footer: (
       <>
-        <span>4 of 10 shown · sorted by usage ↓</span>
+        <span>4 users</span>
         <span>Warning ≥ 90% used · Exceeded = 100%</span>
       </>
     ),

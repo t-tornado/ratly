@@ -1,10 +1,13 @@
+import { cn } from "../../lib/utils";
+
 interface EmptyStateProps {
   message?: string;
+  className?: string;
 }
 
-function EmptyState({ message = "No data to display." }: EmptyStateProps) {
+function EmptyState({ message = "No data to display.", className }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center h-full min-h-64 gap-3 rounded-xl border border-border-default bg-bg-surface-raised px-8 py-12 text-center">
+    <div className={cn("flex flex-col items-center justify-center h-full min-h-64 gap-3 rounded-xl border border-border-default bg-bg-surface-raised px-8 py-12 text-center", className)}>
       <p className="text-base font-semibold text-text-primary">Nothing here</p>
       <p className="text-sm text-text-muted max-w-sm">{message}</p>
     </div>

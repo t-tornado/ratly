@@ -94,7 +94,7 @@ function DataTableRow({
       <td className="py-3 px-4 text-text-muted text-base-sm">
         {lastRequest}
       </td>
-      <td className="py-3 px-4">
+      <td className="py-3 pl-2 pr-4">
         <Button
           variant="icon-only"
           size="icon"
