@@ -33,6 +33,7 @@ const buttonVariants = cva(
         compact: "h-8 px-3 rounded-md text-base-sm",
         filter: "h-[34px] px-3 rounded-md",
         icon: "size-9 rounded-lg",
+        "icon-sm": "size-7 rounded-md",
         pill: "h-9 px-3 rounded-pill text-base-sm",
       },
     },
