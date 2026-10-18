@@ -3,12 +3,12 @@ import { DashboardActionMenu } from ".";
 import { mockUserRow, mockPausedRow, mockCustomLimitRow } from "../../../../test/fixtures";
 
 const NOOP_CALLBACKS = {
-  onResetWindow: () => {},
-  onAddExtra: () => {},
-  onAdjustLimit: () => {},
-  onResetLimit: () => {},
-  onPause: () => {},
-  onUnlock: () => {},
+  onResetWindow: () => Promise.resolve(),
+  onAddExtra: () => Promise.resolve(),
+  onAdjustLimit: () => Promise.resolve(),
+  onResetLimit: () => Promise.resolve(),
+  onPause: () => Promise.resolve(),
+  onUnlock: () => Promise.resolve(),
 };
 
 const meta: Meta<typeof DashboardActionMenu> = {

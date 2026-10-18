@@ -9,12 +9,12 @@ import type { RowEventStore } from "../../hooks/useRowEventStore";
 const MOBILE_BREAKPOINT = "(max-width: 639px)";
 
 interface AdminActions {
-  resetWindowMutation: { mutate: (userId: string) => void };
-  addExtraMutation: { mutate: (params: { userId: string; amount: number }) => void };
-  adjustLimitMutation: { mutate: (params: { userId: string; limit: number }) => void };
-  resetLimitMutation: { mutate: (userId: string) => void };
-  pauseMutation: { mutate: (params: { userId: string; seconds: number }) => void };
-  unlockMutation: { mutate: (userId: string) => void };
+  resetWindowMutation: { mutateAsync: (userId: string) => Promise<unknown> };
+  addExtraMutation: { mutateAsync: (params: { userId: string; amount: number }) => Promise<unknown> };
+  adjustLimitMutation: { mutateAsync: (params: { userId: string; limit: number }) => Promise<unknown> };
+  resetLimitMutation: { mutateAsync: (userId: string) => Promise<unknown> };
+  pauseMutation: { mutateAsync: (params: { userId: string; seconds: number }) => Promise<unknown> };
+  unlockMutation: { mutateAsync: (userId: string) => Promise<unknown> };
 }
 
 interface DashboardTableRowProps {
@@ -47,12 +47,12 @@ function renderActionMenu(row: UserRow, userId: string, adminActions: AdminActio
   return (
     <DashboardActionMenu
       row={row}
-      onResetWindow={() => adminActions.resetWindowMutation.mutate(userId)}
-      onAddExtra={(amount) => adminActions.addExtraMutation.mutate({ userId, amount })}
-      onAdjustLimit={(limit) => adminActions.adjustLimitMutation.mutate({ userId, limit })}
-      onResetLimit={() => adminActions.resetLimitMutation.mutate(userId)}
-      onPause={(seconds) => adminActions.pauseMutation.mutate({ userId, seconds })}
-      onUnlock={() => adminActions.unlockMutation.mutate(userId)}
+      onResetWindow={() => adminActions.resetWindowMutation.mutateAsync(userId)}
+      onAddExtra={(amount) => adminActions.addExtraMutation.mutateAsync({ userId, amount })}
+      onAdjustLimit={(limit) => adminActions.adjustLimitMutation.mutateAsync({ userId, limit })}
+      onResetLimit={() => adminActions.resetLimitMutation.mutateAsync(userId)}
+      onPause={(seconds) => adminActions.pauseMutation.mutateAsync({ userId, seconds })}
+      onUnlock={() => adminActions.unlockMutation.mutateAsync(userId)}
     />
   );
 }
