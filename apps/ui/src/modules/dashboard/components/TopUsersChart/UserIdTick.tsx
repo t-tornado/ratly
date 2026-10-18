@@ -12,7 +12,7 @@ const ICON_GAP = 5;
 const START_X = 4;
 
 function UserIdTick({
-  x,
+  x: _x,
   y,
   payload,
   onClickUser,
