@@ -32,7 +32,7 @@ function DashboardUsersTable({ store, isLoading = false }: DashboardUsersTablePr
   const statusFilterOptions = buildUserStatusFilterOptions(allRows, statusFilter);
 
   return (
-    <div data-testid="dashboard-users-table" className="flex flex-col sm:flex-1 sm:min-h-0 gap-3">
+    <div data-testid="dashboard-users-table" className="flex flex-col min-h-[800px] gap-3">
       <div className="sticky top-14 z-10 sm:static bg-bg-base">
         <FilterBar
           filters={statusFilterOptions}
@@ -44,7 +44,7 @@ function DashboardUsersTable({ store, isLoading = false }: DashboardUsersTablePr
         />
       </div>
       <DataTable
-        className="flex-1 min-h-0"
+        className="max-h-[800px]"
         userIds={filteredUserIds}
         isLoading={isLoading}
         renderRow={(userId) => (

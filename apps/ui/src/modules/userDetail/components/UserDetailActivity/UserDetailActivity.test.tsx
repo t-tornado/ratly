@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { screen, fireEvent } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { renderWithProviders } from "../../../../test/renderWithProviders";
 import { UserDetailActivity } from ".";
 
@@ -14,33 +15,41 @@ vi.mock("../../hooks/useActivityData", () => ({
   }),
 }));
 
+function renderActivity(initialEntries: string[] = ["/"]) {
+  return renderWithProviders(
+    <MemoryRouter initialEntries={initialEntries}>
+      <UserDetailActivity userId="test-user" />
+    </MemoryRouter>,
+  );
+}
+
 describe("UserDetailActivity", () => {
   it("renders with data-testid", () => {
-    renderWithProviders(<UserDetailActivity userId="test-user" />);
+    renderActivity();
     expect(screen.getByTestId("user-detail-activity")).toBeInTheDocument();
   });
 
   it("shows activity heading", () => {
-    renderWithProviders(<UserDetailActivity userId="test-user" />);
+    renderActivity();
     expect(
-      screen.getByText("Activity · requests per minute")
+      screen.getByText("Activity (requests per minute)")
     ).toBeInTheDocument();
   });
 
   it("has range toggle buttons", () => {
-    renderWithProviders(<UserDetailActivity userId="test-user" />);
+    renderActivity();
     expect(screen.getByText("Past hour")).toBeInTheDocument();
     expect(screen.getByText("Past day")).toBeInTheDocument();
   });
 
   it("shows legend items", () => {
-    renderWithProviders(<UserDetailActivity userId="test-user" />);
+    renderActivity();
     expect(screen.getByText("Allowed")).toBeInTheDocument();
     expect(screen.getByText("Rejected")).toBeInTheDocument();
   });
 
   it("renders recharts BarChart", () => {
-    renderWithProviders(<UserDetailActivity userId="test-user" />);
+    renderActivity();
     expect(
       screen.getByRole("region", { name: "Activity history" })
     ).toBeInTheDocument();
@@ -50,14 +59,14 @@ describe("UserDetailActivity", () => {
   });
 
   it("shows auto-refresh dropdown", () => {
-    renderWithProviders(<UserDetailActivity userId="test-user" />);
+    renderActivity();
     const refreshSelect = screen.getByLabelText("Auto-refresh interval");
     expect(refreshSelect).toBeInTheDocument();
     expect(refreshSelect).toHaveValue("off");
   });
 
   it("allows changing auto-refresh option", () => {
-    renderWithProviders(<UserDetailActivity userId="test-user" />);
+    renderActivity();
     const refreshSelect = screen.getByLabelText("Auto-refresh interval");
     fireEvent.change(refreshSelect, { target: { value: "30s" } });
     expect(refreshSelect).toHaveValue("30s");

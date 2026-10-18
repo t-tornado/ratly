@@ -9,12 +9,11 @@ describe("UserDetailStats", () => {
     expect(screen.getByTestId("user-detail-stats")).toBeInTheDocument();
   });
 
-  it("shows all 5 stat labels", () => {
+  it("shows all 4 stat labels", () => {
     renderWithProviders(<UserDetailStats userId="usr_test123" />);
     expect(screen.getByText("Remaining")).toBeInTheDocument();
     expect(screen.getByText("Resets in")).toBeInTheDocument();
-    expect(screen.getByText("Current window")).toBeInTheDocument();
     expect(screen.getByText("Last reset")).toBeInTheDocument();
-    expect(screen.getByText("429s today")).toBeInTheDocument();
+    expect(screen.getByText("Rejected today")).toBeInTheDocument();
   });
 });

@@ -8,7 +8,7 @@ function SectionHeading({
   return (
     <h2
       className={cn(
-        "m-0 mb-3 text-base-sm font-medium uppercase tracking-wider text-text-secondary",
+        "m-0 mb-3 text-base font-medium text-text-secondary",
         className
       )}
       {...props}

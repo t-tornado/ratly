@@ -1,3 +1,4 @@
+import { Stamp } from "lucide-react";
 import { EventStream } from "../../../../components/EventStream";
 import { SectionHeading } from "../../../../components/SectionHeading";
 import { useUserDetailEvents } from "../../hooks/useUserDetailEvents";
@@ -8,7 +9,7 @@ interface UserDetailEventsProps {
 }
 
 function UserDetailEvents({ userId }: UserDetailEventsProps) {
-  const events = useUserDetailEvents(userId);
+  const { events, lastRecorded } = useUserDetailEvents(userId);
   const isEmpty = events.length === 0;
 
   if (isEmpty) {
@@ -26,7 +27,19 @@ function UserDetailEvents({ userId }: UserDetailEventsProps) {
 
   return (
     <div data-testid="user-detail-events" className="h-full">
-      <EventStream title="Event stream" events={events} className="h-full flex flex-col" />
+      <EventStream
+        title="Event stream"
+        events={events}
+        className="h-full flex flex-col"
+        headerRight={
+          lastRecorded && (
+            <span className="flex items-center gap-1 text-xs text-text-muted">
+              <Stamp size={12} />
+              Last recorded {lastRecorded}
+            </span>
+          )
+        }
+      />
     </div>
   );
 }
