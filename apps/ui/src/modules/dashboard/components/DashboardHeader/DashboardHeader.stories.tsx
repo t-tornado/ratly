@@ -4,6 +4,7 @@ import { DashboardHeader } from ".";
 const meta = {
   component: DashboardHeader,
   tags: ["autodocs"],
+  args: { isError: false, onRetry: () => {} },
 } satisfies Meta<typeof DashboardHeader>;
 
 export default meta;
@@ -15,4 +16,8 @@ export const Connected: Story = {
 
 export const Disconnected: Story = {
   args: { isConnected: false },
+};
+
+export const FetchError: Story = {
+  args: { isConnected: false, isError: true },
 };

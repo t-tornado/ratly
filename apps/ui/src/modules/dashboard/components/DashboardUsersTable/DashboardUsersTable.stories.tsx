@@ -11,15 +11,19 @@ export default meta;
 type Story = StoryObj<typeof DashboardUsersTable>;
 
 export const Populated: Story = {
-  args: { store: createMockRowEventStore(mockRows) },
+  args: { store: createMockRowEventStore(mockRows), isConnected: true },
 };
 
 export const Empty: Story = {
-  args: { store: createMockRowEventStore([]) },
+  args: { store: createMockRowEventStore([]), isConnected: true },
+};
+
+export const Disconnected: Story = {
+  args: { store: createMockRowEventStore(mockRows), isConnected: false },
 };
 
 export const Mobile: Story = {
-  args: { store: createMockRowEventStore(mockRows) },
+  args: { store: createMockRowEventStore(mockRows), isConnected: true },
   parameters: {
     viewport: { defaultViewport: "mobile1" },
   },

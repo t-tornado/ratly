@@ -11,9 +11,13 @@ export default meta;
 type Story = StoryObj<typeof DashboardContent>;
 
 export const Loaded: Story = {
-  args: { store: createMockRowEventStore(mockRows), isLoading: false },
+  args: { store: createMockRowEventStore(mockRows), isLoading: false, isConnected: true },
 };
 
 export const Loading: Story = {
-  args: { store: createMockRowEventStore([]), isLoading: true },
+  args: { store: createMockRowEventStore([]), isLoading: true, isConnected: true },
+};
+
+export const Disconnected: Story = {
+  args: { store: createMockRowEventStore(mockRows), isLoading: false, isConnected: false },
 };
