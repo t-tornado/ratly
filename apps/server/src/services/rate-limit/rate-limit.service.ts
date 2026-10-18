@@ -40,21 +40,24 @@ export class RateLimitService {
   }
 
   async readRow(userId: string): Promise<UserRow | null> {
+    const today = new Date().toISOString().slice(0, 10);
+
     const result = (await this.redis.eval(
       userRowScript,
-      5,
+      6,
       redisKeys.userRate(userId),
       redisKeys.userLimit(userId),
       redisKeys.userPaused(userId),
       redisKeys.usersLastSeen,
       redisKeys.userLastReset(userId),
+      redisKeys.activityBucket(userId, today),
       userId,
       String(DEFAULT_LIMIT),
     )) as number[] | null;
 
     if (!result) return null;
 
-    const [used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastRequestAt, now, lastAdminResetAt] = result;
+    const [used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastRequestAt, now, lastAdminResetAt, rejectedToday] = result;
     const allowedTotal = limit + bonus;
     const ratio = allowedTotal > 0 ? used / allowedTotal : 0;
 
@@ -72,6 +75,7 @@ export class RateLimitService {
       status: ratio >= 1 ? "exceeded" : ratio >= 0.9 ? "warning" : "ok",
       lastRequestAt,
       lastAdminResetAt: lastAdminResetAt > 0 ? lastAdminResetAt : null,
+      rejectedToday,
       at: now,
     };
   }
@@ -82,11 +86,14 @@ export class RateLimitService {
   }
 
   async readAllRows(): Promise<UserRow[]> {
+    const today = new Date().toISOString().slice(0, 10);
+
     const flat = (await this.redis.eval(
       allRowsScript,
       1,
       redisKeys.usersLastSeen,
       String(DEFAULT_LIMIT),
+      today,
     )) as (string | number)[];
 
     return unpackAllRows(flat);

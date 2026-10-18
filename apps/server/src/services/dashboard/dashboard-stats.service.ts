@@ -31,13 +31,10 @@ export class DashboardStatsService {
 
     const topUsers: TopUser[] = [];
     for (let i = 5; i < raw.length; i += 3) {
-      const used = Number(raw[i + 1]);
-      const allowedTotal = Number(raw[i + 2]);
       topUsers.push({
         userId: String(raw[i]),
-        used,
-        allowedTotal,
-        ratio: allowedTotal > 0 ? used / allowedTotal : 0,
+        used: Number(raw[i + 1]),
+        allowedTotal: Number(raw[i + 2]),
       });
     }
 
