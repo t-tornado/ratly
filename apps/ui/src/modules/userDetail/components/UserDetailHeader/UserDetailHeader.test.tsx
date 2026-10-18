@@ -14,6 +14,7 @@ function renderHeader(
     isThrottling: false,
     currentLimit: 100,
     currentRemaining: 42,
+    hasActiveWindow: true,
   };
   return render(
     <ThemeProvider>
@@ -118,11 +119,11 @@ describe("UserDetailHeader", () => {
     );
   });
 
-  it("opens ThrottlingModal with resume variant when isThrottling is false", () => {
+  it("opens ThrottlingModal with start variant when isThrottling is false", () => {
     renderHeader({ isThrottling: false });
     fireEvent.click(screen.getByText("Start Throttling"));
     expect(screen.getByTestId("modal-title")).toHaveTextContent(
-      "Resume throttling for"
+      "Start throttling for"
     );
   });
 });

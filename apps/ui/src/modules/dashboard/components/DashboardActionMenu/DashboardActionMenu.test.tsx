@@ -30,16 +30,16 @@ describe("DashboardActionMenu", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows 'Pause throttling' when row is not paused", () => {
+  it("shows 'Start throttling' when row is not paused", () => {
     render(<DashboardActionMenu row={mockUserRow} {...NOOP_CALLBACKS} />);
     openActionMenu(mockUserRow.userId);
-    expect(screen.getByText("Pause throttling")).toBeInTheDocument();
+    expect(screen.getByText("Start throttling")).toBeInTheDocument();
   });
 
-  it("shows 'Resume throttling' when row.paused is true", () => {
+  it("shows 'Pause throttling' when row.paused is true", () => {
     render(<DashboardActionMenu row={mockPausedRow} {...NOOP_CALLBACKS} />);
     openActionMenu(mockPausedRow.userId);
-    expect(screen.getByText("Resume throttling")).toBeInTheDocument();
+    expect(screen.getByText("Pause throttling")).toBeInTheDocument();
   });
 
   it("hides 'Reset to default' when row.limit equals DEFAULT_LIMIT", () => {
