@@ -7,8 +7,8 @@ import type { RateUpdateEvent, RateLimitExceededEvent, UserRow } from "@ratly/co
 import { useSocket } from "../../../lib/hooks";
 import { fetchUser, queryKeys } from "../../../lib/api";
 import type { StatItem } from "../../../components/StatsRow";
-
-type UserStatus = "ok" | "warning" | "exceeded" | null;
+import type { UserStatus } from "../types/userStats";
+import { formatCountdown, buildLiveStatItems } from "../utils/userStats";
 
 interface UserDetailStatsResult {
   statItems: StatItem[];
@@ -18,69 +18,11 @@ interface UserDetailStatsResult {
   paused: boolean;
 }
 
-const STATUS_ACCENT: Record<string, StatItem["accent"]> = {
-  ok: undefined,
-  warning: "warning",
-  exceeded: "error",
-};
-
-function formatCountdown(resetAt: number): string {
-  const remainingMs = resetAt - Date.now();
-  if (remainingMs <= 0) return "0s";
-
-  const totalSeconds = Math.ceil(remainingMs / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  if (minutes > 0) return `${minutes}m ${String(seconds).padStart(2, "0")}s`;
-  return `${seconds}s`;
-}
-
-function formatTimestamp(epochMs: number): string {
-  const date = new Date(epochMs);
-  return date.toLocaleTimeString("en-GB", { hour12: false });
-}
-
-function buildLiveStatItems(row: UserRow): StatItem[] {
-  const remainingAccent = STATUS_ACCENT[row.status];
-
-  const remainingItem: StatItem = {
-    label: "Remaining",
-    value: String(row.remaining),
-    sub: row.bonus > 0 ? (
-      `of ${row.allowedTotal} (admin override)`
-    ) : (
-      `of ${row.allowedTotal}`
-    ),
-    accent: remainingAccent,
-  };
-
-  const resetsInItem: StatItem = {
-    label: "Resets in",
-    value: row.resetAt ? formatCountdown(row.resetAt) : "--",
-  };
-
-  const lastResetTimestamp = row.resetAt;
-  const lastResetItem: StatItem = {
-    label: "Last reset",
-    value: lastResetTimestamp ? formatTimestamp(lastResetTimestamp) : "--",
-    sub: lastResetTimestamp ? "today" : undefined,
-  };
-
-  return [remainingItem, resetsInItem, lastResetItem];
-}
-
-const STATIC_STAT_ITEMS: StatItem[] = [
-  {
-    label: "Current window",
-    value: "--",
-    sub: "-- allowed · -- rejected",
-  },
-  {
-    label: "429s today",
-    value: "--",
-    sub: "no data yet",
-  },
+const EMPTY_STATS: StatItem[] = [
+  { label: "Remaining", value: "--" },
+  { label: "Resets in", value: "--" },
+  { label: "Last reset", value: "--" },
+  { label: "Rejected today", value: "--" },
 ];
 
 function useUserDetailStats(userId: string): UserDetailStatsResult {
@@ -123,18 +65,9 @@ function useUserDetailStats(userId: string): UserDetailStatsResult {
     return () => clearInterval(intervalId);
   }, [latestRow?.resetAt]);
 
-  const countdownValue = latestRow?.resetAt
-    ? formatCountdown(latestRow.resetAt)
-    : "--";
-
   if (!latestRow) {
     return {
-      statItems: [
-        { label: "Remaining", value: "--" },
-        { label: "Resets in", value: "--" },
-        { label: "Last reset", value: "--" },
-        ...STATIC_STAT_ITEMS,
-      ],
+      statItems: EMPTY_STATS,
       status: null,
       currentRemaining: null,
       currentLimit: null,
@@ -142,11 +75,15 @@ function useUserDetailStats(userId: string): UserDetailStatsResult {
     };
   }
 
+  const countdownValue = latestRow.resetAt
+    ? formatCountdown(latestRow.resetAt)
+    : "--";
+
   const liveItems = buildLiveStatItems(latestRow);
   liveItems[1] = { ...liveItems[1], value: countdownValue };
 
   return {
-    statItems: [...liveItems, ...STATIC_STAT_ITEMS],
+    statItems: liveItems,
     status: latestRow.status,
     currentRemaining: latestRow.remaining,
     currentLimit: latestRow.limit,

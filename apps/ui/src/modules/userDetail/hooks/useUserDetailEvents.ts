@@ -1,50 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { RATE_UPDATE_EVENT, RATE_LIMIT_EXCEEDED_EVENT } from "@ratly/core";
-import type { RateUpdateEvent, RateLimitExceededEvent, UserRow } from "@ratly/core";
+import type { RateUpdateEvent, RateLimitExceededEvent } from "@ratly/core";
 
 import { useSocket } from "../../../lib/hooks";
-import type { StreamEvent } from "../../../components/EventStream";
+import { mapRateUpdateToStreamEvent, mapLimitExceededToStreamEvent } from "../utils/eventStream";
+import { useEventStreamStore } from "./useEventStreamStore";
+import type { UserEventStream } from "./useEventStreamStore";
 
-function formatEventTimestamp(): string {
-  return new Date().toLocaleTimeString("en-GB", { hour12: false });
-}
-
-function buildEventDescription(row: UserRow): string {
-  return `remaining ${row.remaining} / ${row.allowedTotal} · resets ${row.resetAt ? new Date(row.resetAt).toLocaleTimeString("en-GB", { hour12: false }) : "--"}`;
-}
-
-function mapRateUpdateToStreamEvent(row: UserRow): StreamEvent {
-  return {
-    type: RATE_UPDATE_EVENT,
-    timestamp: formatEventTimestamp(),
-    description: buildEventDescription(row),
-    severity: "info",
-  };
-}
-
-function mapLimitExceededToStreamEvent(row: UserRow): StreamEvent {
-  return {
-    type: RATE_LIMIT_EXCEEDED_EVENT,
-    timestamp: formatEventTimestamp(),
-    description: `blocked · retry at ${row.resetAt ? new Date(row.resetAt).toLocaleTimeString("en-GB", { hour12: false }) : "--"}`,
-    severity: "error",
-  };
-}
-
-function useUserDetailEvents(userId: string): StreamEvent[] {
+function useUserDetailEvents(userId: string): UserEventStream {
   const { socket } = useSocket();
-  const [events, setEvents] = useState<StreamEvent[]>([]);
+  const addEvent = useEventStreamStore((state) => state.addEvent);
+  const stream = useEventStreamStore((state) => state.getStream(userId));
 
   useEffect(() => {
     const handleRateUpdate = ({ row }: RateUpdateEvent) => {
       if (row.userId !== userId) return;
-      setEvents((previous) => [mapRateUpdateToStreamEvent(row), ...previous]);
+      addEvent(userId, mapRateUpdateToStreamEvent(row));
     };
 
     const handleLimitExceeded = ({ row }: RateLimitExceededEvent) => {
       if (row.userId !== userId) return;
-      setEvents((previous) => [mapLimitExceededToStreamEvent(row), ...previous]);
+      addEvent(userId, mapLimitExceededToStreamEvent(row));
     };
 
     socket.on(RATE_UPDATE_EVENT, handleRateUpdate);
@@ -54,9 +31,9 @@ function useUserDetailEvents(userId: string): StreamEvent[] {
       socket.off(RATE_UPDATE_EVENT, handleRateUpdate);
       socket.off(RATE_LIMIT_EXCEEDED_EVENT, handleLimitExceeded);
     };
-  }, [socket, userId]);
+  }, [socket, userId, addEvent]);
 
-  return events;
+  return stream;
 }
 
 export { useUserDetailEvents };
