@@ -35,7 +35,7 @@ function EventStream({
       {...props}
     >
       <SectionHeading>{title}</SectionHeading>
-      <div className="flex flex-col gap-0">
+      <div className="flex flex-col gap-0 max-h-80 md:max-h-[calc(100vh-12rem)] overflow-y-auto" tabIndex={0}>
         {events.map((event, i) => (
           <div
             key={i}
