@@ -1,12 +1,24 @@
-// Burst scenario — aggressive traffic to trigger rate limits
-// Assumes: 100 req limit / 3600s window per user
-// 1s between requests — each user exhausts limit in ~50s without overwhelming server
+/**
+ * Burst scenario — aggressive traffic to trigger rate limits fast.
+ *
+ * Targets 10 users with 2 concurrent virtual users each, all firing
+ * at 1 req/s. Each user exhausts their 100-request window in ~50s.
+ *
+ * Assumes: 100 req limit / 3600s window per user.
+ *
+ * @see RETURNING_USERS — fixed user pool
+ * @see BASE_URL — target server
+ */
 
 import { BASE_URL } from "../lib/config.mjs";
 import { RETURNING_USERS } from "../lib/users.mjs";
 
 const TARGET_USERS = RETURNING_USERS.slice(0, 10);
+
+/** Concurrent virtual users per target user — multiplies request pressure. */
 const VUS_PER_USER = 2;
+
+/** Gap between requests per VU — keeps load aggressive but not flooding. */
 const REQUEST_GAP_MS = 1_000;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
