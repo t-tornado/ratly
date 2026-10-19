@@ -1,32 +1,52 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { INestApplication } from "@nestjs/common";
-import { FastifyAdapter } from "@nestjs/platform-fastify";
+import { Test } from "@nestjs/testing";
+import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify";
 import request from "supertest";
+import Redis from "ioredis";
 import { AppModule } from "../src/app.module.js";
+import { createTestRedis, isRedisAvailable } from "../src/test/redisTestClient.js";
+import { waitForRedis } from "../src/test/waitForRedis.js";
 
-describe("AppController (e2e)", () => {
-  let app: INestApplication;
+const redisAvailable = await isRedisAvailable();
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+describe.runIf(redisAvailable)("App (e2e)", () => {
+  let app: NestFastifyApplication;
+  let redis: Redis;
+
+  beforeAll(async () => {
+    redis = createTestRedis();
+    await redis.connect();
+
+    const module = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication(new FastifyAdapter());
+    app = module.createNestApplication(new FastifyAdapter());
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
+    await waitForRedis(app);
   });
 
-  it("/health (GET)", () => {
-    return request(app.getHttpServer())
-      .get("/health")
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.message).toBe("ratly server is running");
-      });
+  beforeEach(async () => {
+    await redis.flushdb();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await app.close();
+    await redis.flushdb();
+    redis.disconnect();
+  });
+
+  it("GET /health → 200", async () => {
+    const res = await request(app.getHttpServer()).get("/health").expect(200);
+
+    expect(res.body.message).toBe("ratly server is running");
+  });
+
+  it("GET /test → 200", async () => {
+    const res = await request(app.getHttpServer()).get("/test").expect(200);
+
+    expect(res.body.status).toBe("ok");
+    expect(res.body.service).toBe("ratly");
+    expect(res.body.timestamp).toBeDefined();
   });
 });

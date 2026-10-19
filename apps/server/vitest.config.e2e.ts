@@ -7,5 +7,12 @@ export default defineConfig({
     globals: true,
     root: "./",
     include: ["**/*.e2e-spec.ts"],
+    fileParallelism: false,
+    hookTimeout: 30_000,
+    env: {
+      REDIS_HOST: "localhost",
+      REDIS_PORT: "6380",
+      LOG_LEVEL: "silent",
+    },
   },
 });
