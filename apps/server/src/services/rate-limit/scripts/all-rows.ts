@@ -1,7 +1,19 @@
 import { UserRow } from "../../../lib/types/index.js";
 
+/** Fields per user in the Lua flat array: userId, used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastSeen, lastAdminResetAt, rejectedToday. */
 const USER_FIELD_COUNT = 10;
 
+/**
+ * Decodes the flat array returned by `all-rows.lua` into {@link UserRow}[].
+ *
+ * Lua returns `[now, ...fields]` where each user occupies a
+ * {@link USER_FIELD_COUNT}-wide stride. Timestamps in the Lua
+ * output are seconds-based TTLs — this function converts them
+ * to absolute epoch-ms values using `now`.
+ *
+ * @see RateLimitService.readAllRows — caller
+ * @see all-rows.lua — produces the flat array
+ */
 export function unpackAllRows(flat: (string | number)[]): UserRow[] {
   if (!flat || flat.length < 1) return [];
 

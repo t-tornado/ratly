@@ -57,6 +57,13 @@ export class EventsGateway
     this.logger.info("WS:StatsTimer [Stop]");
   }
 
+  /**
+   * Broadcast after any mutation to a user's rate state.
+   *
+   * @fires socket {@link RATE_UPDATE_EVENT}
+   * @see RateLimitInterceptor — calls this after allowed/denied consume
+   * @see AdminController — calls this after reset/adjust/pause/unlock
+   */
   emitRateUpdate(row: UserRow) {
     this.server.emit(RATE_UPDATE_EVENT, { type: RATE_UPDATE_EVENT, row });
     this.logger.debug(
@@ -65,6 +72,12 @@ export class EventsGateway
     );
   }
 
+  /**
+   * Broadcast when a request is rejected with 429.
+   *
+   * @fires socket {@link RATE_LIMIT_EXCEEDED_EVENT}
+   * @see RateLimitInterceptor — sole caller, on denied consume
+   */
   emitLimitExceeded(row: UserRow) {
     this.server.emit(RATE_LIMIT_EXCEEDED_EVENT, {
       type: RATE_LIMIT_EXCEEDED_EVENT,
@@ -76,6 +89,12 @@ export class EventsGateway
     );
   }
 
+  /**
+   * Broadcast aggregate dashboard metrics on the stats interval.
+   *
+   * @fires socket {@link DASHBOARD_STATS_UPDATE_EVENT}
+   * @see onModuleInit — timer that triggers this every {@link STATS_INTERVAL_MS}
+   */
   emitDashboardStats(stats: DashboardStats) {
     this.server.emit(DASHBOARD_STATS_UPDATE_EVENT, {
       type: DASHBOARD_STATS_UPDATE_EVENT,

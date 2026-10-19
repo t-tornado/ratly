@@ -1,3 +1,15 @@
+/**
+ * Architecture guard: Lua scripts are loaded once at startup.
+ *
+ * Every `.lua` file in this directory is read into memory as a
+ * string constant. Services pass these to `redis.eval()` — they
+ * never read Lua files at request time. Adding a new script
+ * means adding a `loadScript` call here and exporting the constant.
+ *
+ * @see RateLimitService — consumes fixedWindowScript, userRowScript, allRowsScript
+ * @see AdminService — consumes addExtraScript, resetWindowScript
+ * @see DashboardStatsService — consumes dashboardStatsScript
+ */
 import { readFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";

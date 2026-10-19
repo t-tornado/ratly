@@ -11,6 +11,8 @@ import { UserRow, ActivityBucket, ActivityRange, ActivityResponse } from "../../
 import { redisKeys } from "../../lib/redis-keys.js";
 
 const VALID_ACTIVITY_RANGES: ActivityRange[] = ["hour", "day"];
+
+/** Day-view aggregation window — each bucket spans this many minutes. */
 const MINUTES_PER_DAY_BUCKET = 30;
 
 @Injectable()
@@ -121,6 +123,12 @@ export class AdminService {
     return date.toISOString().slice(0, 10);
   }
 
+  /**
+   * Decode Redis hash fields (format `HH:MM:outcome`) into a minute-keyed map.
+   *
+   * Prepends the date to each time key (`2026-10-19T14:30`) so hour and
+   * day buckets that span midnight don't collide.
+   */
   private parseActivityFields(
     fields: Record<string, string>,
     date: Date,
@@ -141,6 +149,12 @@ export class AdminService {
     }
   }
 
+  /**
+   * Build 60 × 1-minute buckets going backward from `now`.
+   *
+   * Each bucket maps to one minute's allowed + rejected counts.
+   * Missing minutes get zeroes — the chart always shows a full hour.
+   */
   private buildHourResponse(
     now: Date,
     minuteCounts: Map<string, { allowed: number; rejected: number }>,
@@ -158,6 +172,13 @@ export class AdminService {
     return { range: "hour", bucketSize: "1m", buckets };
   }
 
+  /**
+   * Build 48 × 30-minute buckets going backward from `now` (24 hours).
+   *
+   * Each bucket aggregates {@link MINUTES_PER_DAY_BUCKET} individual
+   * minute counts. Spans two calendar days — yesterday's Redis hash
+   * is fetched alongside today's by the caller.
+   */
   private buildDayResponse(
     now: Date,
     minuteCounts: Map<string, { allowed: number; rejected: number }>,
