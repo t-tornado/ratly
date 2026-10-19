@@ -27,8 +27,10 @@
 - **Single `useSyncExternalStore` snapshot** — every event replaces the array reference, so React diffs every row even though only one changed. Doesn't scale.
 - **React Query `setQueryData`** — 80+ cache updates per second, each notifying all observers on that key. Adds serialization overhead and fights the stale/refetch lifecycle which is built for request-response, not push.
 
-**Decision:** Custom `createRowStore` — a plain `Map<userId, UserRow>` with per-row subscriber callbacks. An event for user X notifies only user X's row component. New users trigger a store-level notification for the ID list. `useSyncExternalStore` is still used, but scoped: once for the user ID list, once per row via `useUserRow`.
+**Decision:** Custom `createRowStore` — a plain `Map<userId, UserRow>` with per-row subscriber callbacks. An event for user X does an O(1) map lookup and calls that row's `setRow` directly — only that component re-renders. New users trigger a coalesced store-level notification for the ID list via `useSyncExternalStore`.
 
-**Result:** < 16ms frame times under the same 500-user / 80-event/sec load. React Query still owns the initial fetch; the store takes over once the socket connects.
+The critical difference from `useSyncExternalStore`-per-row: React's external store contract requires calling every subscriber's `getSnapshot` on every notification to check for changes. With N mounted rows, that's O(n) snapshot calls per single-row update — the check itself is cheap, but at 500+ rows and 80 events/sec the aggregate cost is measurable. The direct `setState` subscription bypasses this entirely: 1 event → 1 `setRow` → 1 re-render, O(1) end to end.
+
+**Result:** < 16ms frame times under 500-user / 80-event/sec load. React Query still owns the initial fetch; the store takes over once the socket connects.
 
 **Tradeoff:** ~50-line custom store maintained alongside React Query. State is duplicated briefly at initialization.

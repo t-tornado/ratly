@@ -120,21 +120,23 @@ This project uses AI as a development tool, not a replacement for engineering de
 
 The project includes 14 Claude Code skills. Each one follows the same coding rules as any human contributor, and every action produces a verifiable artifact: proof files for implementation steps, gate reports for PRs. Nothing is committed without evidence that it works.
 
-### Ratis — autonomous issue agent
+### Ratis — custom agentic skill for scoped fixes
 
-Ratis is the main automation skill. Give it a GitHub issue number, and it ships a pull request — reading the issue, planning the work, writing the code, running the tests, and opening the PR with proof of every step.
+Ratis is a Claude Code skill I built to handle small, well-defined issues — bug fixes, config changes, minor features. It is not a general-purpose agent. It works on issues written with specific scope, concrete acceptance criteria, and verify commands so every step produces proof it actually worked.
+
+The key constraint: ratis only operates on issues that are scoped enough for a machine to verify. Vague issues, multi-system changes, and anything touching auth or security get rejected at intake with an explanation of why.
 
 <img src="docs/assets/ratis-flow.svg" alt="Ratis pipeline" width="700" />
 
-**Intake** — Ratis reads the issue and checks whether it's scoped, verifiable by tests, fully contained in the codebase, and away from security-critical code. If any check fails, it posts a comment explaining why and stops.
+**Intake** — Reads the issue and runs a doability gate: is it scoped to specific files, verifiable by tests or commands, fully contained in the codebase, and away from security-critical code? If any check fails, it posts a comment explaining why and stops.
 
-**Task plan** — If the issue passes, Ratis builds a step-by-step plan where each step has a verify command. This is the one human checkpoint — you review and approve before any code is written.
+**Task plan (human checkpoint)** — If the issue passes, ratis builds a step-by-step plan where each step has a verify command. This is where the human reviews and approves. No code is written until you say go.
 
-**Worktree** — Ratis creates an isolated branch from main in a separate worktree. Your working directory is never touched. If anything fails, the branch is deleted with no side effects.
+**Worktree** — Creates an isolated branch from main in a separate worktree. Your working directory is never touched. If anything fails, the branch is deleted with no side effects.
 
-**Implement** — Each step runs in order, gets verified, and produces a proof file. If any verification fails, Ratis stops and shows you the exact output.
+**Implement with proof** — Each step runs in order, gets verified, and produces a proof file (JSON with the command, exit code, and output). If any verification fails, ratis stops and shows the exact output. Nothing is swept under the rug.
 
-**Quality gates** — After all steps pass, Ratis runs build, tests, and architecture guards for every affected app. If everything is green, it opens a PR with the proofs embedded and a `Closes #N` reference.
+**Quality gates** — After all steps pass, ratis runs build, tests, and architecture guards for every affected app. If everything is green, it opens a PR with the proof files embedded and a `Closes #N` reference.
 
 ### Templates and rules
 
