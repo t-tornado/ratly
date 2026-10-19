@@ -18,10 +18,10 @@ Ratly is an API rate limiting service with a real-time admin dashboard. Each use
 
 ## Demo
 
-<!-- TODO: Add assets and uncomment -->
-<!-- ![Dashboard](docs/assets/demo-dashboard.png) -->
-<!-- [Watch the demo video](docs/assets/demo.mp4) -->
-<!-- [Storybook components](docs/assets/demo-storybook.png) -->
+![Demo](docs/assets/demo.gif)
+
+<!-- TODO: Add remaining assets and uncomment -->
+<!-- ![Storybook components](docs/assets/demo-storybook.png) -->
 <!-- [Ratis in action](docs/assets/demo-ratis.mp4) -->
 
 ## Prerequisites
@@ -116,11 +116,13 @@ Every significant decision is documented with context, alternatives considered, 
 
 <img src="docs/assets/ai-bot.svg" alt="AI Agent" width="48" />
 
-Ratly uses 14 Claude Code skills to automate structured development tasks — from triaging a GitHub issue to shipping a pull request with passing quality gates. Every skill follows the same coding rules as human contributors, and every action produces a verifiable artifact: proof files for each implementation step, gate reports for each PR. Nothing is committed without evidence that it works.
+This project uses AI as a development tool, not a replacement for engineering decisions. The architecture, rules, and design system were built by hand. AI handles the repetitive execution — triaging issues, running verification, shipping PRs — under constraints that I define and enforce.
+
+The project includes 14 Claude Code skills. Each one follows the same coding rules as any human contributor, and every action produces a verifiable artifact: proof files for implementation steps, gate reports for PRs. Nothing is committed without evidence that it works.
 
 ### Ratis — autonomous issue agent
 
-Ratis is the centerpiece of this system. Give it a GitHub issue number, and it ships a complete pull request — reading the issue, planning the implementation, writing the code, running the tests, and opening the PR with proof of every step attached.
+Ratis is the main automation skill. Give it a GitHub issue number, and it ships a pull request — reading the issue, planning the work, writing the code, running the tests, and opening the PR with proof of every step.
 
 <img src="docs/assets/ratis-flow.svg" alt="Ratis pipeline" width="700" />
 
