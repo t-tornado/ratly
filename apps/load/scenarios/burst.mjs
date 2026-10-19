@@ -10,13 +10,14 @@
  * @see BASE_URL — target server
  */
 
-import { BASE_URL } from "../lib/config.mjs";
+import { BASE_URL, parseVUs } from "../lib/config.mjs";
 import { RETURNING_USERS } from "../lib/users.mjs";
-
-const TARGET_USERS = RETURNING_USERS.slice(0, 10);
 
 /** Concurrent virtual users per target user — multiplies request pressure. */
 const VUS_PER_USER = 2;
+
+const TOTAL_VUS = parseVUs();
+const TARGET_USERS = RETURNING_USERS.slice(0, Math.ceil(TOTAL_VUS / VUS_PER_USER));
 
 /** Gap between requests per VU — keeps load aggressive but not flooding. */
 const REQUEST_GAP_MS = 1_000;

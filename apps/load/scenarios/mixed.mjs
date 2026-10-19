@@ -11,26 +11,38 @@
  * @see BASE_URL — target server
  */
 
-import { BASE_URL } from "../lib/config.mjs";
+import { BASE_URL, parseVUs } from "../lib/config.mjs";
 import { RETURNING_USERS } from "../lib/users.mjs";
+
+const TOTAL_VUS = parseVUs();
 
 /** Minimum pause between consecutive requests within a cycle. */
 const REQUEST_GAP_MS = 1_000;
 
+/** ~88% of VUs go to steady, ~12% to burst (original ratio: 150/170). */
+const STEADY_VUS = Math.round(TOTAL_VUS * 0.88);
+const BURST_VU_COUNT = TOTAL_VUS - STEADY_VUS;
+
 /**
- * Steady traffic profiles — same shape as the steady scenario but smaller scale.
+ * Steady traffic profiles — weights scaled from STEADY_VUS.
  *
- * Totals 150 users across four pacing tiers.
+ * Weights preserve original ratio: 8:30:52:60.
  */
-const STEADY_PROFILES = [
-  { count: 8, cycleSleepMs: 1_400, requestsPerCycle: 2, label: "heavy" },
-  { count: 30, cycleSleepMs: 2_400, requestsPerCycle: 1, label: "moderate" },
-  { count: 52, cycleSleepMs: 3_600, requestsPerCycle: 1, label: "steady" },
-  { count: 60, cycleSleepMs: 6_000, requestsPerCycle: 1, label: "light" },
+const STEADY_WEIGHTS = [
+  { weight: 8, cycleSleepMs: 1_400, requestsPerCycle: 2, label: "heavy" },
+  { weight: 30, cycleSleepMs: 2_400, requestsPerCycle: 1, label: "moderate" },
+  { weight: 52, cycleSleepMs: 3_600, requestsPerCycle: 1, label: "steady" },
+  { weight: 60, cycleSleepMs: 6_000, requestsPerCycle: 1, label: "light" },
 ];
 
+const STEADY_WEIGHT_SUM = STEADY_WEIGHTS.reduce((sum, p) => sum + p.weight, 0);
+const STEADY_PROFILES = STEADY_WEIGHTS.map((p) => ({
+  ...p,
+  count: Math.max(1, Math.round((p.weight / STEADY_WEIGHT_SUM) * STEADY_VUS)),
+}));
+
 /** Burst users drawn from the tail of the pool to avoid overlap with steady. */
-const BURST_USERS = RETURNING_USERS.slice(180, 200);
+const BURST_USERS = RETURNING_USERS.slice(180, 180 + BURST_VU_COUNT);
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

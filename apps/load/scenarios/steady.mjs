@@ -1,5 +1,5 @@
 /**
- * Steady scenario — varied-pace traffic across 400 users.
+ * Steady scenario — varied-pace traffic across configurable VUs (default 300).
  *
  * Four traffic profiles spread users across different consumption rates.
  * Each virtual user loops indefinitely, hitting the rate-limit interceptor
@@ -11,26 +11,34 @@
  * @see BASE_URL — target server
  */
 
-import { BASE_URL } from "../lib/config.mjs";
+import { BASE_URL, parseVUs } from "../lib/config.mjs";
 import { RETURNING_USERS } from "../lib/users.mjs";
+
+const TOTAL_VUS = parseVUs();
 
 /** Minimum pause between consecutive requests within a cycle. */
 const REQUEST_GAP_MS = 1_000;
 
 /**
- * Traffic profiles — each defines a consumption pace.
+ * Profile ratios — weights sum to 20. Counts derived from TOTAL_VUS.
  *
- * Heavy:    2 reqs then 10s pause   → exhausts in ~8 min
- * Moderate: 1 req every 15s         → exhausts in ~25 min
- * Steady:   1 req every 30s         → exhausts in ~50 min
- * Light:    1 req every 60s         → exhausts in ~100 min
+ * Heavy:    2 reqs then 5s pause    → exhausts in ~4 min
+ * Moderate: 1 req every 7.5s        → exhausts in ~12 min
+ * Steady:   1 req every 15s         → exhausts in ~25 min
+ * Light:    1 req every 30s         → exhausts in ~50 min
  */
-const PROFILES = [
-  { count: 20, cycleSleepMs: 10_000, requestsPerCycle: 2, label: "heavy" },
-  { count: 80, cycleSleepMs: 15_000, requestsPerCycle: 1, label: "moderate" },
-  { count: 140, cycleSleepMs: 30_000, requestsPerCycle: 1, label: "steady" },
-  { count: 160, cycleSleepMs: 60_000, requestsPerCycle: 1, label: "light" },
+const PROFILE_WEIGHTS = [
+  { weight: 1, cycleSleepMs: 5_000,  requestsPerCycle: 2, label: "heavy" },
+  { weight: 4, cycleSleepMs: 7_500,  requestsPerCycle: 1, label: "moderate" },
+  { weight: 7, cycleSleepMs: 15_000, requestsPerCycle: 1, label: "steady" },
+  { weight: 8, cycleSleepMs: 30_000, requestsPerCycle: 1, label: "light" },
 ];
+
+const WEIGHT_SUM = PROFILE_WEIGHTS.reduce((sum, p) => sum + p.weight, 0);
+const PROFILES = PROFILE_WEIGHTS.map((p) => ({
+  ...p,
+  count: Math.max(1, Math.round((p.weight / WEIGHT_SUM) * TOTAL_VUS)),
+}));
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
