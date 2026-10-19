@@ -41,11 +41,12 @@ services:
       - NODE_ENV=production
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - ALLOWED_ORIGIN=http://localhost:3030
     depends_on:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -55,8 +56,10 @@ services:
     build:
       context: .
       dockerfile: apps/ui/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:3000
     ports:
-      - "80:80"
+      - "3030:80"
 
   load:
     build:
