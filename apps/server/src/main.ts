@@ -13,7 +13,10 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const allowedOrigin = configService.get<string>("ALLOWED_ORIGIN", "http://localhost:5173");
-  app.enableCors({ origin: allowedOrigin });
+  app.enableCors({
+    origin: allowedOrigin,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  });
 
   const port = configService.get<number>("PORT", 3000);
   const env = process.env.NODE_ENV ?? "development";
