@@ -10,9 +10,11 @@ async function bootstrap() {
   });
 
   app.useLogger(app.get(Logger));
-  app.enableCors({ origin: "*" });
 
   const configService = app.get(ConfigService);
+  const allowedOrigin = configService.get<string>("ALLOWED_ORIGIN", "http://localhost:5173");
+  app.enableCors({ origin: allowedOrigin });
+
   const port = configService.get<number>("PORT", 3000);
   const env = process.env.NODE_ENV ?? "development";
 
@@ -20,7 +22,7 @@ async function bootstrap() {
 
   const logger = await app.resolve(PinoLogger);
   logger.info(
-    { port, env, nodeVersion: process.versions.node },
+    { port, env, allowedOrigin, nodeVersion: process.versions.node },
     "Server:Bootstrap [Success]",
   );
 }

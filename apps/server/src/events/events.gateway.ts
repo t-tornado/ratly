@@ -5,6 +5,7 @@ import {
   WebSocketServer,
 } from "@nestjs/websockets";
 import { OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { Server, Socket } from "socket.io";
 import { DashboardStatsService } from "../services/dashboard/dashboard-stats.service.js";
@@ -17,7 +18,11 @@ import {
   DASHBOARD_STATS_UPDATE_EVENT,
 } from "@ratly/core";
 
-@WebSocketGateway({ cors: { origin: "*" } })
+@WebSocketGateway({
+  cors: {
+    origin: process.env.ALLOWED_ORIGIN ?? "http://localhost:5173",
+  },
+})
 export class EventsGateway
   implements
     OnGatewayConnection,
