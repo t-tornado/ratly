@@ -1,5 +1,5 @@
 /**
- * Steady scenario — varied-pace traffic across 2000 users.
+ * Steady scenario — varied-pace traffic across 400 users.
  *
  * Four traffic profiles spread users across different consumption rates.
  * Each virtual user loops indefinitely, hitting the rate-limit interceptor
@@ -20,16 +20,16 @@ const REQUEST_GAP_MS = 1_000;
 /**
  * Traffic profiles — each defines a consumption pace.
  *
- * Heavy:    2 reqs then 3s pause    → exhausts in ~5 min
- * Moderate: 1 req every 5s          → exhausts in ~8 min
- * Steady:   1 req every 10s         → exhausts in ~17 min
- * Light:    1 req every 20s         → exhausts in ~33 min
+ * Heavy:    2 reqs then 10s pause   → exhausts in ~8 min
+ * Moderate: 1 req every 15s         → exhausts in ~25 min
+ * Steady:   1 req every 30s         → exhausts in ~50 min
+ * Light:    1 req every 60s         → exhausts in ~100 min
  */
 const PROFILES = [
-  { count: 100, cycleSleepMs: 3_000, requestsPerCycle: 2, label: "heavy" },
-  { count: 400, cycleSleepMs: 5_000, requestsPerCycle: 1, label: "moderate" },
-  { count: 700, cycleSleepMs: 10_000, requestsPerCycle: 1, label: "steady" },
-  { count: 800, cycleSleepMs: 20_000, requestsPerCycle: 1, label: "light" },
+  { count: 20, cycleSleepMs: 10_000, requestsPerCycle: 2, label: "heavy" },
+  { count: 80, cycleSleepMs: 15_000, requestsPerCycle: 1, label: "moderate" },
+  { count: 140, cycleSleepMs: 30_000, requestsPerCycle: 1, label: "steady" },
+  { count: 160, cycleSleepMs: 60_000, requestsPerCycle: 1, label: "light" },
 ];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
