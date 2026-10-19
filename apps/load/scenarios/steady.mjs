@@ -1,25 +1,40 @@
-// Steady scenario — varied-pace traffic across 200 users
-// Assumes: 100 req limit / 3600s window per user
-// Users move at different speeds — exhaust at 2, 4, 6, or 10 min
-// 1s minimum gap between requests to avoid overwhelming the server
+/**
+ * Steady scenario — varied-pace traffic across 2000 users.
+ *
+ * Four traffic profiles spread users across different consumption rates.
+ * Each virtual user loops indefinitely, hitting the rate-limit interceptor
+ * until its window exhausts, then continues to generate 429s.
+ *
+ * Assumes: 100 req limit / 3600s window per user.
+ *
+ * @see RETURNING_USERS — fixed user pool shared across scenarios
+ * @see BASE_URL — target server
+ */
 
 import { BASE_URL } from "../lib/config.mjs";
 import { RETURNING_USERS } from "../lib/users.mjs";
 
+/** Minimum pause between consecutive requests within a cycle. */
 const REQUEST_GAP_MS = 1_000;
 
-// Heavy:    2 reqs then 1.4s pause → exhausts in ~2 min
-// Moderate: 1 req every 2.4s       → exhausts in ~4 min
-// Steady:   1 req every 3.6s       → exhausts in ~6 min
-// Light:    1 req every 6s         → exhausts in ~10 min
+/**
+ * Traffic profiles — each defines a consumption pace.
+ *
+ * Heavy:    2 reqs then 3s pause    → exhausts in ~5 min
+ * Moderate: 1 req every 5s          → exhausts in ~8 min
+ * Steady:   1 req every 10s         → exhausts in ~17 min
+ * Light:    1 req every 20s         → exhausts in ~33 min
+ */
 const PROFILES = [
-  { count: 10, cycleSleepMs: 1_400, requestsPerCycle: 2, label: "heavy" },
-  { count: 40, cycleSleepMs: 2_400, requestsPerCycle: 1, label: "moderate" },
-  { count: 70, cycleSleepMs: 3_600, requestsPerCycle: 1, label: "steady" },
-  { count: 80, cycleSleepMs: 6_000, requestsPerCycle: 1, label: "light" },
+  { count: 100, cycleSleepMs: 3_000, requestsPerCycle: 2, label: "heavy" },
+  { count: 400, cycleSleepMs: 5_000, requestsPerCycle: 1, label: "moderate" },
+  { count: 700, cycleSleepMs: 10_000, requestsPerCycle: 1, label: "steady" },
+  { count: 800, cycleSleepMs: 20_000, requestsPerCycle: 1, label: "light" },
 ];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Adds ±20% randomness to prevent synchronized request waves. */
 const jitter = (ms) => ms + ms * (Math.random() * 0.4 - 0.2);
 
 async function hit(userId, label) {
@@ -30,8 +45,14 @@ async function hit(userId, label) {
   console.log(`[${label}] ${userId} → ${res.status}  remaining: ${remaining}`);
 }
 
+/**
+ * Simulates one user's traffic pattern.
+ *
+ * Staggers start by up to 15s to avoid a thundering herd at launch,
+ * then loops through request cycles at the profile's pace.
+ */
 async function virtualUser(userId, profile) {
-  await sleep(Math.random() * 3_000);
+  await sleep(Math.random() * 15_000);
 
   while (true) {
     for (let i = 0; i < profile.requestsPerCycle; i++) {
@@ -60,5 +81,8 @@ for (const profile of PROFILES) {
     `  ${profile.label}: ${profile.count} users, ${profile.requestsPerCycle} req/cycle, ~${exhaustMin} min to exhaust`
   );
 }
+
+console.log("Waiting 15s before starting load...");
+await sleep(15_000);
 
 await Promise.all(vus.map(({ userId, profile }) => virtualUser(userId, profile)));
