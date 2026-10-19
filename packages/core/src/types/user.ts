@@ -3,9 +3,6 @@
  *
  * Assembled by Lua scripts on the server, consumed by both
  * dashboard table rows and the user detail page.
- *
- * @see RateLimitService.readRow — single-user fetch
- * @see unpackAllRows — bulk decode from Lua flat array
  */
 export interface UserRow {
   userId: string;

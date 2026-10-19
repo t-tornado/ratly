@@ -1,7 +1,6 @@
 /**
- * Socket.IO event names — emitted by {@link EventsGateway}, consumed by UI hooks.
+ * Socket.IO event names — emitted by the server gateway, consumed by UI hooks.
  *
- * @see EventsGateway — server-side emitter
  * @see useRowEventStore — dashboard listener for row events
  * @see useUserDetailStats — detail page listener for row events
  * @see useDashboardData — dashboard listener for stats events
