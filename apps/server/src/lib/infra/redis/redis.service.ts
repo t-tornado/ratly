@@ -3,6 +3,17 @@ import { ConfigService } from "@nestjs/config";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import Redis from "ioredis";
 
+import { REDIS_RETRY_BASE_MS, REDIS_RETRY_CAP_MS } from "../../constants.js";
+
+/**
+ * Linear backoff for Redis reconnection attempts, capped at {@link REDIS_RETRY_CAP_MS}.
+ *
+ * Never returns null — ioredis retries indefinitely so the server
+ * stays alive while Redis is down.
+ */
+const computeReconnectDelay = (attemptNumber: number): number =>
+  Math.min(attemptNumber * REDIS_RETRY_BASE_MS, REDIS_RETRY_CAP_MS);
+
 @Injectable()
 export class RedisService extends Redis implements OnModuleDestroy {
   private readonly redisHost: string;
@@ -14,7 +25,12 @@ export class RedisService extends Redis implements OnModuleDestroy {
   ) {
     const host = configService.get<string>("REDIS_HOST", "localhost");
     const port = configService.get<number>("REDIS_PORT", 6379);
-    super({ host, port });
+    super({
+      host,
+      port,
+      maxRetriesPerRequest: null,
+      retryStrategy: computeReconnectDelay,
+    });
 
     this.redisHost = host;
     this.redisPort = port;

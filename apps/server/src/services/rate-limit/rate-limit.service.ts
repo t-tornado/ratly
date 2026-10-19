@@ -9,6 +9,11 @@ import { redisKeys } from "../../lib/redis-keys.js";
 export class RateLimitService {
   constructor(private readonly redis: RedisService) {}
 
+  /** Whether the underlying Redis connection is accepting commands. */
+  get isHealthy(): boolean {
+    return this.redis.status === "ready";
+  }
+
   async consume(userId: string): Promise<ConsumeResult> {
     const today = new Date().toISOString().slice(0, 10);
 

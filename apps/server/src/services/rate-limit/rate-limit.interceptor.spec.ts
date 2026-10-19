@@ -78,6 +78,7 @@ describe("RateLimitInterceptor", () => {
 
   beforeEach(async () => {
     mockService = {
+      isHealthy: true,
       consume: vi.fn(),
       readRow: vi.fn(),
     };
@@ -97,6 +98,21 @@ describe("RateLimitInterceptor", () => {
     }).compile();
 
     interceptor = module.get<RateLimitInterceptor>(RateLimitInterceptor);
+  });
+
+  it("throws 503 when Redis is unavailable", async () => {
+    mockService.isHealthy = false;
+    const { context } = createHttpContext({ "x-user-id": "user-1" });
+
+    try {
+      await interceptor.intercept(context as never, callHandler);
+      expect.unreachable("should have thrown");
+    } catch (error) {
+      expect(error).toBeInstanceOf(HttpException);
+      expect((error as HttpException).getStatus()).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    expect(mockService.consume).not.toHaveBeenCalled();
   });
 
   it("throws 401 when x-user-id header is missing", async () => {
