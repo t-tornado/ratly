@@ -9,6 +9,7 @@ import { RateLimitService } from "../rate-limit/rate-limit.service.js";
 import { addExtraScript, resetWindowScript } from "../rate-limit/scripts/index.js";
 import { UserRow, ActivityBucket, ActivityRange, ActivityResponse } from "../../lib/types/index.js";
 import { redisKeys } from "../../lib/redis-keys.js";
+import { MIN_PAUSE_SECONDS, MAX_PAUSE_SECONDS } from "../../lib/constants.js";
 
 const VALID_ACTIVITY_RANGES: ActivityRange[] = ["hour", "day"];
 
@@ -76,8 +77,8 @@ export class AdminService {
   }
 
   async pause(userId: string, seconds: number): Promise<UserRow> {
-    if (!Number.isInteger(seconds) || seconds < 60 || seconds > 86400) {
-      throw new BadRequestException("seconds must be a whole number between 60 and 86400");
+    if (!Number.isInteger(seconds) || seconds < MIN_PAUSE_SECONDS || seconds > MAX_PAUSE_SECONDS) {
+      throw new BadRequestException(`seconds must be a whole number between ${MIN_PAUSE_SECONDS} and ${MAX_PAUSE_SECONDS}`);
     }
     await this.assertUserExists(userId);
     await this.redis.set(redisKeys.userPaused(userId), "1", "EX", seconds);

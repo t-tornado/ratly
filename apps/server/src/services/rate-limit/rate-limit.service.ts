@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { RedisService } from "../../lib/infra/redis/redis.service.js";
 import { fixedWindowScript, userRowScript, allRowsScript, unpackAllRows } from "./scripts/index.js";
 import { ConsumeResult, UserRow } from "../../lib/types/index.js";
-import { DEFAULT_LIMIT, WINDOW_SECONDS } from "../../lib/constants.js";
+import { DEFAULT_LIMIT, WINDOW_SECONDS, NEAR_LIMIT_THRESHOLD } from "../../lib/constants.js";
 import { redisKeys } from "../../lib/redis-keys.js";
 
 @Injectable()
@@ -77,7 +77,7 @@ export class RateLimitService {
       paused: pauseTtl > 0,
       pausedUntil: pauseTtl > 0 ? now + pauseTtl * 1000 : null,
       resetAt: windowTtl > 0 ? now + windowTtl * 1000 : null,
-      status: ratio >= 1 ? "exceeded" : ratio >= 0.9 ? "warning" : "ok",
+      status: ratio >= 1 ? "exceeded" : ratio >= NEAR_LIMIT_THRESHOLD ? "warning" : "ok",
       lastRequestAt,
       lastAdminResetAt: lastAdminResetAt > 0 ? lastAdminResetAt : null,
       rejectedToday,

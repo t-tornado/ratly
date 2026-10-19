@@ -1,4 +1,5 @@
 import { UserRow } from "../../../lib/types/index.js";
+import { NEAR_LIMIT_THRESHOLD } from "../../../lib/constants.js";
 
 /** Fields per user in the Lua flat array: userId, used, bonus, pausedCount, limit, windowTtl, pauseTtl, lastSeen, lastAdminResetAt, rejectedToday. */
 const USER_FIELD_COUNT = 10;
@@ -46,7 +47,7 @@ export function unpackAllRows(flat: (string | number)[]): UserRow[] {
       paused: pauseTtl > 0,
       pausedUntil: pauseTtl > 0 ? now + pauseTtl * 1000 : null,
       resetAt: windowTtl > 0 ? now + windowTtl * 1000 : null,
-      status: ratio >= 1 ? "exceeded" : ratio >= 0.9 ? "warning" : "ok",
+      status: ratio >= 1 ? "exceeded" : ratio >= NEAR_LIMIT_THRESHOLD ? "warning" : "ok",
       lastRequestAt: lastSeen,
       lastAdminResetAt: lastAdminResetAt > 0 ? lastAdminResetAt : null,
       rejectedToday,

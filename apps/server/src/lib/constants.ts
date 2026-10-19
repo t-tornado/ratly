@@ -18,6 +18,12 @@ export const NEAR_LIMIT_THRESHOLD = 0.9;
 /** TTL for the daily 429-count Redis key (2 days — keeps yesterday for the day chart). */
 export const STATS_429_TTL_SECONDS = 172_800;
 
+/** Minimum allowed pause duration for admin pause action. */
+export const MIN_PAUSE_SECONDS = 60;
+
+/** Maximum allowed pause duration for admin pause action (24 hours). */
+export const MAX_PAUSE_SECONDS = 86_400;
+
 /** Starting delay (ms) for Redis reconnection backoff. */
 export const REDIS_RETRY_BASE_MS = 500;
 
