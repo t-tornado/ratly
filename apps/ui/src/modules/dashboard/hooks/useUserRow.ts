@@ -1,14 +1,20 @@
-import { useCallback, useSyncExternalStore } from "react";
+import { useState, useEffect } from "react";
 import type { UserRow } from "@ratly/core";
 import type { RowEventStore } from "./useRowEventStore";
 
 /**
- * Reactive binding for a single table row.
+ * Reactive binding for a single table row via direct setState subscription.
  *
- * Subscribes to one userId in the {@link createRowStore} via
- * `useSyncExternalStore` — re-renders only when this specific
- * row changes, not on every socket event. This is what makes
- * the table performant with hundreds of rows.
+ * Registers this row's `setRow` in the {@link createRowStore} subscriber
+ * map. When a socket event arrives for this userId, the store does an
+ * O(1) map lookup and calls `setRow` directly — only this row re-renders.
+ *
+ * Uses `useState` + direct callback instead of `useSyncExternalStore`.
+ * With `useSyncExternalStore`, React calls every subscriber's `getSnapshot`
+ * on every store notification to check for changes — O(n) across all
+ * mounted rows per event. The direct `setRow` pattern skips that: the
+ * store already knows which row changed from the event payload, so it
+ * calls exactly one setter. O(1) per event regardless of row count.
  *
  * @param userId - Row to subscribe to
  * @param store - Store instance from {@link useRowEventStore}
@@ -17,20 +23,15 @@ import type { RowEventStore } from "./useRowEventStore";
  * @see createRowStore — owns the subscriber map
  */
 function useUserRow(userId: string, store: RowEventStore): UserRow | undefined {
-  const subscribeToRow = useCallback(
-    (onStoreChange: () => void) => {
-      store.subscribe(userId, () => onStoreChange());
-      return () => store.unsubscribe(userId);
-    },
-    [userId, store],
-  );
+  const [row, setRow] = useState<UserRow | undefined>(() => store.getRow(userId));
 
-  const getRowSnapshot = useCallback(
-    () => store.getRow(userId),
-    [userId, store],
-  );
+  useEffect(() => {
+    setRow(store.getRow(userId));
+    store.subscribe(userId, setRow);
+    return () => store.unsubscribe(userId);
+  }, [userId, store]);
 
-  return useSyncExternalStore(subscribeToRow, getRowSnapshot);
+  return row;
 }
 
 export { useUserRow };

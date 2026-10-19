@@ -77,13 +77,17 @@ describe("useRowEventStore", () => {
     expect(result.current.getRow("usr_ok")?.status).toBe("exceeded");
   });
 
-  it("adds new user to userIds on event for unknown user", () => {
+  it("adds new user to userIds on event for unknown user", async () => {
     const { result } = renderHook(() => useRowEventStore(mockSocket as unknown as Socket, mockRows));
 
     const newRow: UserRow = { ...mockUserRow, userId: "usr_new" };
 
     act(() => {
       mockSocket.emit(RATE_UPDATE_EVENT, { row: newRow });
+    });
+
+    await act(async () => {
+      await new Promise<void>((resolve) => queueMicrotask(resolve));
     });
 
     expect(result.current.userIds).toContain("usr_new");

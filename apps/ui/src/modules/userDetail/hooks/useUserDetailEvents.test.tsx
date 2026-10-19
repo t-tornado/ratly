@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import type { ReactNode } from "react";
 import type { Socket } from "socket.io-client";
@@ -8,6 +8,7 @@ import { mockUserRow, mockExceededRow } from "../../../test/fixtures";
 import { SocketContext } from "../../../lib/hooks/useSocket";
 import { useUserDetailEvents } from "./useUserDetailEvents";
 import { useEventStreamStore } from "./useEventStreamStore";
+import { EVENT_BUFFER_FLUSH_MS } from "../utils/eventStream";
 
 type SocketHandler = (...args: unknown[]) => void;
 
@@ -42,12 +43,16 @@ describe("useUserDetailEvents", () => {
   let mockSocket: ReturnType<typeof createMockSocket>;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.useFakeTimers();
     mockSocket = createMockSocket();
     useEventStreamStore.setState({ streams: {} });
   });
 
-  it("pushes rate:update event for matching userId to store", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("flushes buffered rate:update event to store after interval", () => {
     const { result } = renderHook(() => useUserDetailEvents("usr_ok"), {
       wrapper: createWrapper(mockSocket as unknown as Socket),
     });
@@ -56,12 +61,18 @@ describe("useUserDetailEvents", () => {
       mockSocket.emit(RATE_UPDATE_EVENT, { row: mockUserRow });
     });
 
+    expect(result.current.events).toHaveLength(0);
+
+    act(() => {
+      vi.advanceTimersByTime(EVENT_BUFFER_FLUSH_MS);
+    });
+
     expect(result.current.events).toHaveLength(1);
     expect(result.current.events[0].type).toBe(RATE_UPDATE_EVENT);
     expect(result.current.events[0].severity).toBe("info");
   });
 
-  it("pushes rate:limit_exceeded event for matching userId to store", () => {
+  it("flushes buffered rate:limit_exceeded event to store after interval", () => {
     const exceededRow = { ...mockUserRow, userId: "usr_ok", used: 100, remaining: 0, status: "exceeded" as const };
 
     const { result } = renderHook(() => useUserDetailEvents("usr_ok"), {
@@ -70,11 +81,32 @@ describe("useUserDetailEvents", () => {
 
     act(() => {
       mockSocket.emit(RATE_LIMIT_EXCEEDED_EVENT, { row: exceededRow });
+      vi.advanceTimersByTime(EVENT_BUFFER_FLUSH_MS);
     });
 
     expect(result.current.events).toHaveLength(1);
     expect(result.current.events[0].type).toBe(RATE_LIMIT_EXCEEDED_EVENT);
     expect(result.current.events[0].severity).toBe("error");
+  });
+
+  it("batches multiple events into single flush", () => {
+    const { result } = renderHook(() => useUserDetailEvents("usr_ok"), {
+      wrapper: createWrapper(mockSocket as unknown as Socket),
+    });
+
+    act(() => {
+      mockSocket.emit(RATE_UPDATE_EVENT, { row: mockUserRow });
+      mockSocket.emit(RATE_UPDATE_EVENT, { row: { ...mockUserRow, used: 10 } });
+      mockSocket.emit(RATE_UPDATE_EVENT, { row: { ...mockUserRow, used: 20 } });
+    });
+
+    expect(result.current.events).toHaveLength(0);
+
+    act(() => {
+      vi.advanceTimersByTime(EVENT_BUFFER_FLUSH_MS);
+    });
+
+    expect(result.current.events).toHaveLength(3);
   });
 
   it("ignores events for non-matching userId", () => {
@@ -84,9 +116,27 @@ describe("useUserDetailEvents", () => {
 
     act(() => {
       mockSocket.emit(RATE_UPDATE_EVENT, { row: mockExceededRow });
+      vi.advanceTimersByTime(EVENT_BUFFER_FLUSH_MS);
     });
 
     expect(result.current.events).toHaveLength(0);
+  });
+
+  it("flushes remaining buffer on unmount", () => {
+    const { result, unmount } = renderHook(() => useUserDetailEvents("usr_ok"), {
+      wrapper: createWrapper(mockSocket as unknown as Socket),
+    });
+
+    act(() => {
+      mockSocket.emit(RATE_UPDATE_EVENT, { row: mockUserRow });
+    });
+
+    act(() => {
+      unmount();
+    });
+
+    const stream = useEventStreamStore.getState().getStream("usr_ok");
+    expect(stream.events).toHaveLength(1);
   });
 
   it("cleans up listeners on unmount", () => {

@@ -153,12 +153,14 @@ function UserDetailActivity({ userId }: UserDetailActivityProps) {
                   fill={ALLOWED_COLOR}
                   opacity={0.85}
                   radius={[1, 1, 0, 0]}
+                  isAnimationActive={false}
                 />
                 <Bar
                   dataKey="rejected"
                   stackId="activity"
                   fill={REJECTED_COLOR}
                   radius={[1, 1, 0, 0]}
+                  isAnimationActive={false}
                 />
               </BarChart>
             </ResponsiveContainer>

@@ -10,13 +10,13 @@ const DEFAULT_PROPS = {
   userId: "usr_abc123",
 };
 
-describe("ThrottlingModal — Pause variant", () => {
-  it("renders pause title when isThrottling=true", () => {
+describe("ThrottlingModal — Start variant (isThrottling=true)", () => {
+  it("renders start title when isThrottling=true", () => {
     render(
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={true} />
     );
     expect(screen.getByTestId("modal-title")).toHaveTextContent(
-      "Pause throttling for usr_abc123"
+      "Start throttling for usr_abc123"
     );
   });
 
@@ -82,25 +82,25 @@ describe("ThrottlingModal — Pause variant", () => {
       />
     );
     fireEvent.click(screen.getByText("24 hours"));
-    fireEvent.click(screen.getByText("Pause throttling"));
+    fireEvent.click(screen.getByText("Start throttling"));
     expect(handleConfirm).toHaveBeenCalledWith("24h");
   });
 
-  it('confirm button says "Pause throttling"', () => {
+  it('confirm button says "Start throttling"', () => {
     render(
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={true} />
     );
-    expect(screen.getByText("Pause throttling")).toBeInTheDocument();
+    expect(screen.getByText("Start throttling")).toBeInTheDocument();
   });
 });
 
-describe("ThrottlingModal — Start variant", () => {
-  it("renders start title when isThrottling=false", () => {
+describe("ThrottlingModal — Stop variant (isThrottling=false)", () => {
+  it("renders stop title when isThrottling=false", () => {
     render(
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={false} />
     );
     expect(screen.getByTestId("modal-title")).toHaveTextContent(
-      "Start throttling for usr_abc123"
+      "Stop throttling for usr_abc123"
     );
   });
 
@@ -140,14 +140,14 @@ describe("ThrottlingModal — Start variant", () => {
         onConfirm={handleConfirm}
       />
     );
-    fireEvent.click(screen.getByText("Start throttling"));
+    fireEvent.click(screen.getByText("Stop throttling"));
     expect(handleConfirm).toHaveBeenCalledWith();
   });
 
-  it('confirm button says "Start throttling"', () => {
+  it('confirm button says "Stop throttling"', () => {
     render(
       <ThrottlingModal {...DEFAULT_PROPS} isThrottling={false} />
     );
-    expect(screen.getByText("Start throttling")).toBeInTheDocument();
+    expect(screen.getByText("Stop throttling")).toBeInTheDocument();
   });
 });

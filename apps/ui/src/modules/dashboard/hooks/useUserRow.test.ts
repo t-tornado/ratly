@@ -25,21 +25,19 @@ describe("useUserRow", () => {
     expect(result.current).toBeUndefined();
   });
 
-  it("re-renders when row data changes via store subscriber", () => {
+  it("re-renders when row subscriber is called with updated data", () => {
     let subscribedCallback: ((row: UserRow) => void) | null = null;
     const subscribingStore: RowEventStore = {
       ...store,
-      subscribe: vi.fn((userId: string, callback: (row: UserRow) => void) => {
+      subscribe: vi.fn((_userId: string, callback: (row: UserRow) => void) => {
         subscribedCallback = callback;
       }),
       unsubscribe: vi.fn(),
-      getRow: vi.fn()
-        .mockReturnValueOnce(mockUserRow)
-        .mockReturnValue({ ...mockUserRow, used: 99, remaining: 1 }),
     };
 
     const { result } = renderHook(() => useUserRow("usr_ok", subscribingStore));
 
+    expect(result.current).toEqual(mockUserRow);
     expect(subscribingStore.subscribe).toHaveBeenCalledWith("usr_ok", expect.any(Function));
 
     act(() => {

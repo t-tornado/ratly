@@ -77,7 +77,7 @@ function DashboardActionMenu({
       hidden: row.limit === DEFAULT_LIMIT,
     },
     {
-      label: row.paused ? "Pause throttling" : "Start throttling",
+      label: row.paused ? "Stop throttling" : "Start throttling",
       onClick: () => setActiveModal("throttling"),
     },
   ];
@@ -147,7 +147,7 @@ function DashboardActionMenu({
         onClose={closeModal}
         onConfirm={handleThrottlingConfirm}
         userId={row.userId}
-        isThrottling={row.paused}
+        isThrottling={!row.paused}
         currentRemaining={row.remaining}
         isLoading={isThrottlingPending}
       />

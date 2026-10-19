@@ -77,14 +77,14 @@ describe("UserDetailHeader", () => {
     expect(screen.getByText("Add extra requests")).toBeInTheDocument();
   });
 
-  it("shows 'Start Throttling' when isThrottling is false", () => {
+  it("shows 'Stop Throttling' when isThrottling is false", () => {
     renderHeader({ isThrottling: false });
-    expect(screen.getByText("Start Throttling")).toBeInTheDocument();
+    expect(screen.getByText("Stop Throttling")).toBeInTheDocument();
   });
 
-  it("shows 'Pause Throttling' when isThrottling is true", () => {
+  it("shows 'Start Throttling' when isThrottling is true", () => {
     renderHeader({ isThrottling: true });
-    expect(screen.getByText("Pause Throttling")).toBeInTheDocument();
+    expect(screen.getByText("Start Throttling")).toBeInTheDocument();
   });
 
   it("opens ResetWindowModal when Reset window button clicked", () => {
@@ -111,19 +111,19 @@ describe("UserDetailHeader", () => {
     );
   });
 
-  it("opens ThrottlingModal with pause variant when isThrottling is true", () => {
+  it("opens ThrottlingModal with start variant when isThrottling is true", () => {
     renderHeader({ isThrottling: true });
-    fireEvent.click(screen.getByText("Pause Throttling"));
-    expect(screen.getByTestId("modal-title")).toHaveTextContent(
-      "Pause throttling for"
-    );
-  });
-
-  it("opens ThrottlingModal with start variant when isThrottling is false", () => {
-    renderHeader({ isThrottling: false });
     fireEvent.click(screen.getByText("Start Throttling"));
     expect(screen.getByTestId("modal-title")).toHaveTextContent(
       "Start throttling for"
+    );
+  });
+
+  it("opens ThrottlingModal with stop variant when isThrottling is false", () => {
+    renderHeader({ isThrottling: false });
+    fireEvent.click(screen.getByText("Stop Throttling"));
+    expect(screen.getByTestId("modal-title")).toHaveTextContent(
+      "Stop throttling for"
     );
   });
 });

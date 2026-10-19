@@ -1,6 +1,7 @@
 import type { UserRow } from "@ratly/core";
 import { mapUserRowToTableRow } from "../../../../lib/utils";
 import { useMediaQuery } from "../../../../lib/hooks/useMediaQuery";
+import { routes } from "../../../../routes";
 import { DataTableRow } from "../DataTable/DataTableRow";
 import { DashboardActionMenu } from "../DashboardActionMenu";
 import { useUserRow } from "../../hooks/useUserRow";
@@ -35,6 +36,7 @@ function DashboardTableRow({ userId, store, onRowClick, adminActions }: Dashboar
   return (
     <DataTableRow
       {...tableRow}
+      href={routes.userDetail(userId)}
       variant={isMobile ? "card" : "table"}
       isClickable
       onClick={onRowClick}

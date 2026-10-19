@@ -50,7 +50,7 @@ function ThrottlingModal({
 
   const title = (
     <>
-      {isThrottling ? "Pause" : "Start"} throttling for{" "}
+      {isThrottling ? "Start" : "Stop"} throttling for{" "}
       <span className="font-mono">{userId}</span>
     </>
   );
@@ -67,7 +67,7 @@ function ThrottlingModal({
     <ModalFooter
       onCancel={onClose}
       onConfirm={handleConfirm}
-      confirmLabel={isThrottling ? "Pause throttling" : "Start throttling"}
+      confirmLabel={isThrottling ? "Start throttling" : "Stop throttling"}
       confirmVariant={isThrottling ? "primary" : "accent"}
       isConfirmLoading={isLoading}
     />
@@ -107,7 +107,7 @@ function ThrottlingModal({
           </>
         ) : (
           <p className="text-base-sm text-text-tertiary leading-normal">
-            Turn throttling back on now. The user has{" "}
+            Resume normal rate limiting now. The user has{" "}
             {currentRemaining ?? 0} left in this window; if they're
             already over, further requests are rejected right away.
           </p>

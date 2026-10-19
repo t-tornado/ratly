@@ -94,7 +94,7 @@ function UserDetailHeader({
               variant={isThrottling ? "primary" : "ghost"}
               onClick={() => setActiveModal("throttling")}
             >
-              {isThrottling ? "Pause Throttling" : "Start Throttling"}
+              {isThrottling ? "Start Throttling" : "Stop Throttling"}
             </Button>
           </div>
         }

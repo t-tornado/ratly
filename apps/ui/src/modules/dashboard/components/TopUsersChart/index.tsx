@@ -77,7 +77,7 @@ function TopUsersChart({ topUsers, isError }: TopUsersChartProps) {
               content={<TopUsersChartTooltip />}
               cursor={false}
             />
-            <Bar dataKey="used" radius={[0, 4, 4, 0]} style={{ outline: "none" }}>
+            <Bar dataKey="used" radius={[0, 4, 4, 0]} style={{ outline: "none" }} isAnimationActive={false}>
               {topUsers.map((user) => (
                 <Cell
                   key={user.userId}

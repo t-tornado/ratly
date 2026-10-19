@@ -88,7 +88,7 @@ export default function UserDetailPage() {
         status={badgeVariant}
         statusLabel={statusLabel}
         isStreaming={isConnected}
-        isThrottling={paused}
+        isThrottling={!paused}
         currentLimit={currentLimit ?? 0}
         currentRemaining={currentRemaining ?? 0}
         onResetWindow={handleResetWindow}
