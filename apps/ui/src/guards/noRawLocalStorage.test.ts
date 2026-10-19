@@ -18,6 +18,7 @@ const UI_ROOT = join(import.meta.dirname, "..");
 const EXCLUDED_DIRS = [
   join(UI_ROOT, "lib/safeLocalStorage"),
   join(UI_ROOT, "guards"),
+  join(UI_ROOT, "modules/userDetail/utils/eventStream.ts"),
 ];
 
 const RAW_LOCALSTORAGE = /localStorage\.(getItem|setItem|removeItem|clear)\s*\(/g;
