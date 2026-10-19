@@ -17,8 +17,8 @@ COPY apps/ui ./apps/ui
 # Build core first (ui depends on @ratly/core)
 RUN pnpm --filter @ratly/core build
 
-# Build UI — empty VITE_API_URL so requests go to same origin (nginx proxy)
-ENV VITE_API_URL=""
+ARG VITE_API_URL=http://localhost:3000
+ENV VITE_API_URL=$VITE_API_URL
 RUN pnpm --filter @ratly/ui build
 
 FROM nginx:alpine AS prod
