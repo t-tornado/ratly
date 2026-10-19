@@ -2,6 +2,22 @@ import type { UserRow } from "@ratly/core";
 
 type RowSubscriber = (row: UserRow) => void;
 
+/**
+ * In-memory store for dashboard table rows — the pub/sub core.
+ *
+ * Holds the canonical row map and two subscriber tiers:
+ * - **Row subscribers** — per-userId callbacks fired on row mutation
+ *   (consumed by {@link useUserRow} via `useSyncExternalStore`)
+ * - **Store listeners** — fired when the userId list changes
+ *   (consumed by {@link useRowEventStore} to re-render the table)
+ *
+ * Flow: socket event → {@link useRowEventStore}.handleRowEvent
+ * → `store.handleRowEvent` → notifies per-row subscriber OR
+ * store listeners (if new user).
+ *
+ * @see useRowEventStore — wires socket events into this store
+ * @see useUserRow — subscribes a single table row to its updates
+ */
 function createRowStore() {
   const rowsMap = new Map<string, UserRow>();
   const rowSubscribers = new Map<string, RowSubscriber>();

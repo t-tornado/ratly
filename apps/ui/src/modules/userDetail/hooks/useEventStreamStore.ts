@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { StreamEvent } from "../../../lib/types";
 
+/** Oldest events evicted beyond this cap — history lives server-side. */
 const MAX_EVENTS_PER_USER = 200;
 
 interface UserEventStream {
@@ -17,6 +18,17 @@ interface EventStreamState {
 
 const EMPTY_STREAM: UserEventStream = { events: [], lastRecorded: null };
 
+/**
+ * Zustand store for user event streams — persisted to localStorage.
+ *
+ * Each user gets an independent stream capped at {@link MAX_EVENTS_PER_USER}.
+ * Fed by {@link useUserDetailEvents} which maps socket events into
+ * {@link StreamEvent} objects.
+ *
+ * @remarks Persisted under key `"ratly-event-streams"`. Survives
+ * page refresh so the user sees recent history on return.
+ * @see useUserDetailEvents — the socket-to-store bridge
+ */
 const useEventStreamStore = create<EventStreamState>()(
   persist(
     (set, get) => ({

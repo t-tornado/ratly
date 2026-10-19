@@ -12,6 +12,28 @@ interface RowEventStore {
   getRow: (userId: string) => UserRow | undefined;
 }
 
+/**
+ * Bridge between socket events and the dashboard table rows.
+ *
+ * Seeds {@link createRowStore} with REST-fetched rows, then pushes
+ * every `rate:update` and `rate:limit_exceeded` socket event into
+ * the store. The store fans out to per-row subscribers.
+ *
+ * ```
+ * SocketProvider
+ *   └─ useDashboardData ──→ initial rows (REST)
+ *   └─ useRowEventStore ──→ live row patches (WebSocket)
+ *        └─ createRowStore (pub/sub core)
+ *             └─ useUserRow (per-row consumer)
+ * ```
+ *
+ * @param socket - Shared Socket.IO instance from {@link SocketProvider}
+ * @param initialRows - REST-fetched rows from {@link useDashboardData}
+ * @listens socket "rate:update" — patches existing row or adds new user
+ * @listens socket "rate:limit_exceeded" — patches row with exceeded state
+ * @see createRowStore — the underlying pub/sub store
+ * @see useUserRow — per-row reactive binding
+ */
 function useRowEventStore(socket: Socket, initialRows: UserRow[]): RowEventStore {
   const [store] = useState(() => createRowStore());
 

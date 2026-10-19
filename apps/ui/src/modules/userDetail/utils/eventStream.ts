@@ -2,6 +2,17 @@ import { RATE_UPDATE_EVENT, RATE_LIMIT_EXCEEDED_EVENT } from "@ratly/core";
 import type { UserRow } from "@ratly/core";
 import type { StreamEvent } from "../../../lib/types";
 
+/**
+ * Mappers that convert raw {@link UserRow} socket payloads into
+ * display-ready {@link StreamEvent} objects for the event stream UI.
+ *
+ * Each mapper stamps a client-side timestamp and UUID — the server
+ * doesn't provide these since events are ephemeral broadcasts.
+ *
+ * @see useUserDetailEvents — calls these on each socket event
+ * @see useEventStreamStore — receives the mapped events
+ */
+
 function formatEventTimestamp(): string {
   return new Date().toLocaleTimeString("en-GB", { hour12: false });
 }

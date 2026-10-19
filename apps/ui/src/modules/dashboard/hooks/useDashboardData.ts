@@ -9,6 +9,19 @@ import type { DashboardResponse } from "../../../lib/api";
 
 const EMPTY_ROWS: UserRow[] = [];
 
+/**
+ * REST bootstrap + live stats for the dashboard.
+ *
+ * Fetches the initial dashboard payload (rows + stats), then
+ * keeps stats current via `dashboard_stats:update` socket events.
+ * Rows are handed off to {@link useRowEventStore} for per-row
+ * pub/sub — this hook does not manage row updates.
+ *
+ * @param socket - Shared Socket.IO instance from {@link SocketProvider}
+ * @returns Initial rows (seed for {@link useRowEventStore}), live stats, loading state
+ * @listens socket "dashboard_stats:update" — replaces stats in query cache
+ * @see useRowEventStore — takes `initialRows` and owns row-level updates
+ */
 function useDashboardData(socket: Socket) {
   const queryClient = useQueryClient();
 

@@ -20,6 +20,24 @@ interface UserDetailStatsResult {
   isError: boolean;
 }
 
+/**
+ * Live rate-limit state for a single user's detail page.
+ *
+ * Fetches the user via REST, then patches the query cache on every
+ * matching socket event. A 1s interval tick keeps the countdown
+ * display current between events.
+ *
+ * Unlike the dashboard's {@link useRowEventStore} (which fans out
+ * through a pub/sub store), this hook writes directly to the
+ * React Query cache — simpler for a single-user view.
+ *
+ * @param userId - Target user
+ * @returns Reactive stat items, status, and control flags
+ * @listens socket "rate:update" — patches row if userId matches
+ * @listens socket "rate:limit_exceeded" — patches row if userId matches
+ * @see useUserDetailEvents — sibling hook for the event stream
+ * @see buildLiveStatItems — pure formatter in utils/userStats
+ */
 function useUserDetailStats(userId: string): UserDetailStatsResult {
   const { socket } = useSocket();
   const queryClient = useQueryClient();

@@ -9,6 +9,15 @@ interface SocketContextValue {
 
 export const SocketContext = createContext<SocketContextValue | null>(null);
 
+/**
+ * Access the shared Socket.IO instance from {@link SocketProvider}.
+ *
+ * Returns the socket and connection status. Throws if called
+ * outside SocketProvider — never returns null at runtime.
+ *
+ * @throws {ContextNotFoundError} When used outside SocketProvider
+ * @see SocketProvider — owns the connection lifecycle
+ */
 export function useSocket(): SocketContextValue {
   const context = useContext(SocketContext);
 
