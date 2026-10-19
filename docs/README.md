@@ -1,15 +1,38 @@
-# Ratly design docs
+# Documentation
 
-> **All documents are drafts.** UI specs are stable; backend architecture is not yet decided.
+## Architecture and decisions
 
-Start with the TRD; the other documents hold the detail it links to.
+| Document | What it covers |
+| --- | --- |
+| [decisions/architecture.md](decisions/architecture.md) | Why Redis-only, ephemeral state, monorepo, WebSocket + REST |
+| [decisions/backend.md](decisions/backend.md) | Fixed window, TOCTOU safety, activity tracking counters |
+| [decisions/frontend.md](decisions/frontend.md) | Client-side filtering, per-row pub/sub store |
 
-| File | Contents | Status |
-| --- | --- | --- |
-| [01-TRD.md](01-TRD.md) | Requirements, UI spec, open decisions | **Draft** — requirements and UI stable |
-| [02-architecture.md](02-architecture.md) | Component diagram | **TBD** |
-| [03-request-flow.md](03-request-flow.md) | Sequence diagrams | **TBD** |
-| [04-api-contracts.md](04-api-contracts.md) | Endpoints, payloads, WebSocket events | **Draft** — directional, not final |
-| [05-data-model.md](05-data-model.md) | Database and storage schema | **TBD** |
-| [06-invariants.md](06-invariants.md) | System properties and enforcement | **TBD** |
-| [backlog.md](backlog.md) | Deferred work — intentionally not in current scope | Living doc |
+## System design
+
+| Document | What it covers |
+| --- | --- |
+| [01-redis-data-model.md](01-redis-data-model.md) | Every Redis key, type, TTL, who reads and writes it |
+| [02-admin-actions.md](02-admin-actions.md) | All admin endpoints, validation, edge cases |
+| [03-flows-and-scripts.md](03-flows-and-scripts.md) | Request flow, Lua scripts, dashboard load, stats timer |
+
+## Original requirements
+
+| Document | What it covers |
+| --- | --- |
+| [system/diagrams/01-TRD.md](system/diagrams/01-TRD.md) | Technical Requirements Document — goals, UI spec, requirements matrix |
+| [system/diagrams/architecture.png](system/diagrams/architecture.png) | System architecture diagram |
+
+## Agent system
+
+| Document | What it covers |
+| --- | --- |
+| [agentic-playbook/README.md](agentic-playbook/README.md) | Overview of the agent system and what's automated |
+| [agentic-playbook/ratis.md](agentic-playbook/ratis.md) | Ratis — autonomous issue agent, phases, doability criteria |
+| [agentic-playbook/skills.md](agentic-playbook/skills.md) | Full index of all Claude Code skills |
+
+## Roadmap
+
+| Document | What it covers |
+| --- | --- |
+| [backlog.md](backlog.md) | Deferred work — observability, authentication, and what triggers each |
