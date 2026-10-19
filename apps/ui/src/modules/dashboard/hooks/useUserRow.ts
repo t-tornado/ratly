@@ -26,7 +26,6 @@ function useUserRow(userId: string, store: RowEventStore): UserRow | undefined {
   const [row, setRow] = useState<UserRow | undefined>(() => store.getRow(userId));
 
   useEffect(() => {
-    setRow(store.getRow(userId));
     store.subscribe(userId, setRow);
     return () => store.unsubscribe(userId);
   }, [userId, store]);

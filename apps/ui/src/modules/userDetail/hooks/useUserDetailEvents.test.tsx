@@ -123,7 +123,7 @@ describe("useUserDetailEvents", () => {
   });
 
   it("flushes remaining buffer on unmount", () => {
-    const { result, unmount } = renderHook(() => useUserDetailEvents("usr_ok"), {
+    const { unmount } = renderHook(() => useUserDetailEvents("usr_ok"), {
       wrapper: createWrapper(mockSocket as unknown as Socket),
     });
 
