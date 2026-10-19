@@ -37,7 +37,12 @@ export class RateLimitInterceptor implements NestInterceptor {
      * Rate limiting depends on Redis — checked via {@link RateLimitService.isHealthy}
      * rather than Redis directly because this interceptor owns the rate-limit concern.
      *
-     * @see EventsGateway.isRedisReady for the WebSocket equivalent
+     * This only covers HTTP requests. WebSocket connections bypass the
+     * interceptor entirely — {@link EventsGateway.handleConnection} owns
+     * its own Redis health gate via {@link EventsGateway.isRedisReady}.
+     *
+     * @see EventsGateway.isRedisReady — WebSocket equivalent
+     * @see EventsGateway.handleConnection — rejects WS clients when Redis is down
      */
     if (!this.rateLimitService.isHealthy) {
       this.logger.error("RateLimit:Redis [Unavailable]");
