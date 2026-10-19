@@ -5,11 +5,9 @@ import { Logger, PinoLogger } from "nestjs-pino";
 import { AppModule } from "./app.module.js";
 
 async function bootstrap() {
-  const app = await NestFactory.create(
-    AppModule,
-    new FastifyAdapter(),
-    { bufferLogs: true },
-  );
+  const app = await NestFactory.create(AppModule, new FastifyAdapter(), {
+    bufferLogs: true,
+  });
 
   app.useLogger(app.get(Logger));
   app.enableCors({ origin: "*" });
@@ -20,8 +18,11 @@ async function bootstrap() {
 
   await app.listen(port, "0.0.0.0");
 
-  const logger = app.get(PinoLogger);
-  logger.info({ port, env, nodeVersion: process.versions.node }, "Server:Bootstrap [Success]");
+  const logger = await app.resolve(PinoLogger);
+  logger.info(
+    { port, env, nodeVersion: process.versions.node },
+    "Server:Bootstrap [Success]",
+  );
 }
 
 bootstrap().catch((error) => {
