@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, afterAll } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import Redis from "ioredis";
 import { createTestRedis, isRedisAvailable } from "../../../test/redisTestClient.js";
 import { fixedWindowScript } from "./index.js";

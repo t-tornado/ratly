@@ -68,6 +68,9 @@ importers:
         specifier: ^4.8.4
         version: 4.8.4
     devDependencies:
+      '@eslint/js':
+        specifier: ^10.0.1
+        version: 10.0.1(eslint@10.13.0(jiti@2.7.0))
       '@nestjs/cli':
         specifier: ^12.0.8
         version: 12.0.8(@types/node@26.6.5)
@@ -86,6 +89,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^5.0.5
         version: 5.0.5(@vitest/browser@5.0.5)(vitest@5.0.5)
+      eslint:
+        specifier: ^10.13.0
+        version: 10.13.0(jiti@2.7.0)
       fastify:
         specifier: ^5.12.7
         version: 5.12.7
@@ -104,6 +110,9 @@ importers:
       typescript:
         specifier: ^6
         version: 6.0.3
+      typescript-eslint:
+        specifier: ^8.71.2
+        version: 8.71.2(eslint@10.13.0(jiti@2.7.0))(typescript@6.0.3)
       vite-tsconfig-paths:
         specifier: ^6.1.1
         version: 6.1.1(typescript@6.0.3)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))

@@ -1,6 +1,25 @@
+# Core must build first — server and ui depend on it
 pnpm --filter @ratly/core typecheck
-pnpm --filter @ratly/server typecheck
-pnpm --filter @ratly/ui typecheck
-pnpm --filter @ratly/ui lint
-pnpm --filter @ratly/server test
-pnpm --filter @ratly/ui test -- --run
+pnpm --filter @ratly/core build
+
+# Server and UI checks run in parallel
+(
+  pnpm --filter @ratly/server lint &&
+  pnpm --filter @ratly/server typecheck &&
+  pnpm --filter @ratly/server build &&
+  pnpm --filter @ratly/server test
+) &
+SERVER_PID=$!
+
+(
+  pnpm --filter @ratly/ui lint &&
+  pnpm --filter @ratly/ui typecheck &&
+  pnpm --filter @ratly/ui build &&
+  pnpm --filter @ratly/ui test -- --run &&
+  pnpm --filter @ratly/ui test:guards
+) &
+UI_PID=$!
+
+# Wait for both — fail if either fails
+wait $SERVER_PID || exit 1
+wait $UI_PID || exit 1
