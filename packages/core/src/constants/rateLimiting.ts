@@ -1,2 +1,2 @@
-// Default per-user request limit per window. Used by server and UI tag builder.
+/** Per-user request allowance per fixed window — server enforces, UI displays. */
 export const DEFAULT_LIMIT = 100;
