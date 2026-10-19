@@ -73,7 +73,7 @@ const callHandler = { handle: () => of("response-body") };
 
 describe("RateLimitInterceptor", () => {
   let interceptor: RateLimitInterceptor;
-  let mockService: Record<string, ReturnType<typeof vi.fn>>;
+  let mockService: { isHealthy: boolean; consume: ReturnType<typeof vi.fn>; readRow: ReturnType<typeof vi.fn> };
   let mockGateway: Record<string, ReturnType<typeof vi.fn>>;
 
   beforeEach(async () => {
