@@ -47,6 +47,7 @@
 | Scope | Rule file | Read when |
 |-------|-----------|-----------|
 | All code | `.claude/rules/coding-guidelines.md` | Always — naming, types, imports, error handling, code style |
+| All code | `.claude/rules/comments.md` | Always — JSDoc structure, `@see`/`@link`/`@listens` tags, what gets commented |
 | UI app (`apps/ui/`) | `.claude/rules/ui-structure.md` | Any change to UI components, modules, hooks, or utils |
 | UI app (`apps/ui/`) | `.claude/rules/ui-components.md` | Creating or modifying any component |
 | UI app (`apps/ui/`) | `.claude/rules/ui-hooks.md` | Creating or modifying any hook |
