@@ -8,4 +8,4 @@ prototypes
 storybook-static
 **/coverage
 **/*.tsbuildinfo
-apps/ui
+apps/load

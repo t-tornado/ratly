@@ -35,12 +35,13 @@ services:
     build:
       context: .
       dockerfile: apps/server/Dockerfile
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     environment:
-      - NODE_ENV=test
+      - NODE_ENV=production
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - ALLOWED_ORIGIN=http://ui
     depends_on:
       redis:
         condition: service_healthy
@@ -50,6 +51,13 @@ services:
       timeout: 3s
       retries: 10
       start_period: 15s
+
+  ui:
+    build:
+      context: .
+      dockerfile: apps/ui/Dockerfile
+    ports:
+      - "80:80"
 
 volumes:
   ratly_redis:
