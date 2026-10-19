@@ -5,7 +5,6 @@ import {
   WebSocketServer,
 } from "@nestjs/websockets";
 import { OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { Server, Socket } from "socket.io";
 import { DashboardStatsService } from "../services/dashboard/dashboard-stats.service.js";
